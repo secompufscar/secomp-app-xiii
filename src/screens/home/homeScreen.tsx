@@ -127,7 +127,7 @@ export default function Home() {
                     <Text className="text-xs text-green font-poppinsSemiBold">Nossos apoiadores</Text>
 
                     <Pressable 
-                        onPress={() => { navigation.navigate("") }}
+                        onPress={() => { navigation.navigate("Sponsors") }}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}
                         className={`w-full h-[62px] p-2 gap-3 flex-row items-center border border-border rounded-[8px] transition-all duration-50 

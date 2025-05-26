@@ -5,6 +5,7 @@ import TabRoutes from './tab.routes'
 import {
     Schedule,
     ScheduleDetails,
+    Sponsors,
     MyEvents,
     Credential,
     Registration,
@@ -33,6 +34,7 @@ type StackNavigation = {
     Credential: undefined;
     Notifications: undefined;
     QRCode: { id: string };
+    Sponsors: undefined;
     PasswordReset: undefined;
 };
 
@@ -56,6 +58,7 @@ export default function StackRoutes() {
             <Stack.Screen name="Competições" component={Competições} />
             <Stack.Screen name="Workshops" component={Workshops} />
             <Stack.Screen name="QRCode" component={QRCode} />
+            <Stack.Screen name="Sponsors" component={Sponsors} />
             <Stack.Screen name="SECOMP" component={SECOMP} />
         </Stack.Navigator>
     );
