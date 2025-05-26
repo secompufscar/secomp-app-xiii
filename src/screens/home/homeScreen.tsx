@@ -107,15 +107,17 @@ export default function Home() {
                 <View className="w-full mb-8 gap-4">
                     <Text className="text-xs text-green font-poppinsSemiBold">Guia do evento</Text>
 
-                    <Pressable onPress={() => { navigation.navigate("") }}>
-                        <View className="h-[80px] bg-background py-3 px-5 flex-row items-center gap-4 rounded-[8px]">
-                            <Image source={require('../../../assets/home/guidebook.png')} style={{ width: 54, height: 54 }}/>
-                            <View className="flex-col w-full justify-start gap-1">
-                                <Text className="text-white text-[13px] font-poppinsMedium">Como participar da Secomp?</Text>
-                                <Text className="hidden text-default text-[12px] font-inter leading-[1.4] xxs:block">Um guia com tudo o que você precisa!</Text>
-                                <Text className="block text-default text-[12px] font-inter leading-[1.4] xxs:hidden">Um guia contendo tudo!</Text>
+                    <Pressable onPress={() => { navigation.navigate("EventGuide") }}>
+                        {({ pressed }) => (
+                            <View className={`h-[80px] py-3 px-5 flex-row items-center gap-4 rounded-[8px] ${pressed ? " bg-background/70" : "bg-background"}`}>
+                                <Image source={require('../../../assets/home/guidebook.png')} style={{ width: 54, height: 54 }}/>
+                                <View className="flex-col w-full justify-start gap-1">
+                                    <Text className="text-white text-[13px] font-poppinsMedium">Como participar da Secomp?</Text>
+                                    <Text className="hidden text-default text-[12px] font-inter leading-[1.4] xxs:block">Um guia com tudo o que você precisa!</Text>
+                                    <Text className="block text-default text-[12px] font-inter leading-[1.4] xxs:hidden">Um guia contendo tudo!</Text>
+                                </View>
                             </View>
-                        </View>
+                        )}
                     </Pressable>
                 </View>
 

@@ -1,12 +1,13 @@
 import Login from './login-signup/loginScreen'
 import SignUp from './login-signup/signupScreen'
+import Welcome from './login-signup/welcomeScreen'
 
 import PasswordReset from './password-reset/passwordResetScreen';
 import VerifyEmail from './password-reset/verifyEmailScreen';
 import SetNewPassword from './password-reset/setNewPasswordScreen';
 
-import Welcome from './login-signup/welcomeScreen'
 import Home from './home/homeScreen'
+import EventGuide from './event-guide/eventGuideScreen';
 import Sponsors from './sponsors/sponsorsScreen'
 import UserProfile from './profile/userProfileScreen'
 
@@ -31,7 +32,11 @@ export {
     Login,
     SignUp,
     Welcome,
+    PasswordReset,
+    VerifyEmail,
+    SetNewPassword,
     Home,
+    EventGuide,
     Sponsors,
     UserProfile,
     Schedule,
@@ -45,9 +50,6 @@ export {
     Palestras,
     Competições,
     Workshops,
-    QRCode,
     SECOMP,
-    PasswordReset,
-    VerifyEmail,
-    SetNewPassword
+    QRCode,
 }
