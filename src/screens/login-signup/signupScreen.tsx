@@ -2,7 +2,7 @@ import { useState } from "react"
 import { View, Alert, TouchableOpacity, Text, Platform, Pressable, ActivityIndicator } from "react-native"
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
-import { StackTypes } from '../../routes/stack.routes';
+import { AuthTypes } from "../../routes/auth.routes"
 import { colors } from "../../styles/colors"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signup } from "../../services/users";
@@ -24,7 +24,7 @@ function capitalizeFirstLetter(string: string) {
 }
 
 export default function SignUp() {
-	const navigation = useNavigation<StackTypes>();
+	const navigation = useNavigation<AuthTypes>();
 	const [nome, setNome] = useState("")
 	
 	// E-mail

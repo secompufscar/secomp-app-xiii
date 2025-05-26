@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../hooks/AuthContext";
-import { StackTypes } from '../../routes/stack.routes';
+import { AuthTypes } from "../../routes/auth.routes";
 import { colors } from "../../styles/colors"
 import { login } from "../../services/users";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -14,7 +14,7 @@ import BackButton from "../../components/button/backButton";
 import validator from 'validator';
 
 export default function Login() {
-    const navigation = useNavigation<StackTypes>();
+    const navigation = useNavigation<AuthTypes>();
     const { signIn } = useAuth();
 
     const [email, setEmail] = useState("");

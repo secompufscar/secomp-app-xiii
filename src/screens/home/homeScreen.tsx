@@ -74,10 +74,10 @@ export default function Home() {
             <AppLayout>
                 <View className="w-full flex-row items-center justify-between mt-8 mb-8 gap-4">
                     <View className="flex-col h-full flex-1 ">
-                        <Text className="text-[13px] text-blue-100 font-inter">{eventDay}</Text>
+                        <Text className="text-[14px] text-blue-100 font-inter">{eventDay}</Text>
                         <View className="flex-row items-center justify-start mt-[7px]">
-                            <Text className="text-[16px] text-white font-poppinsSemiBold">{greeting} </Text>
-                            <Text className="text-[16px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
+                            <Text className="text-[18px] text-white font-poppinsSemiBold">{greeting} </Text>
+                            <Text className="text-[18px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
                         </View>
                     </View>
                     
@@ -94,25 +94,25 @@ export default function Home() {
                     colors={["#29303F", "#2A3B5E"]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    className="flex-col w-full rounded-[8px] justify-start gap-2 mb-8 px-6 py-4"
+                    className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-4"
                     >
-                        <Text className="text-white text-[13px] font-poppinsMedium">Inscreva-se na Secomp</Text>
-                        <Text className="text-default text-[12px] font-inter leading-[1.4]">Para participar do evento e de suas atividades, você deve se inscrever por aqui</Text>
+                        <Text className="text-white text-[14px] font-poppinsMedium mb-2">Inscreva-se na Secomp</Text>
+                        <Text className="text-default text-[13px] font-inter leading-[1.4] mb-4">Para participar do evento e de suas atividades, você deve se inscrever por aqui</Text>
                         <Pressable onPress={subscribe} className="w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1">
-                            <Text className="text-white text-[12px] font-poppinsMedium">Inscrever-se</Text>
+                            <Text className="text-white text-[13px] font-poppinsMedium">Inscrever-se</Text>
                         </Pressable>
                 </LinearGradient>
 
                 {/* Guia do evento */}
                 <View className="w-full mb-8 gap-4">
-                    <Text className="text-xs text-green font-poppinsSemiBold">Guia do evento</Text>
+                    <Text className="text-sm text-green font-poppinsSemiBold">Guia do evento</Text>
 
                     <Pressable onPress={() => { navigation.navigate("EventGuide") }}>
                         {({ pressed }) => (
                             <View className={`h-[80px] py-3 px-5 flex-row items-center gap-4 rounded-[8px] ${pressed ? " bg-background/70" : "bg-background"}`}>
                                 <Image source={require('../../../assets/home/guidebook.png')} style={{ width: 54, height: 54 }}/>
                                 <View className="flex-col w-full justify-start gap-1">
-                                    <Text className="text-white text-[13px] font-poppinsMedium">Como participar da Secomp?</Text>
+                                    <Text className="text-white text-[12px] font-poppinsMedium">Como participar da Secomp?</Text>
                                     <Text className="hidden text-default text-[12px] font-inter leading-[1.4] xxs:block">Um guia com tudo o que você precisa!</Text>
                                     <Text className="block text-default text-[12px] font-inter leading-[1.4] xxs:hidden">Um guia contendo tudo!</Text>
                                 </View>
@@ -123,13 +123,13 @@ export default function Home() {
 
                 {/* Competições */}
                 <View className="w-full mb-8 gap-1">
-                    <Text className="text-xs text-green font-poppinsSemiBold">Competições</Text>
+                    <Text className="text-sm text-green font-poppinsSemiBold">Competições</Text>
                     <HomeCompetitions />
                 </View>
 
                 {/* Patrocinadores */}
                 <View className="w-full mb-8 gap-4">
-                    <Text className="text-xs text-green font-poppinsSemiBold">Nossos apoiadores</Text>
+                    <Text className="text-sm text-green font-poppinsSemiBold">Nossos apoiadores</Text>
 
                     <Pressable 
                         onPress={() => { navigation.navigate("Sponsors") }}
@@ -152,7 +152,7 @@ export default function Home() {
 
                 {/* Redes sociais */}
                 <View className="w-full mb-20 gap-4">
-                    <Text className="text-xs text-green font-poppinsSemiBold">Redes sociais</Text>
+                    <Text className="text-sm text-green font-poppinsSemiBold">Redes sociais</Text>
                     <HomeSocials />
                 </View>            
             </AppLayout>
