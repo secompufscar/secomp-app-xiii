@@ -45,7 +45,7 @@ export default function StackRoutes() {
         <Stack.Navigator 
             screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}
         >
-            <Stack.Screen name="Home" component={TabRoutes} />
+            <Stack.Screen name="App" component={TabRoutes} />
             <Stack.Screen name="Schedule" component={Schedule} />
             <Stack.Screen name="ScheduleDetails" component={ScheduleDetails} />
             <Stack.Screen name="MyEvents" component={MyEvents} />
