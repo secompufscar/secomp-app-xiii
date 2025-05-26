@@ -5,7 +5,6 @@ import { Home, Schedule, UserProfile, Categorias } from '../screens';
 
 import { colors } from "../styles/colors"
 import { useAuth } from "../hooks/AuthContext";
-import { bottomLeft } from '@shopify/react-native-skia';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +39,7 @@ export default function TabRoutes() {
         >
 
             <Tab.Screen
-                name="HOME"
+                name="Home"
                 component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -57,7 +56,7 @@ export default function TabRoutes() {
             />
 
             <Tab.Screen
-                name="CRONOGRAMA"
+                name="Cronograma"
                 component={Schedule}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -74,7 +73,7 @@ export default function TabRoutes() {
             />
 
             <Tab.Screen
-                name="ATIVIDADES"
+                name="Atividades"
                 component={Categorias}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -91,7 +90,7 @@ export default function TabRoutes() {
             />
 
             <Tab.Screen
-                name="PERFIL"
+                name="Perfil"
                 component={UserProfile}
                 options={{
                     tabBarIcon: ({ focused }) => (

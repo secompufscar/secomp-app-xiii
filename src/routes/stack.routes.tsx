@@ -25,18 +25,22 @@ const Stack = createNativeStackNavigator();
 
 // Rotas para usuários logados
 type StackNavigation = {
-    Home: undefined;
-    Login: undefined;
-    SignUp: undefined;
+    App: undefined;
+    Schedule: undefined;
     ScheduleDetails: { item: ScheduleItemProps };
-    RegistrationDetails: { item: ScheduleItemProps };
+    Sponsors: undefined;
     MyEvents: undefined;
     Credential: undefined;
-    Notifications: undefined;
+    Registration: undefined;
+    RegistrationDetails: { item: ScheduleItemProps };
+    Categorias: undefined;
+    Minicursos: undefined;
+    Palestras: undefined;
+    Workshops: undefined;
+    Competições: undefined;
     QRCode: { id: string };
-    Sponsors: undefined;
-    PasswordReset: undefined;
-};
+    SECOMP: undefined;
+  };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
 
@@ -45,9 +49,10 @@ export default function StackRoutes() {
         <Stack.Navigator 
             screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}
         >
-            <Stack.Screen name="Home" component={TabRoutes} />
+            <Stack.Screen name="App" component={TabRoutes} />
             <Stack.Screen name="Schedule" component={Schedule} />
             <Stack.Screen name="ScheduleDetails" component={ScheduleDetails} />
+            <Stack.Screen name="Sponsors" component={Sponsors} />
             <Stack.Screen name="MyEvents" component={MyEvents} />
             <Stack.Screen name="Credential" component={Credential} />
             <Stack.Screen name="Registration" component={Registration} />
@@ -55,10 +60,9 @@ export default function StackRoutes() {
             <Stack.Screen name="Categorias" component={Categorias} />
             <Stack.Screen name="Minicursos" component={Minicursos} />
             <Stack.Screen name="Palestras" component={Palestras} />
-            <Stack.Screen name="Competições" component={Competições} />
             <Stack.Screen name="Workshops" component={Workshops} />
+            <Stack.Screen name="Competições" component={Competições} />
             <Stack.Screen name="QRCode" component={QRCode} />
-            <Stack.Screen name="Sponsors" component={Sponsors} />
             <Stack.Screen name="SECOMP" component={SECOMP} />
         </Stack.Navigator>
     );
