@@ -58,7 +58,10 @@ export default function Home() {
     const nomes = nomeCompleto.trim().split(" ");
 
     const primeiroNome = nomes[0];
-    const ultimoNome = nomes[nomes.length - 1];
+    const ultimoNome = nomes.length > 1 ? nomes[nomes.length - 1] : "";
+    const nomeParaMostrar = ultimoNome && ultimoNome !== primeiroNome
+    ? `${primeiroNome} ${ultimoNome}`
+    : primeiroNome;
 
     // Inscrever-se no evento
     const subscribe = () => {
@@ -74,7 +77,7 @@ export default function Home() {
                         <Text className="text-[13px] text-blue-100 font-inter">{eventDay}</Text>
                         <View className="flex-row items-center justify-start mt-[7px]">
                             <Text className="text-[16px] text-white font-poppinsSemiBold">{greeting} </Text>
-                            <Text className="text-[16px] text-green font-poppinsSemiBold">{`${primeiroNome} ${ultimoNome}`}</Text>
+                            <Text className="text-[16px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
                         </View>
                     </View>
                     
@@ -127,7 +130,7 @@ export default function Home() {
                     <Text className="text-xs text-green font-poppinsSemiBold">Nossos apoiadores</Text>
 
                     <Pressable 
-                        onPress={() => { navigation.navigate("") }}
+                        onPress={() => { navigation.navigate("Sponsors") }}
                         onPressIn={() => setPressed(true)}
                         onPressOut={() => setPressed(false)}
                         className={`w-full h-[62px] p-2 gap-3 flex-row items-center border border-border rounded-[8px] transition-all duration-50 

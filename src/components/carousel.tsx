@@ -4,11 +4,11 @@ import { View, Image, FlatList, Dimensions, StyleSheet } from 'react-native';
 const { width } = Dimensions.get('window');
 
 // Importe as imagens locais
-const image1 = require('../../../assets/empresas/rocketseat.png');
-const image2 = require('../../../assets/empresas/tempest.png');
-const image3 = require('../../../assets/empresas/visagio.png');
-const image4 = require('../../../assets/empresas/tractian.png');
-const image5 = require('../../../assets/empresas/magalu.png');
+const image1 = require('../../../assets/sponsors/rocketseat.png');
+const image2 = require('../../../assets/sponsors/tempest.png');
+const image3 = require('../../../assets/sponsors/visagio.png');
+const image4 = require('../../../assets/sponsors/tractian.png');
+const image5 = require('../../../assets/sponsors/magalu.png');
 
 const images = [
   { id: '1', uri: image1 },

@@ -1,6 +1,6 @@
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -9,10 +9,14 @@ export default function BackButton(){
 
     return(
         <Pressable
-          className="w-[32px] h-[32px] flex items-center justify-center mt-16 mb-10 p-2 bg-[#29303F] rounded-[4px]"
+        className="w-[32px] h-[32px] mt-16 mb-10"
           onPress={() => navigation.goBack()}
         >
-            <FontAwesomeIcon className="text-blue-200 text-[16px]" icon={faChevronLeft} />
+            {({ pressed }) => (
+                <View className={`flex items-center justify-center p-2 rounded-[4px] ${pressed ? "bg-[#29303F]/80" : "bg-[#29303F]"}`}>
+                    <FontAwesomeIcon className="text-blue-200 text-[16px]" icon={faChevronLeft} />
+                </View>
+            )}
         </Pressable>
     );
 }
