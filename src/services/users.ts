@@ -12,18 +12,23 @@ type SignUp = ({
     senha: string
 })
 
+interface SignupResponse {
+  message: string;
+  emailEnviado: boolean;
+}
+
 export const login = async (data: Login): Promise<User> => {
     const response = await api.post("/users/login", data)
 
-    const { token } = response.data;
+    const { user, token } = response.data;
         
     // Armazenar o token em AsyncStorage
     await AsyncStorage.setItem('userToken', token);
 
-    return response.data
+    return user
 }
 
-export const signup = async (data: SignUp): Promise<boolean> => {
+export const signup = async (data: SignUp): Promise<SignupResponse> => {
     const response = await api.post("/users/signup", data)
 
     return response.data

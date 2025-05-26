@@ -1,5 +1,4 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -32,7 +31,6 @@ export default function Notifications() {
 				</TouchableOpacity>
 			</View>
 			
-			<StatusBar style="auto" />
 		</SafeAreaView>
 	);
 }

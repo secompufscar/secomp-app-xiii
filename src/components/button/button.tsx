@@ -16,7 +16,7 @@ export default function Button({ title, ...rest }: Props) {
                 className={clsx(
                     "w-full p-4 items-center justify-center rounded-lg text-white text-sm font-inter font-semibold text-center",
                     "transition-transform duration-100",
-                    pressed ? "bg-blue-500 opacity-90" : "bg-blue-500"
+                    pressed ? "bg-blue-500 opacity-80" : "bg-blue-500"
                 )}
                 >
                 {title}

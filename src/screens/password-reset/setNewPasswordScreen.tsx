@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import {
   SafeAreaView,
   View,
-  ScrollView,
   Image,
   Text,
-  TouchableOpacity,
   Modal,
   Pressable,
   Alert,
@@ -16,6 +14,7 @@ import { useRoute } from "@react-navigation/native";
 import { updatePassword } from "../../services/users";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
+import AppLayout from "../../components/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -60,7 +59,7 @@ export default function SetNewPassword() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1 px-6 pb-12 pt-6 w-full max-w-[1000px]">
+      <AppLayout>
         <BackButton/>
 
         <View className="mb-8">
@@ -85,13 +84,13 @@ export default function SetNewPassword() {
               secureTextEntry={!isPasswordVisible}
             />
 
-            <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+            <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
               <Ionicons
                 name={isPasswordVisible ? 'eye' : 'eye-off'}
                 size={20}
                 color={colors.border}
               />
-            </TouchableOpacity>
+            </Pressable>
           </Input>
 
           {/* Confirmar senha */}
@@ -105,18 +104,18 @@ export default function SetNewPassword() {
               secureTextEntry={!isConfirmPasswordVisible}
             />
 
-            <TouchableOpacity onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}>
+            <Pressable onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}>
               <Ionicons
                 name={isConfirmPasswordVisible ? 'eye' : 'eye-off'}
                 size={20}
                 color={colors.border}
               />
-            </TouchableOpacity>
+            </Pressable>
           </Input>
         </View>
 
         <Button className="mt-4" title="Atualizar senha" onPress={handleUpdatePassword}/>
-      </ScrollView>
+      </AppLayout>
       
       <Modal visible={successVisible} transparent animationType="fade">
         <View className="flex-1 justify-center items-center bg-[rgba(0,0,0,0.6)]">

@@ -5,7 +5,9 @@ import PasswordReset from './password-reset/passwordResetScreen';
 import VerifyEmail from './password-reset/verifyEmailScreen';
 import SetNewPassword from './password-reset/setNewPasswordScreen';
 
-import Home from './home/homeScreen';
+import Welcome from './login-signup/welcomeScreen'
+import Home from './home/homeScreen'
+import Sponsors from './sponsors/sponsorsScreen'
 import UserProfile from './profile/userProfileScreen'
 
 import Schedule from './schedule/scheduleScreen'
@@ -24,13 +26,13 @@ import Workshops from './activities/atividadesWorkshops'
 import SECOMP from './activities/atividadesSECOMP'
 
 import QRCode from './credential/qrCodeReaderScreen'
-import Welcome from './WelcomeScreen'
-import Sponsors from './sponsors/sponsorsScreen';
 
 export {
     Login,
     SignUp,
+    Welcome,
     Home,
+    Sponsors,
     UserProfile,
     Schedule,
     ScheduleDetails,
@@ -44,8 +46,6 @@ export {
     Competições,
     Workshops,
     QRCode,
-    Sponsors,
-    Welcome,
     SECOMP,
     PasswordReset,
     VerifyEmail,

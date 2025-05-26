@@ -13,8 +13,8 @@ const Tab = createBottomTabNavigator();
 export default function TabRoutes() {
 
     // Usa para diferenciar entre navegação de user e admin
-    const { user: { user } }: any = useAuth()
-    const role = user.tipo;
+    const { user } = useAuth();
+    const role = user?.tipo;
 
     return (
         <Tab.Navigator

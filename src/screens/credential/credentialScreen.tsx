@@ -11,7 +11,7 @@ import { useAuth } from "../../hooks/AuthContext";
 export default function Credential() {
     const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-    const { user: { user } }: any = useAuth()
+    const { user } : any = useAuth();
 
     return (
         <SafeAreaView className='items-center bg-white flex-1'>

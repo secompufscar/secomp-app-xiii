@@ -1,90 +1,72 @@
-import { View, TouchableOpacity, StatusBar, Alert, Text, Image, Platform, ScrollView } from "react-native"
+import { View, Alert, Text, Platform, Pressable, ActivityIndicator } from "react-native"
 import { useState } from "react"
-
 import { useNavigation } from "@react-navigation/native"
-import Entypo from '@expo/vector-icons/Entypo';
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { useAuth } from "../../hooks/AuthContext";
 import { StackTypes } from '../../routes/stack.routes';
-
-
+import { colors } from "../../styles/colors"
+import { login } from "../../services/users";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../components/input/input";
 import Button from "../../components/button/button";
-
-import { colors } from "../../styles/colors"
-import { useAuth } from "../../hooks/AuthContext";
-
-import { login } from "../../services/users";
-
-
-const validateEmail = (email: string) => {
-    return String(email)
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-};
+import AppLayout from "../../components/appLayout";
+import BackButton from "../../components/button/backButton";
+import validator from 'validator';
 
 export default function Login() {
     const navigation = useNavigation<StackTypes>();
-    const { signIn }: any = useAuth()
+    const { signIn } = useAuth();
 
-    const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
-    const [senhaVisivel, setSenhaVisivel] = useState(false);
+    const [email, setEmail] = useState("");
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [senha, setSenha] = useState("");
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const validateEmail = (email: string): boolean => {
+        return validator.isEmail(email);
+    };
 
     const handleLogin = async () => {
+        setIsEmailValid(true);
+        setIsPasswordValid(true);
+        
         if (!email.trim() || !senha.trim()) {
             if (Platform.OS === 'web') {
                 window.alert("Por favor, preencha todos os campos!");
             } else {
-                Alert.alert("Login", "Por favor, preencha todos os campos!");
+                Alert.alert("Login incompleto!", "Por favor, preencha todos os campos.");
             }
-
-            return
+            return;
         }
-
-        if (!validateEmail(email)) {
-            if (Platform.OS === 'web') {
-                window.alert("Por favor, digite um email válido!");
-            } else {
-                Alert.alert("Login", "Por favor, digite um email válido!");
-            }
-
-            return
-        }
-
+        
+        // Verifica a validade do e-mail
+        const emailValido = validateEmail(email);
+		setIsEmailValid(emailValido);
+		if (!emailValido) return;
+        
+        // Verifica a validade da senha
         if (senha.length < 6) {
-            if (Platform.OS === 'web') {
-                window.alert("Por favor, digite uma senha com mais de 6 caracteres!");
-            } else {
-                Alert.alert("Login", "Por favor, digite uma senha com mais de 6 caracteres!");
-            }
-
-            return
+            setIsPasswordValid(false);
+            return;
+        } else {
+            setIsPasswordValid(true);
         }
 
         setIsLoading(true)
 
         try {
             const data = await login({ email, senha })
-
             await signIn(data)
-
         } catch (error) {
             const err = error as any;
-
             const errorMessage = err.response?.data?.message || 'Falha ao processar o login.';
 
-            // Imprime o erro no console para depuração
-
-            //console.error('Erro ao processar o check-in:', err.response.data);
-
             if (Platform.OS === 'web') {
-                window.alert(`${errorMessage}`);
+                window.alert(`Erro: não foi possível realizar o login`);
             } else {
-                Alert.alert("Login", errorMessage);
+                Alert.alert("Erro no login", errorMessage);
             }
 
         } finally {
@@ -92,81 +74,100 @@ export default function Login() {
         }
     }
 
-
-
     return (
-        <SafeAreaView className="flex-1 bg-blue-900">
+        <SafeAreaView className="flex-1 bg-blue-900 items-center">
+            <AppLayout>
+                <BackButton/>
 
-            <ScrollView contentContainerStyle={{
-                flexGrow: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }} scrollEnabled={false}>
-                <StatusBar barStyle="light-content" />
+                <View className={`mt-8`}>
+                    <Text className="text-white text-[24px] font-poppinsSemiBold">
+                        Olá,
+                    </Text>
 
-                <View className="items-center">
-                    <Image
-                        source={require("../../../assets/logo.png")}
-                        className="h-24"
-                        resizeMode="contain"
-                    />
+                    <Text className="text-white text-[24px] font-poppinsSemiBold">
+                        Bem-vindo de volta
+                    </Text>
                 </View>
 
-                <StatusBar barStyle="light-content" />
+                <View className="flex-col w-full gap-2 py-6 text-center justify-center">
+                    <View className="w-full">
+                        <Input>
+                            <MaterialIcons name="email" size={20} color={colors.border} />
 
-                <View className="w-full gap-2 text-center justify-center p-8">
+                            <Input.Field
+                                placeholder="E-mail"
+                                onChangeText={setEmail}
+                                value={email}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </Input>
 
-                    <Input>
-                        <Entypo name="email"
-                            color={colors.white}
-                            size={20}
-                        />
+                        {!isEmailValid && (
+                            <Text className="text-[12px] text-danger font-inter mb-1">
+                                Por favor, digite um email válido!
+                            </Text>
+                        )}
+                    </View>
+                        
+                    <View className="w-full">
+                        <Input>
+                            <MaterialIcons name="lock" size={20} color={colors.border} />
 
-                        <Input.Field
-                            placeholder="E-mail"
-                            onChangeText={setEmail}
-                        />
-                    </Input>
-
-                    <Input>
-                        <Entypo name="lock"
-                            color={colors.white}
-                            size={20}
-                        />
-
-                        <Input.Field
+                            <Input.Field
                             placeholder="Senha"
                             onChangeText={setSenha}
-                            secureTextEntry={!senhaVisivel}
-                        />
-
-                        <TouchableOpacity onPress={() => setSenhaVisivel(!senhaVisivel)}>
-                            <Entypo
-                                name={senhaVisivel ? 'eye-with-line' : 'eye'} // Alterna o ícone do olho
-                                size={20}
-                                color={'#fff'}
+                            value={senha}
+                            secureTextEntry={!isPasswordVisible}
                             />
-                        </TouchableOpacity>
 
-                    </Input>
+                            <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                                <Ionicons
+                                    name={isPasswordVisible ? 'eye' : 'eye-off'}
+                                    size={20}
+                                    color={colors.border}
+                                />
+                            </Pressable>
+                        </Input>
 
-                    <Button className="mt-2" title="Entrar" onPress={handleLogin}/>
+                        {!isPasswordValid && (
+                            <Text className="text-[12px] text-danger font-inter">
+                                A senha deve conter no mínimo 6 caracteres
+                            </Text>
+                        )}
+                    </View>
+        
+                    <View className="w-full items-end">
+                        <Pressable onPress={() => navigation.navigate("PasswordReset")}>
+                            {({ pressed }) => (
+                            <Text className={`text-xs font-poppins underline ${pressed ? "text-white" : "text-gray-400"}`}>
+                                Esqueci minha senha!
+                            </Text>
+                            )}
+                        </Pressable>
+                    </View>
 
-                    <TouchableOpacity onPress={() => navigation.navigate("PasswordReset")}>
-                        <Text className="text-white text-base font-bold text-center mt-4 underline">
-                            Esqueceu a senha?
+                    {isLoading ? (
+                        <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+                    ) : (
+                        <Button className="mt-8" title="Entrar" onPress={handleLogin} />
+                    )}
+
+                    <View className="flex-row mt-10 items-center justify-center gap-1">
+                        <Text className="text-white text-sm font-inter">
+                            Não possui uma conta?
                         </Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-                        <Text className="text-white text-base font-bold text-center mt-4">
-                            Ainda não possui inscrição?
-                        </Text>
-                    </TouchableOpacity>
-
+                        <Pressable onPress={() => navigation.navigate("SignUp")}>
+                            {({ pressed }) => (
+                                <Text className={`text-sm font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}>
+                                    Criar agora
+                                </Text>
+                            )}
+                        </Pressable>
+                    </View>
                 </View>
-
-            </ScrollView>
+            </AppLayout>
         </SafeAreaView>
     )
 }

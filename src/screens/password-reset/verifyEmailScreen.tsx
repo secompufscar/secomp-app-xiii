@@ -11,6 +11,7 @@ import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
+import AppLayout from "../../components/appLayout";
 
 export default function VerifyEmail() {
     const navigation = useNavigation<AuthTypes>();
@@ -33,7 +34,7 @@ export default function VerifyEmail() {
 
     return (
         <SafeAreaView className="flex-1 bg-blue-900 items-center">
-            <ScrollView showsVerticalScrollIndicator={false} className="flex-1 px-6 pb-12 pt-6 w-full max-w-[1000px]">
+            <AppLayout>
                 <BackButton/>
 
                 <View className="mb-8">
@@ -56,7 +57,7 @@ export default function VerifyEmail() {
                         Voltar para o login
                     </Text>
                 </Pressable>
-            </ScrollView>
+            </AppLayout>
         </SafeAreaView>
     );
 }

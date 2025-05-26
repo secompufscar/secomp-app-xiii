@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, Text } from "react-native";
+import { SafeAreaView, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
+import validator from 'validator';
+import AppLayout from "../../components/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button  from "../../components/button/button";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -14,9 +16,7 @@ export default function PasswordReset() {
   const navigation = useNavigation<AuthTypes>();
 
   const validateEmail = (email: string): boolean => {
-    const normalizedEmail = email.trim().toLowerCase();
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    return regex.test(normalizedEmail);
+    return validator.isEmail(email);
   };
 
   async function replacePass() {
@@ -41,7 +41,7 @@ export default function PasswordReset() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1 px-6 pb-12 pt-6 w-full max-w-[1000px]">
+      <AppLayout>
         <BackButton/>
 
         <View className="mb-8">
@@ -68,7 +68,7 @@ export default function PasswordReset() {
 
         <Button className="mt-4" title="Enviar" onPress={replacePass}/>
 
-      </ScrollView>
+      </AppLayout>
     </SafeAreaView>
   );
 }

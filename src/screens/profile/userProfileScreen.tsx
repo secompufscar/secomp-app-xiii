@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { ParamListBase, useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -8,7 +7,7 @@ import { useAuth } from "../../hooks/AuthContext";
 // Página para usuário
 export default function UserProfile() {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-	const { signOut, user:{user}}: any = useAuth()
+	const { signOut, user}: any = useAuth()
 
 	return (
 		<SafeAreaView className='bg-white flex-1'>
@@ -82,8 +81,6 @@ export default function UserProfile() {
 					</View>
 				</TouchableOpacity>
 			</View>
-
-			<StatusBar style="auto" />
 		</SafeAreaView>
 	);
 }
