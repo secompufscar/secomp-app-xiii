@@ -121,7 +121,7 @@ export default function SetNewPassword() {
         <View className="flex-1 justify-center items-center bg-[rgba(0,0,0,0.6)]">
           <View className="w-[80%] px-6 py-8 gap-4 bg-blue-900 rounded-xl justify-center items-center xxs:w-[300px]">
             <Image
-              source={require("../../../assets/animacoes/check-success.gif")}
+              source={require("../../../assets/animation/check-success.gif")}
               style={{ width: 130, height: 130 }}
               resizeMode="contain"
             />
