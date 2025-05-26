@@ -104,7 +104,7 @@ export default function Home() {
                 <View className="w-full mb-8 gap-4">
                     <Text className="text-xs text-green font-poppinsSemiBold">Guia do evento</Text>
 
-                    <Pressable onPress={() => { navigation.navigate("") }}>
+                    <Pressable onPress={() => { navigation.navigate("EventGuide") }}>
                         <View className="h-[80px] bg-background py-3 px-5 flex-row items-center gap-4 rounded-[8px]">
                             <Image source={require('../../../assets/home/guidebook.png')} style={{ width: 54, height: 54 }}/>
                             <View className="flex-col w-full justify-start gap-1">

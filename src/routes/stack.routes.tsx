@@ -15,7 +15,8 @@ import {
     Workshops,
     Competições,
     QRCode,
-    SECOMP
+    SECOMP,
+    EventGuide
 } from '../screens'
 
 import { ScheduleItemProps } from '../entities/schedule-item';
@@ -25,6 +26,7 @@ const Stack = createNativeStackNavigator();
 // Rotas para usuários logados
 type StackNavigation = {
     Home: undefined;
+    EventGuide: undefined;
     Login: undefined;
     SignUp: undefined;
     ScheduleDetails: { item: ScheduleItemProps };
@@ -44,6 +46,7 @@ export default function StackRoutes() {
             screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}
         >
             <Stack.Screen name="Home" component={TabRoutes} />
+            <Stack.Screen name="EventGuide" component={EventGuide} />
             <Stack.Screen name="Schedule" component={Schedule} />
             <Stack.Screen name="ScheduleDetails" component={ScheduleDetails} />
             <Stack.Screen name="MyEvents" component={MyEvents} />

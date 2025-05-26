@@ -6,6 +6,7 @@ import VerifyEmail from './password-reset/verifyEmailScreen';
 import SetNewPassword from './password-reset/setNewPasswordScreen';
 
 import Home from './home/homeScreen';
+import EventGuide from './event-guide/eventGuideScreen';
 import UserProfile from './profile/userProfileScreen'
 
 import Schedule from './schedule/scheduleScreen'
@@ -30,6 +31,7 @@ export {
     Login,
     SignUp,
     Home,
+    EventGuide,
     UserProfile,
     Schedule,
     ScheduleDetails,
