@@ -93,7 +93,7 @@ export default function EventGuide() {
                         Minicurso – Controle de versão com git
                     </Text>
 
-                    <Text className="text-default text-sm font-inter">
+                    <Text className="text-default text-sm font-inter leading-relaxed">
                         Para os minicursos, é cobrada uma{" "}
                         <Text className="text-green font-inter leading-relaxed">
                             taxa de 1kg de alimento não perecível

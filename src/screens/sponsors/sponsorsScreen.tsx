@@ -29,7 +29,7 @@ export default function Sponsors() {
                 colors={["#2E364B", "#161F36"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className={`flex-col w-full rounded-[8px] border p-6 mb-8 ${pressed ? "border-green" : "border-border"}`}
+                className={`flex-col w-full rounded-[8px] border p-6 mb-8 ${pressed ? "border-blue-500" : "border-border"}`}
               >
                 {/* Header */}
                 <View className="w-full flex-row items-center justify-between mb-5">

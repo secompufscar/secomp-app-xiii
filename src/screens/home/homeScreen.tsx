@@ -94,7 +94,7 @@ export default function Home() {
                     colors={["#29303F", "#2A3B5E"]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-4"
+                    className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5"
                     >
                         <Text className="text-white text-[14px] font-poppinsMedium mb-2">Inscreva-se na Secomp</Text>
                         <Text className="text-default text-[13px] font-inter leading-[1.4] mb-4">Para participar do evento e de suas atividades, você deve se inscrever por aqui</Text>
