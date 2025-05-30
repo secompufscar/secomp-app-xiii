@@ -5,9 +5,10 @@ import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BeautifulName } from "beautiful-name"
 import { useAuth } from "../../hooks/AuthContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "../../styles/colors";
 
 import AppLayout from "../../components/appLayout";
 import HomeCompetitions from "../../components/home/homeCompetitions";
@@ -84,7 +85,7 @@ export default function Home() {
                     {/* Notificações */}
                     <Pressable onPress={() => { navigation.navigate("") }}>
                         <View className="w-11 h-11 flex items-center justify-center rounded-[8px] p-2 bg-iconbg">
-                            <FontAwesomeIcon className="text-blue-200 text-xl" icon={faBell} />
+                            <FontAwesomeIcon icon={faBell} size={20} color={colors.blue[200]} />
                         </View>
                     </Pressable>
                 </View>
@@ -139,13 +140,13 @@ export default function Home() {
                             ${pressed ? 'bg-background' : ''
                         }`}>
                         <View className="w-11 h-full flex items-center justify-center bg-background rounded-[5px]">
-                            <FontAwesomeIcon className="text-blue-500 text-xl" icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} size={20} color={colors.blue[500]} />
                         </View>
 
                         <Text className="flex-1 text-white text-[13px] font-inter font-medium">Patrocinadores</Text>
 
                         <View className="w-6 h-full flex items-center justify-center">
-                            <FontAwesomeIcon className="text-white text-md" icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight} size={16} color="#FFFFFF" />
                         </View>
                     </Pressable>
                 </View>

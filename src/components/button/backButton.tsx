@@ -1,8 +1,9 @@
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Pressable, View } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { colors } from "../../styles/colors";
 
 export default function BackButton(){
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -14,7 +15,7 @@ export default function BackButton(){
         >
             {({ pressed }) => (
                 <View className={`flex items-center justify-center p-2 rounded-[4px] ${pressed ? "bg-[#29303F]/80" : "bg-[#29303F]"}`}>
-                    <FontAwesomeIcon className="text-blue-200 text-[16px]" icon={faChevronLeft} />
+                    <FontAwesomeIcon icon={faChevronLeft} size={16} color={colors.blue[200]} />
                 </View>
             )}
         </Pressable>
