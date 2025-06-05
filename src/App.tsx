@@ -1,3 +1,4 @@
+import 'react-native-reanimated';
 import { ActivityIndicator, View } from 'react-native';
 import Routes from './routes';
 import './styles/global.css';
