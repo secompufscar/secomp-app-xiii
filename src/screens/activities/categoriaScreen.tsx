@@ -12,7 +12,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import BackButton from "../../components/button/backButton";
 import AppLayout from "../../components/appLayout";
-import { ActivityList, Activity } from "../../components/activity/activityList";
+import { ActivityList } from "../../components/activity/activityList";
 import { CategoryFilter } from "../../components/activity/categoryFilter";
 
 type Category = {
