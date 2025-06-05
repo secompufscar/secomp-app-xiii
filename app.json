@@ -3,9 +3,8 @@
     "name": "Secomp",
     "slug": "secompufscar",
     "description": "A Semana Acadêmica da Computação da Universidade Federal de São Carlos (SECOMP UFSCar) surgiu da necessidade de trazer assuntos que fossem de interesse tanto da comunidade acadêmica quanto de entusiastas.",
+    "newArchEnabled": true,
     "version": "1.0.0",
-    "scheme": "secompapp",
-    "deepLinking": true,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +24,11 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.secompufscar.app"
+      "package": "com.secompufscar.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,9 +46,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "1245d26e-0383-4603-b980-f8c3a0da1444"
+        "projectId": "9c2cbd58-8718-4b40-b755-4a8d1e640891"
       }
     },
-    "owner": "anderson-barbosa"
+    "owner": "enzomurayama"
   }
 }
