@@ -93,7 +93,7 @@ export default function Categorias() {
         </View>
 
         {/* Filtro de Categorias */}
-        <View className="w-full mb-4">
+        <View className="w-full mb-3">
           <CategoryFilter onSelect={handleSelectCategory} />
         </View>
 
