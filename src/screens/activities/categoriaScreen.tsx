@@ -1,89 +1,110 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity
+} from "react-native";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FontAwesome6 } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { FontAwesome6 } from "@expo/vector-icons";
 
-import { useEffect, useState } from 'react';
 import { useAuth } from "../../hooks/AuthContext";
-import { getCategories } from "../../services/categories";
+import BackButton from "../../components/button/backButton";
+import AppLayout from "../../components/appLayout";
+import { ActivityList, Activity } from "../../components/activity/activityList";
+import { CategoryFilter } from "../../components/activity/categoryFilter";
+
+type Category = {
+  id: string;
+  nome: string;
+};
+
 
 
 export default function Categorias() {
-    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-    const { user: { user } }: any = useAuth();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const { user: { user } }: any = useAuth();
 
-    const [categories, setCategories] = useState<Category[]>([]);
+  // Estado para armazenar a categoria selecionada no filtro
+  const [selectedCategory, setSelectedCategory] = useState<string>("Minicurso");
 
-    useEffect(() => {
-        const getCategoriesData = async () => {
-            const data = await getCategories();
-            setCategories(data);
-        };
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+    // Aqui você pode passar `category` para o ActivityList ou filtrar localmente
+    console.log("Categoria selecionada:", category);
+  };
 
-        getCategoriesData();
-    }, []);
+  const handlePressActivity = (item: Activity) => {
+    // Ao clicar numa atividade, navega para os detalhes
+    navigation.navigate("ScheduleDetails", { item });
+  };
 
-    // Função para obter o ícone com base no nome da categoria
-    const getIconName = (categoryName: string): string => {
-        switch (categoryName) {
-            case 'Minicursos':
-                return 'laptop-file';
+  // Função para obter o ícone de categoria (caso decida reaproveitar)
+  const getIconName = (categoryName: string): string => {
+    switch (categoryName) {
+      case "Minicursos":
+        return "laptop-file";
+      case "Palestras":
+        return "chalkboard-user";
+      case "Competições":
+        return "trophy";
+      case "Workshops":
+        return "people-group";
+      case "SECOMP":
+        return "id-badge";
+      default:
+        return "list";
+    }
+  };
 
-            case 'Palestras':
-                return 'chalkboard-user';
+  // (Opcional) Se você ainda precisar renderizar algo baseado em categorias genéricas:
+  const renderCategory = ({ item }: { item: Category }) => (
+    <TouchableOpacity onPress={() => navigation.navigate(item.nome)}>
+      <View className="grow h-20 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20 my-2 border border-neutral-200/40">
+        <View className="w-14 h-full ml-2 items-center justify-center">
+          <FontAwesome6 name={getIconName(item.nome)} size={20} color="#445BE6" />
+        </View>
+        <View className="grow">
+          <Text style={{ fontFamily: "Inter_600SemiBold" }} className="text-lg font-semibold text-neutral-700">
+            {item.nome}
+          </Text>
+        </View>
+        <View className="w-14 h-full ml-2 items-center justify-center">
+          <FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
-            case 'Competições':
-                return 'trophy';
+  return (
+    <SafeAreaView className="bg-blue-900 flex-1 items-center">
+      <AppLayout>
+        <BackButton />
 
-            case 'Workshops':
-                return 'people-group';
+        {/* Cabeçalho */}
+        <View className="mb-8">
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
+            Atividades
+          </Text>
+          <Text className="text-gray-400 font-inter text-sm">
+            Veja todas as atividades disponíveis no evento
+          </Text>
+        </View>
 
-            case 'SECOMP':
-                return 'id-badge';
+        {/* Filtro de Categorias */}
+        <View className="w-full mb-4">
+          <CategoryFilter onSelect={handleSelectCategory} />
+        </View>
 
-            default:
-                return 'list';  // Icone padrão
-        }
-    };
-
-    const renderCategory = ({ item }: { item: Category }) => (
-        <TouchableOpacity onPress={() => { navigation.navigate(`${item.nome}`) }}>
-            <View className='grow h-20 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20 my-2 border border-neutral-200/40'>
-                <View className='w-14 h-full ml-2 items-center justify-center'>
-                    <FontAwesome6 name={getIconName(item.nome)} size={20} color="#445BE6" />
-                </View>
-
-                <View className='grow'>
-                    <Text style={{ fontFamily: 'Inter_600SemiBold' }} className='text-lg font-semibold text-neutral-700'>{item.nome}</Text>
-                </View>
-
-                <View className='w-14 h-full ml-2 items-center justify-center'>
-                    <FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-
-    return (
-        <SafeAreaView className='bg-white flex-1 px-8'>
-            <View className={"flex-row justify-center items-center mt-10"}>
-                <TouchableOpacity className='py-2 px-3' style={{ position: 'absolute', left: 0, top: 0 }} onPress={() => navigation.goBack()}>
-                    <FontAwesome6 name="chevron-left" size={14} color="#000000" />
-                </TouchableOpacity>
-
-                <Text style={{ fontFamily: 'Inter_600SemiBold' }} className='text-xl text-black pt-0.5'>Categorias</Text>
-            </View>
-
-            <FlatList
-                className='mt-5'
-                data={categories}
-                renderItem={renderCategory}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={{ padding: 10 }}
-            />
-
-        </SafeAreaView>
-    );
+        {/* Lista de Atividades */}
+        <View className="w-full flex-1">
+          <ActivityList
+            selectedCategory={selectedCategory}
+            onPressActivity={handlePressActivity}
+          />
+        </View>
+      </AppLayout>
+    </SafeAreaView>
+  );
 }
