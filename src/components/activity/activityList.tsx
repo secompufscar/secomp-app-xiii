@@ -126,8 +126,6 @@ export default function ActivityList({
         const dataObj = new Date(item.data);
         const dia = format(dataObj, 'dd', { locale: ptBR });
         const mes = format(dataObj, 'MMMM', { locale: ptBR });
-        const horaInicio = format(dataObj, 'HH:mm');
-        const horaFim = format(addHours(dataObj, 1), 'HH:mm'); // Considera 1h de duração
 
         return (
           <Pressable
@@ -150,7 +148,7 @@ export default function ActivityList({
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{horaInicio}h - {horaFim}h</Text>
+                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}h</Text>
               </Text>
             </View>
           </Pressable>
