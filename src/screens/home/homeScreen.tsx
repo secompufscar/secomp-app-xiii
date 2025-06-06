@@ -150,7 +150,7 @@ export default function Home() {
                 </View>
 
                 {/* Redes sociais */}
-                <View className="w-full mb-20 gap-4">
+                <View className="w-full mb-24 gap-4">
                     <Text className="text-sm text-green font-poppinsSemiBold">Redes sociais</Text>
                     <HomeSocials />
                 </View>            
