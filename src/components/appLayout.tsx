@@ -12,7 +12,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <View className="flex-1 w-full">
         <StatusBar
           barStyle="light-content"
-          backgroundColor={Platform.OS === 'android' ? '#0f172a' : 'transparent'}
+          backgroundColor='transparent'
           translucent={Platform.OS === 'android'}
         />
         
