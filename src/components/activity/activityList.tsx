@@ -132,7 +132,7 @@ export default function ActivityList({
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm shadow-black/25"
+            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
           >
             {/* Bloco com a data (dia + mês) */}
             <View className="items-center mr-4">
@@ -144,8 +144,8 @@ export default function ActivityList({
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
             {/* Bloco com nome da atividade e horário */}
-            <View className="h-full flex-1 flex-col justify-between py-1">
-              <Text className="text-white text-[14px] font-poppinsMedium">
+            <View className="flex-1 flex-col flex-wrap justify-between py-1">
+              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium">
                 {item.nome}
               </Text>
 
