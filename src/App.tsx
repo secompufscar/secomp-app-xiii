@@ -11,7 +11,7 @@ import { colors } from './styles/colors';
 import * as NavigationBar from "expo-navigation-bar";
 
 NavigationBar.setPositionAsync("absolute");
-NavigationBar.setBackgroundColorAsync("#ffffff01");
+NavigationBar.setBackgroundColorAsync("#ffffff00");
 
 export default function App() {
   let [fontsLoaded] = useFonts({
