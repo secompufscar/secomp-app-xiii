@@ -18,7 +18,6 @@ export default function AdminProfile() {
 
 			<View className='h-44 mx-6 mb-2 py-6 flex-row items-center justify-start space-x-4 border-b-2 border-blue-old'>
 				<View className='w-32 h-full rounded-full'>
-					<Image source={require("../../../assets/default-user.png")} className='w-full h-32 max-w-full max-h-full object-cover object-center rounded-full' />
 				</View>
 
 				<View className='grow flex-col justify-start'>
