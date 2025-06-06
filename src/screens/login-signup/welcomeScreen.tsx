@@ -36,8 +36,8 @@ export default function Welcome() {
 
                         <Pressable className="self-center" onPress={() => {navigation.navigate("SignUp")}}>
                             {({ pressed }) => (
-                                <Text className={`text-sm font-inter ${pressed ? "text-white" : "text-gray-400"}`}>
-                                    Criar nova conta
+                                <Text className={`text-base font-inter ${pressed ? "text-white" : "text-gray-400"}`}>
+                                    Criar conta
                                 </Text>
                             )}
                         </Pressable>
