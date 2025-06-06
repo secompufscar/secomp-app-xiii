@@ -11,13 +11,8 @@ import {
     Credential,
     Registration,
     RegistrationDetails,
-    Categorias,
-    Minicursos,
-    Palestras,
-    Workshops,
-    Competições,
+    Activities,
     QRCode,
-    SECOMP
 } from '../screens'
 
 import { ScheduleItemProps } from '../entities/schedule-item';
@@ -35,13 +30,8 @@ type StackNavigation = {
     Credential: undefined;
     Registration: undefined;
     RegistrationDetails: { item: ScheduleItemProps };
-    Categorias: undefined;
-    Minicursos: undefined;
-    Palestras: undefined;
-    Workshops: undefined;
-    Competições: undefined;
+    Activities: undefined;
     QRCode: { id: string };
-    SECOMP: undefined;
   };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -60,13 +50,8 @@ export default function StackRoutes() {
             <Stack.Screen name="Credential" component={Credential} />
             <Stack.Screen name="Registration" component={Registration} />
             <Stack.Screen name="RegistrationDetails" component={RegistrationDetails} />
-            <Stack.Screen name="Categorias" component={Categorias} />
-            <Stack.Screen name="Minicursos" component={Minicursos} />
-            <Stack.Screen name="Palestras" component={Palestras} />
-            <Stack.Screen name="Workshops" component={Workshops} />
-            <Stack.Screen name="Competições" component={Competições} />
+            <Stack.Screen name="Activities" component={Activities} />
             <Stack.Screen name="QRCode" component={QRCode} />
-            <Stack.Screen name="SECOMP" component={SECOMP} />
         </Stack.Navigator>
     );
 }

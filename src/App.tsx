@@ -13,8 +13,6 @@ import * as SystemUI from 'expo-system-ui';
 
 NavigationBar.setPositionAsync("absolute");
 NavigationBar.setBackgroundColorAsync("#ffffff00");
-NavigationBar.setVisibilityAsync('visible');
-NavigationBar.setBehaviorAsync('overlay-swipe');
 
 SystemUI.setBackgroundColorAsync('transparent');
 

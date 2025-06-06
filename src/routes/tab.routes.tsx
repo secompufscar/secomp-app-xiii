@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from "react-native"
-import { Home, Schedule, UserProfile, Categorias } from '../screens';
+import { Home, Schedule, UserProfile, Activities } from '../screens';
 
 import { colors } from "../styles/colors"
 import { useAuth } from "../hooks/AuthContext";
@@ -75,8 +75,8 @@ export default function TabRoutes() {
             />
 
             <Tab.Screen
-                name="Atividades"
-                component={Categorias}
+                name="Activities"
+                component={Activities}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View className="flex justify-center items-center gap-[4px]">

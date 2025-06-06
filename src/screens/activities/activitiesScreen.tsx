@@ -9,7 +9,7 @@ import AppLayout from "../../components/appLayout";
 import ActivityList from "../../components/activity/activityList";
 import CategoryFilter from "../../components/activity/categoryFilter";
 
-export default function Categorias() {
+export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user: { user } }: any = useAuth();
 
