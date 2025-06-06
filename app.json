@@ -2,6 +2,7 @@
   "expo": {
     "name": "Secomp",
     "slug": "secompufscar",
+    "scheme": "secompapp",
     "description": "A Semana Acadêmica da Computação da Universidade Federal de São Carlos (SECOMP UFSCar) surgiu da necessidade de trazer assuntos que fossem de interesse tanto da comunidade acadêmica quanto de entusiastas.",
     "newArchEnabled": true,
     "version": "1.0.0",
