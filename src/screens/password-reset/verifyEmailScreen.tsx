@@ -1,11 +1,6 @@
 import React from "react";
-import {
-    SafeAreaView,
-    View,
-    ScrollView,
-    Text,
-    Pressable
-} from "react-native";
+import { View, Text, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
@@ -37,12 +32,12 @@ export default function VerifyEmail() {
             <AppLayout>
                 <BackButton/>
 
-                <View className="mb-8">
+                <View className="mt-8 mb-10">
                     <Text className="text-white text-2xl font-poppinsSemiBold mb-3">
                         Verifique seu e-mail
                     </Text>
 
-                    <Text className="text-gray-400 font-inter text-sm">
+                    <Text className="text-gray-400 font-inter text-base">
                         Foi enviado um link para redefinição de senha no seu e-mail cadastrado.
                     </Text>
                 </View>
@@ -50,12 +45,15 @@ export default function VerifyEmail() {
                 <Button title="Enviar novamente" onPress={() => {resendEmail}}/>
 
                 <Pressable
-                    className="w-full mt-4 p-4 border border-gray-400 items-center justify-center rounded-lg outline-none"
                     onPress={() => navigation.navigate("Login")}
                 >
-                    <Text className="text-gray-400 text-sm font-inter font-semibold">
-                        Voltar para o login
-                    </Text>
+                    {({ pressed }) => (
+                        <View className={`w-full mt-4 p-4 border border-blue-200 items-center justify-center rounded-lg outline-none ${pressed ? "bg-blue-100/10" : ""}`}>
+                            <Text className="text-blue-200 text-base font-inter font-semibold">
+                                Voltar para o login
+                            </Text>
+                        </View>
+                    )}
                 </Pressable>
             </AppLayout>
         </SafeAreaView>

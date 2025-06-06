@@ -1,27 +1,26 @@
+import React, { useState } from "react";
 import { PressableProps } from "@react-native-material/core";
-import { Text, Pressable } from "react-native";
-import clsx from "clsx";
+import { View, Text, Pressable } from "react-native";
 
 type Props = PressableProps & {
   title: string;
 };
 
 export default function Button({ title, ...rest }: Props) {
-    return (
-        <Pressable
-            {...rest}
-        >
-            {({ pressed }) => (
-                <Text
-                className={clsx(
-                    "w-full p-4 items-center justify-center rounded-lg text-white text-base font-interMedium text-center",
-                    "transition-transform duration-100",
-                    pressed ? "bg-blue-500 opacity-80" : "bg-blue-500"
-                )}
-                >
-                {title}
-                </Text>
-            )}
-        </Pressable>
-    );
+  const [isPressed, setIsPressed] = useState(false);
+
+  return (
+    <Pressable
+      {...rest}
+      onPressIn={() => setIsPressed(true)}
+      onPressOut={() => setIsPressed(false)}
+    >
+      <View
+        className={`w-full p-4 items-center justify-center rounded-lg transition-transform duration-100 transform bg-blue-500 
+        ${isPressed ? "opacity-80" : "opacity-100"}`}
+      >
+        <Text className="text-white text-base font-interMedium">{title}</Text>
+      </View>
+    </Pressable>
+  );
 }

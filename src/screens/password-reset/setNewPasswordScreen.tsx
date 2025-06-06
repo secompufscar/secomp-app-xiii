@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  Image,
-  Text,
-  Modal,
-  Pressable,
-  Alert,
-} from "react-native";
+import { View, Image, Text, Modal, Pressable, Alert} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
 import { useRoute } from "@react-navigation/native";
@@ -62,12 +55,12 @@ export default function SetNewPassword() {
       <AppLayout>
         <BackButton/>
 
-        <View className="mb-8">
+        <View className="my-8">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-3">
             Defina uma nova senha
           </Text>
 
-          <Text className="text-gray-400 font-inter text-sm">
+          <Text className="text-gray-400 font-inter text-base">
             Estamos quase lá! Digite e confirme sua nova senha.
           </Text>
         </View>

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { View, Alert, TouchableOpacity, Text, Platform, Pressable, ActivityIndicator } from "react-native"
+import { View, Alert, Text, Platform, Pressable, ActivityIndicator } from "react-native"
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 import { AuthTypes } from "../../routes/auth.routes"
@@ -11,7 +11,6 @@ import AppLayout from "../../components/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button"
 import validator from 'validator';
-
 
 function capitalizeFirstLetter(string: string) {
 	const words = string.toLocaleLowerCase().split(" ");
@@ -114,7 +113,7 @@ export default function SignUp() {
                         Criar conta
                     </Text>
 
-					<Text className="text-gray-400 text-sm font-inter">
+					<Text className="text-gray-400 text-base font-inter">
 						Você está próximo de participar do evento!
                     </Text>
                 </View>

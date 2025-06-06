@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text } from "react-native";
+import { View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
@@ -24,12 +25,10 @@ export default function PasswordReset() {
       alert("É preciso informar um e-mail válido para redefinir a senha.");
       return;
     }
-
-    navigation.navigate("VerifyEmail", { email });
   
     try {
       await sendForgotPasswordEmail({ email }); 
-      
+      navigation.navigate("VerifyEmail", { email });
     } catch (error: any) {
       console.error("Erro ao enviar email de recuperação:", error);
       alert(
@@ -44,12 +43,12 @@ export default function PasswordReset() {
       <AppLayout>
         <BackButton/>
 
-        <View className="mb-8">
+        <View className="my-8">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-3">
             Recuperar senha
           </Text>
 
-          <Text className="text-gray-400 font-inter text-sm">
+          <Text className="text-gray-400 font-inter text-base">
             Por favor, insira seu e-mail para redefinir sua senha
           </Text>
         </View>
