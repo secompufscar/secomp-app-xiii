@@ -1,26 +1,13 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity
-} from "react-native";
+import { View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FontAwesome6 } from "@expo/vector-icons";
-
 import { useAuth } from "../../hooks/AuthContext";
 import BackButton from "../../components/button/backButton";
 import AppLayout from "../../components/appLayout";
-import { ActivityList } from "../../components/activity/activityList";
-import { CategoryFilter } from "../../components/activity/categoryFilter";
-
-type Category = {
-  id: string;
-  nome: string;
-};
-
-
+import ActivityList from "../../components/activity/activityList";
+import CategoryFilter from "../../components/activity/categoryFilter";
 
 export default function Categorias() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -58,25 +45,6 @@ export default function Categorias() {
     }
   };
 
-  // (Opcional) Se você ainda precisar renderizar algo baseado em categorias genéricas:
-  const renderCategory = ({ item }: { item: Category }) => (
-    <TouchableOpacity onPress={() => navigation.navigate(item.nome)}>
-      <View className="grow h-20 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20 my-2 border border-neutral-200/40">
-        <View className="w-14 h-full ml-2 items-center justify-center">
-          <FontAwesome6 name={getIconName(item.nome)} size={20} color="#445BE6" />
-        </View>
-        <View className="grow">
-          <Text style={{ fontFamily: "Inter_600SemiBold" }} className="text-lg font-semibold text-neutral-700">
-            {item.nome}
-          </Text>
-        </View>
-        <View className="w-14 h-full ml-2 items-center justify-center">
-          <FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
@@ -87,7 +55,7 @@ export default function Categorias() {
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
             Atividades
           </Text>
-          <Text className="text-gray-400 font-inter text-sm">
+          <Text className="text-gray-400 font-inter text-">
             Veja todas as atividades disponíveis no evento
           </Text>
         </View>

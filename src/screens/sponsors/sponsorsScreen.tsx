@@ -17,7 +17,7 @@ export default function Sponsors() {
             Patrocinadores
           </Text>
 
-          <Text className="text-gray-400 font-inter text-sm">
+          <Text className="text-gray-400 font-inter text-base">
             Empresas que confiam em nós e fazem o evento acontecer
           </Text>
         </View>

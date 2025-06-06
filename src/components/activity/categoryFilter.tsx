@@ -5,7 +5,7 @@ import { View, ScrollView, Text, Pressable } from 'react-native';
 const categories = ['Palestra', 'Minicurso', 'Competições', 'Outros'];
 
 // Componente que exibe filtros de categoria em botões
-export function CategoryFilter({ onSelect }: { onSelect?: (category: string) => void }) {
+export default function CategoryFilter({ onSelect }: { onSelect?: (category: string) => void }) {
   // Estado para rastrear qual categoria está atualmente selecionada
   const [selectedCategory, setSelectedCategory] = useState<string>('Palestra');
 
@@ -29,7 +29,7 @@ export function CategoryFilter({ onSelect }: { onSelect?: (category: string) => 
             <Pressable
               key={category}
               onPress={() => handlePress(category)} 
-              className={`px-4 py-1.5 rounded-full
+              className={`px-5 py-1.5 rounded-full
                 ${isSelected ? 'bg-green' : 'border border-neutral-200'}
                 justify-center items-center`}
             >

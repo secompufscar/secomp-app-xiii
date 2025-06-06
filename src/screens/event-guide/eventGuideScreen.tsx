@@ -15,7 +15,7 @@ export default function EventGuide() {
                     <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
                         Guia do evento
                     </Text>
-                    <Text className="text-gray-400 font-inter text-sm">
+                    <Text className="text-gray-400 font-inter text-base">
                         Como participar das atividades da Secomp?
                     </Text>
                 </View>

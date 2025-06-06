@@ -13,7 +13,7 @@ type ActivityListProps = {
 };
 
 // Componente principal que lista atividades filtradas por categoria
-export function ActivityList({
+export default function ActivityList({
   selectedCategory,
   onPressActivity,
 }: ActivityListProps) {
