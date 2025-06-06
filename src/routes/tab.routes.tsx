@@ -5,6 +5,7 @@ import { Home, Schedule, UserProfile, Categorias } from '../screens';
 
 import { colors } from "../styles/colors"
 import { useAuth } from "../hooks/AuthContext";
+import { center } from '@shopify/react-native-skia';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,13 +25,14 @@ export default function TabRoutes() {
                     backgroundColor: '#1C212C',
                     borderTopWidth: 1,
                     borderTopColor: '#212735',
-                    height: 66,
+                    height: 72,
                     maxWidth: 1000, 
                     width: '100%',  
                     position: 'absolute', 
                     bottom: 0, 
                     marginHorizontal: 'auto', 
                     paddingHorizontal: 12,
+                    paddingVertical: 5,
                     gap: 4,
                 },
                 tabBarShowLabel: false,
@@ -43,7 +45,7 @@ export default function TabRoutes() {
                 component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View className="flex justify-center items-center gap-[7px]">
+                        <View className="flex justify-center items-center gap-[4px]">
                             <Ionicons
                             name={focused ? 'home' : 'home-outline'}
                             size={20}
@@ -60,7 +62,7 @@ export default function TabRoutes() {
                 component={Schedule}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View className="flex justify-center items-center gap-[7px]">
+                        <View className="flex justify-center items-center gap-[4px]">
                             <Ionicons
                                 name={focused ? 'calendar-clear' : 'calendar-clear-outline'}
                                 size={20}
@@ -77,7 +79,7 @@ export default function TabRoutes() {
                 component={Categorias}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View className="flex justify-center items-center gap-[7px]">
+                        <View className="flex justify-center items-center gap-[4px]">
                             <Ionicons
                                 name={focused ? 'list' : 'list-outline'}
                                 size={20}
@@ -94,7 +96,7 @@ export default function TabRoutes() {
                 component={UserProfile}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View className="flex justify-center items-center gap-[7px]">
+                        <View className="flex justify-center items-center gap-[4px]">
                             <Ionicons
                                 name={focused ? 'person' : 'person-outline'}
                                 size={20}
