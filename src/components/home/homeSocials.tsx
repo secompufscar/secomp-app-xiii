@@ -11,7 +11,7 @@ export default function HomeSocials() {
                 colors={["#29303F", "#2A3B5E"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="flex-1 p-4 rounded-[6px]"
+                className="flex-1 p-5 rounded-[6px] overflow-hidden"
             >
                 <Pressable
                     className="flex items-center justify-center"
@@ -25,7 +25,7 @@ export default function HomeSocials() {
                 colors={["#29303F", "#2A3B5E"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="flex-1 p-4 rounded-[6px]"
+                className="flex-1 p-5 rounded-[6px] overflow-hidden"
             >
                 <Pressable
                     className="flex items-center justify-center"
@@ -39,7 +39,7 @@ export default function HomeSocials() {
                 colors={["#29303F", "#2A3B5E"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="flex-1 p-4 rounded-[6px]"
+                className="flex-1 p-5 rounded-[6px] overflow-hidden"
             >
                 <Pressable
                     className="flex items-center justify-center"
@@ -53,7 +53,7 @@ export default function HomeSocials() {
                 colors={["#29303F", "#2A3B5E"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className="flex-1 p-4 rounded-[6px]"
+                className="flex-1 p-5 rounded-[6px] overflow-hidden"
             >
                 <Pressable
                     className="flex items-center justify-center"

@@ -19,6 +19,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           className="flex-1 w-full"
+          contentContainerStyle={{ flexGrow: 1 }}
         >
           <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
             {children}

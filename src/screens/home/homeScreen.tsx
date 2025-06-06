@@ -17,6 +17,7 @@ import HomeSocials from "../../components/home/homeSocials";
 export default function Home() {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const { user } : any = useAuth();
+    const [isBtnPressed, setIsBtnPressed] = useState(false);
     const [pressed, setPressed] = useState(false);
 
     // Mensagem baseada no horário do dia
@@ -73,7 +74,7 @@ export default function Home() {
     return (
         <SafeAreaView className="bg-blue-900 flex-1 items-center">
             <AppLayout>
-                <View className="w-full flex-row items-center justify-between mt-8 mb-8 gap-4">
+                <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
                     <View className="flex-col h-full flex-1 ">
                         <Text className="text-[14px] text-blue-100 font-inter">{eventDay}</Text>
                         <View className="flex-row items-center justify-start mt-[7px]">
@@ -95,11 +96,15 @@ export default function Home() {
                     colors={["#29303F", "#2A3B5E"]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
-                    className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5"
+                    className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 overflow-hidden"
                     >
-                        <Text className="text-white text-[14px] font-poppinsMedium mb-2">Inscreva-se na Secomp</Text>
-                        <Text className="text-default text-[13px] font-inter leading-[1.4] mb-4">Para participar do evento e de suas atividades, você deve se inscrever por aqui</Text>
-                        <Pressable onPress={subscribe} className="w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1">
+                        <Text className="text-white text-lg font-poppinsSemiBold mb-2">Inscreva-se na Secomp</Text>
+                        <Text className="text-default text-[13px] font-inter leading-[1.5] mb-4">Para participar do evento e de suas atividades, você deve se inscrever por aqui</Text>
+                        <Pressable 
+                            onPress={subscribe} 
+                            onPressIn={() => setIsBtnPressed(true)}
+                            onPressOut={() => setIsBtnPressed(false)}
+                            className={`w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${isBtnPressed ? "opacity-80" : "opacity-100"}`}>
                             <Text className="text-white text-[13px] font-poppinsMedium">Inscrever-se</Text>
                         </Pressable>
                 </LinearGradient>
@@ -139,7 +144,7 @@ export default function Home() {
                         className={`w-full h-[62px] p-2 gap-3 flex-row items-center border border-border rounded-[8px] transition-all duration-50 
                             ${pressed ? 'bg-background' : ''
                         }`}>
-                        <View className="w-11 h-full flex items-center justify-center bg-background rounded-[5px]">
+                        <View className="w-[44px] h-full flex items-center justify-center bg-background rounded-[5px]">
                             <FontAwesomeIcon icon={faStar} size={20} color={colors.blue[500]} />
                         </View>
 
