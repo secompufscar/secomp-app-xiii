@@ -76,7 +76,7 @@ export default function Home() {
             <AppLayout>
                 <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
                     <View className="flex-col h-full flex-1 ">
-                        <Text className="text-[14px] text-blue-100 font-inter">{eventDay}</Text>
+                        <Text className="text-base text-blue-100 font-inter">{eventDay}</Text>
                         <View className="flex-row items-center justify-start mt-[7px]">
                             <Text className="text-[18px] text-white font-poppinsSemiBold">{greeting} </Text>
                             <Text className="text-[18px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>

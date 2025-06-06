@@ -1,8 +1,9 @@
-import { SafeAreaView, View, Text, Image, Pressable, Linking } from "react-native";
-import BackButton from "../../components/button/backButton";
+import { View, Text, Image, Pressable, Linking } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import AppLayout from "../../components/appLayout";
 import { sponsors } from "./sponsorsData";
+import AppLayout from "../../components/appLayout";
+import BackButton from "../../components/button/backButton";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Sponsors() {
@@ -29,7 +30,7 @@ export default function Sponsors() {
                 colors={["#2E364B", "#161F36"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                className={`flex-col w-full rounded-[8px] border p-6 mb-8 ${pressed ? "border-blue-500" : "border-border"}`}
+                className={`flex-col w-full rounded-[8px] border p-6 mb-8 overflow-hidden ${pressed ? "border-blue-500" : "border-border"}`}
               >
                 {/* Header */}
                 <View className="w-full flex-row items-center justify-between mb-5">

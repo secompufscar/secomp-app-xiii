@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image } from "react-native";
+import { View, Text, Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/button/backButton";
 import AppLayout from "../../components/appLayout";
 
