@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable} from "react-native";
 import { getActivities } from "../../services/activities";
 import { getCategories } from "../../services/categories";
-import { format, addHours } from "date-fns";
+import { parseISO, addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 
@@ -116,14 +116,14 @@ export default function ActivityList({
     );
   }
 
-  // Lista de atividades filtradas
   return (
     <FlatList
       data={filtered}
       keyExtractor={(item) => item.id}
       contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
       renderItem={({ item }) => {
-        const dataObj = new Date(item.data);
+        const rawDate = parseISO(item.data);
+        const dataObj = addHours(rawDate, 3); // Corrige para UTC-3 (Brasília)
         const dia = format(dataObj, 'dd', { locale: ptBR });
         const mes = format(dataObj, 'MMMM', { locale: ptBR });
 
