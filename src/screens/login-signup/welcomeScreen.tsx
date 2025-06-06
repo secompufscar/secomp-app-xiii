@@ -21,12 +21,12 @@ export default function Welcome() {
                         {/* Ilustração */}
                     </View>
 
-                    <View className="flex-col gap-3">
+                    <View className="flex-col gap-3 mt-6">
                         <Text className="text-white text-2xl font-poppinsSemiBold">
                             Venha viver a Secomp
                         </Text>
 
-                        <Text className="text-gray-400 font-inter text-sm">
+                        <Text className="text-gray-400 font-inter text-base">
                             Participe de um dos maiores eventos tech de São Carlos!
                         </Text>
                     </View>

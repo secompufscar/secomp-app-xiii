@@ -14,7 +14,7 @@ export default function Button({ title, ...rest }: Props) {
             {({ pressed }) => (
                 <Text
                 className={clsx(
-                    "w-full p-4 items-center justify-center rounded-lg text-white text-sm font-inter font-semibold text-center",
+                    "w-full p-4 items-center justify-center rounded-lg text-white text-sm font-inter font-medium text-center",
                     "transition-transform duration-100",
                     pressed ? "bg-blue-500 opacity-80" : "bg-blue-500"
                 )}
