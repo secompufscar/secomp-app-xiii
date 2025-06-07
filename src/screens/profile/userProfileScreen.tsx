@@ -1,11 +1,12 @@
-import { SafeAreaView, View, Text, Pressable } from "react-native";
-import BackButton from "../../components/button/backButton";
+import { View, Text, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
-import EditButton from "../../components/button/editButton";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser} from "@fortawesome/free-solid-svg-icons";
 import AppLayout from "../../components/appLayout";
+import BackButton from "../../components/button/backButton";
+import EditButton from "../../components/button/editButton";
 
 
 export default function UserProfile() {
@@ -68,7 +69,6 @@ export default function UserProfile() {
 			// Navegacao
 		}}
 		>
-			
 		{({ pressed }) => (
 			<View
 			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
@@ -78,30 +78,22 @@ export default function UserProfile() {
 			<View className="flex-row items-center gap-4">
 				<View className="w-6 h-full flex items-center justify-center">
 				<FontAwesomeIcon icon={faBell} size={24} color="#A9B4F4" />
-
-				<Text className="text-white text-base font-inter">
-				Notificações
-				</Text>
+				</View>
+				<Text className="text-white text-base font-inter">Notificações</Text>
 			</View>
 
 			<View className="w-6 h-full flex items-center justify-center">
-				<FontAwesomeIcon
-				icon={faChevronRight}
-				size={16}
-				color="#A9B4F4"
-				/>
+				<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
 			</View>
 			</View>
 		)}
 		</Pressable>
-
 
 		<Pressable
 		onPress={() => {
 			// Navegacao
 		}}
 		>
-			
 		{({ pressed }) => (
 			<View
 			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
@@ -112,18 +104,11 @@ export default function UserProfile() {
 				<View className="w-6 h-full flex items-center justify-center">
 				<FontAwesomeIcon icon={faQrcode} size={24} color="#A9B4F4" />
 				</View>
-
-				<Text className="text-white text-base font-inter">
-				Credencial
-				</Text>
+				<Text className="text-white text-base font-inter">Credencial</Text>
 			</View>
 
 			<View className="w-6 h-full flex items-center justify-center">
-				<FontAwesomeIcon
-				icon={faChevronRight}
-				size={16}
-				color="#A9B4F4"
-				/>
+				<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
 			</View>
 			</View>
 		)}
@@ -134,7 +119,6 @@ export default function UserProfile() {
 			// Navegacao
 		}}
 		>
-			
 		{({ pressed }) => (
 			<View
 			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
@@ -145,23 +129,15 @@ export default function UserProfile() {
 				<View className="w-6 h-full flex items-center justify-center">
 				<FontAwesomeIcon icon={faCalendarDays} size={24} color="#A9B4F4" />
 				</View>
-
-				<Text className="text-white text-base font-inter">
-				Minhas Atividades
-				</Text>
+				<Text className="text-white text-base font-inter">Minhas Atividades</Text>
 			</View>
 
 			<View className="w-6 h-full flex items-center justify-center">
-				<FontAwesomeIcon
-				icon={faChevronRight}
-				size={16}
-				color="#A9B4F4"
-				/>
+				<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
 			</View>
 			</View>
 		)}
 		</Pressable>
-
 
 
         {/* Logout */}
