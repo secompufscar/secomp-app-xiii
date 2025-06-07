@@ -1,86 +1,182 @@
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
-import { ParamListBase, useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FontAwesome6, MaterialIcons } from '@expo/vector-icons';
-import { useAuth } from "../../hooks/AuthContext";
+import { SafeAreaView, View, Text, Pressable } from "react-native";
+import BackButton from "../../components/button/backButton";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import EditButton from "../../components/button/editButton";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faBell, faRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser} from "@fortawesome/free-solid-svg-icons";
+import AppLayout from "../../components/appLayout";
 
-// Página para usuário
+
 export default function UserProfile() {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-	const { signOut, user}: any = useAuth()
+  return (
+    <SafeAreaView className="bg-blue-900 flex-1 items-center">
+		<AppLayout>
+        <View className="flex-row justify-between items-center mb-8">
+          <BackButton />
+          <EditButton />
+        </View>
 
-	return (
-		<SafeAreaView className='bg-white flex-1'>
-			<View className='flex-row justify-start items-center pt-16 pb-2 px-6 gap-4'>
-				<Text className='text-3xl font-bold text-blue-old'>Perfil</Text>
+
+        <View className="items-center mb-8">
+          <View className="w-28 h-28 rounded-full border-[1px] border-[#3DCC87] bg-[#21353A] flex items-center justify-center mb-4">
+            <View className="w-6 h-full flex items-center justify-center">
+					<FontAwesomeIcon icon={faUser} size={48} color="#3DCC87" />
+				</View>
+          </View>
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-1">
+            Nome Completo
+          </Text>
+          <Text className="text-gray-400 font-poppins text-[14px]">
+            aluno@estudante.ufscar.br
+          </Text>
+        </View>
+
+
+        {/* Stats */}
+        <View className="flex-row justify-around items-center mb-8 px-4">
+          <View className="items-center">
+            <Text className="text-white text-3xl font-poppinsSemiBold">
+              27
+            </Text>
+            <Text className="text-gray-400 font-inter text-xs uppercase">
+              NO RANK
+            </Text>
+          </View>
+          <View className="items-center">
+            <Text className="text-white text-3xl font-poppinsSemiBold">
+              1623
+            </Text>
+            <Text className="text-gray-400 font-inter text-xs uppercase">
+              PONTOS
+            </Text>
+          </View>
+          <View className="items-center">
+            <Text className="text-white text-3xl font-poppinsSemiBold">
+              04
+            </Text>
+            <Text className="text-gray-400 font-inter text-xs uppercase">
+              ATIVIDADES
+            </Text>
+          </View>
+        </View>
+
+        {/* Menu */}
+		<Pressable
+		onPress={() => {
+			// Navegacao
+		}}
+		>
+			
+		{({ pressed }) => (
+			<View
+			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
+				pressed ? "bg-[#3D475C]" : "bg-[#29303F]"
+			}`}
+			>
+			<View className="flex-row items-center gap-4">
+				<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon icon={faBell} size={24} color="#A9B4F4" />
+
+				<Text className="text-white text-base font-inter">
+				Notificações
+				</Text>
 			</View>
 
-			<View className='h-44 mx-6 mb-2 py-6 flex-row items-center justify-start space-x-4 border-b-2 border-blue-old'>
-				<View className='w-32 h-full rounded-full'>
+			<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon
+				icon={faChevronRight}
+				size={16}
+				color="#A9B4F4"
+				/>
+			</View>
+			</View>
+		)}
+		</Pressable>
+
+
+		<Pressable
+		onPress={() => {
+			// Navegacao
+		}}
+		>
+			
+		{({ pressed }) => (
+			<View
+			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
+				pressed ? "bg-[#3D475C]" : "bg-[#29303F]"
+			}`}
+			>
+			<View className="flex-row items-center gap-4">
+				<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon icon={faQrcode} size={24} color="#A9B4F4" />
 				</View>
 
-				<View className='grow flex-col justify-start'>
-					<Text className='text-xl font-semibold text-blue-old pb-0.5'>{user.nome}</Text>
-					<Text className='text-sm text-neutral-500'>{user.email}</Text>
-				</View>
-
-				<View className='w-[14%] h-[36%] flex-row justify-center p-1'>
-					<TouchableOpacity onPress={() => { navigation.navigate('') }}>
-						<FontAwesome6 name="edit" size={16} color="#6e6d6d" />
-					</TouchableOpacity>
-				</View>
+				<Text className="text-white text-base font-inter">
+				Credencial
+				</Text>
 			</View>
 
-			<View className='h-full m-6 flex-col justify-start space-y-4'>
-				<TouchableOpacity onPress={() => { navigation.navigate('Credential') }}>
-					<View className='grow h-16 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20'>
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<FontAwesome6 name="id-badge" size={24} color="#445BE6" />
-						</View>
-
-						<View className='grow'>
-							<Text className='text-xl font-semibold text-neutral-700'>Credencial</Text>
-						</View>
-
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => { navigation.navigate('MyEvents') }}>
-					<View className='grow h-16 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20'>
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<MaterialIcons name="event" size={24} color="#445BE6" />
-						</View>
-
-						<View className='grow'>
-							<Text className='text-xl font-semibold text-neutral-700'>Eventos Inscritos</Text>
-						</View>
-
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
-						</View>
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={signOut}>
-					<View className='grow h-16 flex-row items-center space-x-1 rounded-lg bg-neutral-200/20'>
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<MaterialIcons name="logout" size={24} color="#445BE6" />
-						</View>
-
-						<View className='grow'>
-							<Text className='text-xl font-semibold text-neutral-700'>Sair</Text>
-						</View>
-
-						<View className='w-14 h-full ml-2 items-center justify-center'>
-							<FontAwesome6 name="chevron-right" size={18} color="#a3a3a3" />
-						</View>
-					</View>
-				</TouchableOpacity>
+			<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon
+				icon={faChevronRight}
+				size={16}
+				color="#A9B4F4"
+				/>
 			</View>
-		</SafeAreaView>
-	);
+			</View>
+		)}
+		</Pressable>
+
+		<Pressable
+		onPress={() => {
+			// Navegacao
+		}}
+		>
+			
+		{({ pressed }) => (
+			<View
+			className={`flex-row items-center justify-between rounded-lg p-4 mb-3 ${
+				pressed ? "bg-[#3D475C]" : "bg-[#29303F]"
+			}`}
+			>
+			<View className="flex-row items-center gap-4">
+				<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon icon={faCalendarDays} size={24} color="#A9B4F4" />
+				</View>
+
+				<Text className="text-white text-base font-inter">
+				Minhas Atividades
+				</Text>
+			</View>
+
+			<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon
+				icon={faChevronRight}
+				size={16}
+				color="#A9B4F4"
+				/>
+			</View>
+			</View>
+		)}
+		</Pressable>
+
+
+
+        {/* Logout */}
+        <Pressable className="flex-row items-center justify-center p-4">
+          	<View className="w-6 h-full flex items-center justify-center">
+				<FontAwesomeIcon icon={faRightFromBracket} size={16} color="#FFFFFF" />
+			</View>
+          <Text className="text-white text-base font-inter">
+            Sair
+          </Text>
+        </Pressable>
+
+
+      </AppLayout>
+	</SafeAreaView>
+  );
 }
 

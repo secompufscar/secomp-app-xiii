@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text } from "react-native"
-import { Home, Schedule, UserProfile, Activities } from '../screens';
+import { Home, Schedule, UserProfile, AdminProfile, Activities } from '../screens';
 
 import { colors } from "../styles/colors"
 import { useAuth } from "../hooks/AuthContext";
@@ -91,22 +91,46 @@ export default function TabRoutes() {
                 }}
             />
 
-            <Tab.Screen
-                name="Perfil"
-                component={UserProfile}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <View className="flex justify-center items-center gap-[4px]">
-                            <Ionicons
-                                name={focused ? 'person' : 'person-outline'}
-                                size={20}
-                                color={focused ? colors.white : '#828ead'}
-                            />
-                            <Text className={`text-[10px] font-inter font-medium ${focused ? "text-white" : "text-[#828EAD]"}`}>Perfil</Text>
-                        </View>
-                    ),
-                }}
-            />
+            {role === 'admin' ? (
+                // Admin
+                <>
+                    <Tab.Screen
+                        name="AdminPerfil"
+                        component={AdminProfile} 
+                        options={{
+                            tabBarIcon: ({ focused }) => (
+                                <View className="flex justify-center items-center gap-[4px]">
+                                    <Ionicons
+                                        name={focused ? 'shield-half' : 'shield-half-outline'}
+                                        size={20}
+                                        color={focused ? colors.white : '#828ead'}
+                                    />
+                                    <Text className={`text-[10px] font-inter font-medium ${focused ? "text-white" : "text-[#828EAD]"}`}>Admin</Text>
+                                </View>
+                            ),
+                        }}
+                    />
+                    
+                </>
+            ) : (
+                // Usuario Padrao
+                <Tab.Screen
+                    name="Perfil"
+                    component={UserProfile}
+                    options={{
+                        tabBarIcon: ({ focused }) => (
+                            <View className="flex justify-center items-center gap-[4px]">
+                                <Ionicons
+                                    name={focused ? 'person' : 'person-outline'}
+                                    size={20}
+                                    color={focused ? colors.white : '#828ead'}
+                                />
+                                <Text className={`text-[10px] font-inter font-medium ${focused ? "text-white" : "text-[#828EAD]"}`}>Perfil</Text>
+                            </View>
+                        ),
+                    }}
+                />
+            )}
 
         </Tab.Navigator>
     );

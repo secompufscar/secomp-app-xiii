@@ -10,6 +10,7 @@ import Home from './home/homeScreen'
 import EventGuide from './event-guide/eventGuideScreen';
 import Sponsors from './sponsors/sponsorsScreen'
 import UserProfile from './profile/userProfileScreen'
+import AdminProfile from './profile/adminProfileScreen'
 
 import Schedule from './schedule/scheduleScreen'
 import ScheduleDetails from './schedule/scheduleDetailsScreen'
@@ -34,6 +35,7 @@ export {
     EventGuide,
     Sponsors,
     UserProfile,
+    AdminProfile,
     Schedule,
     ScheduleDetails,
     MyEvents,
