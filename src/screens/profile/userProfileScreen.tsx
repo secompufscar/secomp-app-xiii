@@ -62,7 +62,6 @@ export default function UserProfile() {
           </View>
         </View>
 
-
         {/* Menu */}
 		<Pressable
 		onPress={() => {
@@ -79,7 +78,6 @@ export default function UserProfile() {
 			<View className="flex-row items-center gap-4">
 				<View className="w-6 h-full flex items-center justify-center">
 				<FontAwesomeIcon icon={faBell} size={24} color="#A9B4F4" />
-				</View>
 
 				<Text className="text-white text-base font-inter">
 				Notificações

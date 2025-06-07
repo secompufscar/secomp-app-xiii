@@ -1,87 +1,86 @@
 import React from 'react';
-import { useState } from 'react';
-import { AntDesign } from '@expo/vector-icons';
-import { SafeAreaView, Text, Image, TouchableOpacity, View, ImageBackground, Modal, TouchableWithoutFeedback } from 'react-native';
-import { ParamListBase, useNavigation } from "@react-navigation/native"
+import { View, Text, Image, Pressable } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ParamListBase, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useAuth } from "../../hooks/AuthContext";
-// import { LinearGradient } from 'expo-linear-gradient';
-
+import { useAuth } from '../../hooks/AuthContext';
+import AppLayout from '../../components/appLayout';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { colors } from '../../styles/colors';
 
 export default function Credential() {
-    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-    const { user } : any = useAuth();
+    const { user }: any = useAuth();
 
     return (
-        <SafeAreaView className='items-center bg-white flex-1'>
-            <View className='w-96 max-w-[90%] h-screen flex-col items-center '>
-                <View className='w-full h-[20%] items-center relative'>
-                    <View className='w-24 h-[130%] absolute -bottom-10 bg-blue-old' />
+        <SafeAreaView className="flex-1 bg-blue-900 items-center">
+            <AppLayout>
+                {/* Header */}
+                <View className="w-full justify-center items-center mt-16 mb-10">
+                    <Text className="text-white text-xl font-poppinsSemiBold text-center">
+                        Credencial
+                    </Text>
+
+                    <View className="absolute left-0">
+                        <Pressable
+                            className="w-[32px] h-[32px] rounded-[4px] bg-[#29303F] active:bg-[#29303F]/80"
+                            onPress={() => navigation.goBack()}
+                        >
+                            <View className={`flex items-center justify-center p-2 `}>
+                                <FontAwesomeIcon icon={faChevronLeft} size={16} color={colors.blue[200]} />
+                            </View>
+                        </Pressable>
+                    </View>
                 </View>
 
-                <View className='w-full h-[68%] items-center flex-col rounded-3xl relative overflow-hidden'>
-                    <View className='w-full h-[100%]'>
-                        <View className='w-full h-full bg-gradient-to-b from-black to-blue-old'>
+                {/* Subtitle */}
+                <Text className="w-full text-center text-gray-400 text-base mt-2 mb-6">
+                    Use sua credencial para registrar presença nas atividades
+                </Text>
 
-                            <View className='w-full h-20 px-10 py-7 flex-row' />
-                            <View className='mt-2 mb-5'>
-                                <Text className='text-2xl font-bold text-white text-center' allowFontScaling={false}> SECOMP XII</Text>
-                            </View>
-
-                            <View className='w-40 h-40 mx-10 mt-1 self-center'>
-                                <Image
-                                    source={{ uri: user.qrCode }}
-                                    resizeMode="cover"
-                                    className='w-full h-full max-w-full max-h-full object-cover' />
-                            </View>
-
-                            <View className='mt-12'>
-                                <Text className='text-3xl  text-white text-center' allowFontScaling={false}> {user.nome} </Text>                            </View>
-
+                {/* Card Background */}
+                <View className="relative self-center max-w-[440px] w-full h-fit bg-iconbg py-8 px-2 rounded-2xl">
+                    {/* User Info */}
+                    <View className="flex-row items-center ml-6 mb-[28px]">
+                        <Image
+                            source={require("../../../assets/qr-code/qrcode-perfil.png")}
+                            resizeMode="stretch"
+                            style={{ width: 48, height: 48, borderRadius: 24, marginRight: 16 }}
+                        />
+                        <View>
+                            <Text className="text-white text-lg font-poppinsMedium">
+                                {user.nome}
+                            </Text>
+                            <Text className="text-blue-200 text-base">{user.email}</Text>
                         </View>
-
                     </View>
 
-                    <View className='w-24 h-10 absolute top-0 bg-blue-old' />
-                    <View className='w-28 h-3 rounded-full absolute top-[5%] bg-black' />
+                    <View className="absolute w-[36px] h-[36px] rounded-full bg-blue-900 left-[-20] top-[90px]"/>
+                    <View className="absolute w-[36px] h-[36px] rounded-full bg-blue-900 right-[-20] top-[90px]"/>
+
+                    {/* Separator */}
+                    <View className="flex-row justify-between items-center px-6 mb-12">
+                        {Array.from({ length: 20 }).map((_, index) => (
+                            <View
+                                key={index}
+                                className="w-1 h-1 rounded-full bg-border opacity-50"
+                            />
+                        ))}
+                    </View>
+
+                    {/* QR Code */}
+                    <View>
+                        <Image
+                            source={{
+                                uri: user?.qrCode
+                            }}
+                            resizeMode="contain"
+                            className="h-80 mx-6 mb-4"
+                        />
+                    </View>
                 </View>
-
-                <View className='w-full h-[15%] items-center pt-8'>
-                    <TouchableOpacity onPress={() => { setModalVisible(true) }}>
-                        <View className='w-44 h-12 items-center justify-center'>
-                            <Text className='text-base font-medium text-blue-old' allowFontScaling={false}>Ampliar QRCode</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <Modal animationType="fade" transparent={true} visible={modalVisible} statusBarTranslucent onRequestClose={() => { setModalVisible(!modalVisible) }}>
-                    <TouchableOpacity className='w-full h-full' activeOpacity={1} onPress={() => { setModalVisible(false) }}>
-                        <View className='w-full h-full flex items-center bg-neutral-900/70'>
-                            <TouchableWithoutFeedback>
-                                <View className='w-80 h-80 absolute top-52 items-center p-6 rounded-xl bg-white'>
-                                    <Image source={{ uri: user.qrCode }} resizeMode="cover" className='w-[96%] h-[96%] mt-1 max-w-full max-h-full object-cover' />
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </View>
-                    </TouchableOpacity>
-                </Modal>
-            </View>
-
-
-
-            <View className='w-screen h-28 px-5 pt-8 items-center flex-row bg-neutral-700/40 absolute top-0 border-b border-neutral-300/20'>
-                <View className='w-[15%] h-full items-center justify-center'>
-                    <TouchableOpacity>
-                        <AntDesign name="arrowleft" size={24} color="#ffffff" onPress={() => navigation.goBack()} />
-                    </TouchableOpacity>
-                </View>
-
-                <View className='w-[70%] h-full items-center justify-center'>
-                    <Text className='text-xl font-medium text-white'>Minha Credencial</Text>
-                </View>
-            </View>
-
+            </AppLayout>
         </SafeAreaView>
     );
 }

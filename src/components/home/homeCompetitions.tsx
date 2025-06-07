@@ -58,7 +58,7 @@ export default function HomeCompetitions() {
 
                     <Text className="text-default text-[12px] text-inter">Horário: </Text>
                     <Text className="text-blue-200 text-[12px] text-inter">
-                      {item.data.substring(11, 16)}
+                      {item.data.substring(11, 16)}h
                     </Text>
                   </View>
                 </View>

@@ -20,12 +20,7 @@ import Credential from './credential/credentialScreen'
 import Registration from './activity-registration/registrationScreen'
 import RegistrationDetails from './activity-registration/registrationDetailsScreen'
 
-import Categorias from './activities/categoriaScreen'
-import Minicursos from './activities/atividadesMinicursos'
-import Palestras from './activities/atividadesPalestra'
-import Competições from './activities/atividadesCompeticoes'
-import Workshops from './activities/atividadesWorkshops'
-import SECOMP from './activities/atividadesSECOMP'
+import Activities from './activities/activitiesScreen'
 
 import QRCode from './credential/qrCodeReaderScreen'
 
@@ -47,11 +42,6 @@ export {
     Credential,
     Registration,
     RegistrationDetails,
-    Categorias,
-    Minicursos,
-    Palestras,
-    Competições,
-    Workshops,
-    SECOMP,
+    Activities,
     QRCode,
 }

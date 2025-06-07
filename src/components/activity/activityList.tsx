@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable} from "react-native";
 import { getActivities } from "../../services/activities";
 import { getCategories } from "../../services/categories";
-import { format, addHours } from "date-fns";
+import { parseISO, addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 
@@ -13,7 +13,7 @@ type ActivityListProps = {
 };
 
 // Componente principal que lista atividades filtradas por categoria
-export function ActivityList({
+export default function ActivityList({
   selectedCategory,
   onPressActivity,
 }: ActivityListProps) {
@@ -116,23 +116,21 @@ export function ActivityList({
     );
   }
 
-  // Lista de atividades filtradas
   return (
     <FlatList
       data={filtered}
       keyExtractor={(item) => item.id}
       contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
       renderItem={({ item }) => {
-        const dataObj = new Date(item.data);
+        const rawDate = parseISO(item.data);
+        const dataObj = addHours(rawDate, 3); // Corrige para UTC-3 (Brasília)
         const dia = format(dataObj, 'dd', { locale: ptBR });
         const mes = format(dataObj, 'MMMM', { locale: ptBR });
-        const horaInicio = format(dataObj, 'HH:mm');
-        const horaFim = format(addHours(dataObj, 1), 'HH:mm'); // Considera 1h de duração
 
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm shadow-black/25"
+            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
           >
             {/* Bloco com a data (dia + mês) */}
             <View className="items-center mr-4">
@@ -144,13 +142,13 @@ export function ActivityList({
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
             {/* Bloco com nome da atividade e horário */}
-            <View className="h-full flex-1 flex-col justify-between py-1">
-              <Text className="text-white text-[14px] font-poppinsMedium">
+            <View className="flex-1 flex-col flex-wrap justify-between py-1">
+              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium">
                 {item.nome}
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{horaInicio}h - {horaFim}h</Text>
+                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}h</Text>
               </Text>
             </View>
           </Pressable>
