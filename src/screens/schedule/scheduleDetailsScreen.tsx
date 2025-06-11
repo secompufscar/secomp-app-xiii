@@ -8,16 +8,19 @@ import { ptBR } from 'date-fns/locale';
 import AppLayout from "../../components/appLayout";
 import BackButton from "../../components/button/backButton";
 import { Activity } from "../../components/activity/activityList";
+import { Pressable } from "react-native";
+import { StackTypes } from "../../routes/stack.routes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 type ScheduleDetailsProps = {
     item: Activity;
 };
 
 export default function ScheduleDetails() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<StackTypes>();
     const route = useRoute();
     const { item } = route.params as ScheduleDetailsProps;
-
     const data = new Date(item.data);
     const dataFormatada = format(data, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
     const horaInicio = format(data, 'HH:mm');
@@ -77,9 +80,22 @@ export default function ScheduleDetails() {
                                 {item.detalhes}
                             </Text>
                         </View>
+                        
+                        <View className="w-full items-center mt-4">
+                            <Pressable
+                                onPress={() => navigation.navigate("QRCode", { id: item.id })}
+                                className="bg-blue-600 px-6 py-3 rounded-full active:bg-blue-700"
+                            >
+                                <Text className="text-white font-poppinsSemiBold text-base">
+                                Acessar QR Code 
+                                </Text>
+                            </Pressable>
+                            </View>
                     </View>
                 </View>
             </AppLayout>
+         
+
         </SafeAreaView>
     );
 }

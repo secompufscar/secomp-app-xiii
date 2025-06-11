@@ -4,19 +4,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const getApi = () => {
     const api = axios.create({
-        baseURL: "https://api.secompufscar.com.br/api/v1"
+        baseURL: "http://192.168.0.8:3000/api/v1/"
     })  
   
     api.interceptors.request.use(async config => {
         try {
-            // Obtém os dados do usuário armazenados no AsyncStorage
-            const userData = await AsyncStorage.getItem("user");
+            // Obtém o token do usuário através do asyncStorage (token criado no Login em 'user.ts login()' )
+            const userToken = await AsyncStorage.getItem("userToken");
 
-            // Verifica se há dados armazenados. Se houver, os parseia, caso contrário, define como null
-            const user = userData ? JSON.parse(userData) : null;
-
-            if (user) {
-                config.headers['Authorization'] = `bearer ${user.token}`
+            if (typeof userToken =='string' && userToken.trim()!='') {
+                config.headers['Authorization'] = `Bearer ${userToken}`
+            }
+            else{
+                console.log("Erro na obtenção do token do usuário")
             }
 
             return config
