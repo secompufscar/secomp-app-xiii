@@ -13,7 +13,7 @@ function Input({ children }: { children: ReactNode }) {
 
 function Field({ ...rest }: TextInputProps) {
     return (
-        <TextInput className="flex-1 h-full text-white text-sm font-inter align-middle items-center outline-none"
+        <TextInput className="w-full h-full text-white text-sm font-inter align-middle items-center outline-none"
             placeholderTextColor={colors.border}
             multiline={false}
             numberOfLines={1}
