@@ -5,7 +5,7 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { format, addHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import { Activity } from "../../components/activity/activityList";
 

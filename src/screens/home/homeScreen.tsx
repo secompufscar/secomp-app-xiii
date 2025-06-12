@@ -10,7 +10,7 @@ import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icon
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../styles/colors";
 
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
 

@@ -6,7 +6,7 @@ import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 
 export default function VerifyEmail() {
     const navigation = useNavigation<AuthTypes>();

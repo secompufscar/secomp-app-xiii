@@ -9,7 +9,7 @@ import { login } from "../../services/users";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Input } from "../../components/input/input";
 import Button from "../../components/button/button";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import validator from 'validator';
 

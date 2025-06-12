@@ -6,7 +6,7 @@ import { BeautifulName } from "beautiful-name"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
 

@@ -2,7 +2,7 @@ import { Text, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from '../../routes/auth.routes';
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import Button from '../../components/button/button';
 
 export default function Welcome() {

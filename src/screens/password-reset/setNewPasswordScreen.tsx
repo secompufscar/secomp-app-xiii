@@ -7,7 +7,7 @@ import { useRoute } from "@react-navigation/native";
 import { updatePassword } from "../../services/users";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';

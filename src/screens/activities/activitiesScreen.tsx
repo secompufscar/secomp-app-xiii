@@ -5,7 +5,7 @@ import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "../../hooks/AuthContext";
 import BackButton from "../../components/button/backButton";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import ActivityList from "../../components/activity/activityList";
 import CategoryFilter from "../../components/activity/categoryFilter";
 
