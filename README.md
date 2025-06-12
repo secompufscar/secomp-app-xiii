@@ -48,7 +48,7 @@ npm start
 <br>
 
 ## 💻 Rodar Localmente
-Para rodar o aplicativo localmente, siga os passos abaixo:
+Para rodar o aplicativo localmente, siga os passos adicionais abaixo:
 
 1. **Configure o backend** conforme as instruções disponíveis no README do repositório correspondente
 2. Ajuste a URL da API no frontend, alterando o arquivo *.env* para refletir o novo endereço.
