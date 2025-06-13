@@ -11,7 +11,6 @@ import AppLayout from "../../components/app/appLayout";
 export default function VerifyEmail() {
     const navigation = useNavigation<AuthTypes>();
     const route = useRoute();
-    console.log('route.params:', route.params);
     const { email } = route.params as { email: string } || { email: '' };
 
     // Reenviar e-mail de redefinição de senha

@@ -1,5 +1,5 @@
 import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Login, SignUp, PasswordReset, VerifyEmail, SetNewPassword, Welcome } from '../screens'
+import { Login, SignUp, EmailConfirmation, PasswordReset, VerifyEmail, SetNewPassword, Welcome } from '../screens'
 
 const Stack = createNativeStackNavigator();
 
@@ -8,6 +8,7 @@ type StackNavigation = {
     Welcome: undefined;
     Login: undefined;
     SignUp: undefined;
+    EmailConfirmation: { email: string };
     PasswordReset: undefined;
     VerifyEmail: { email: string };
     SetNewPassword: undefined;
@@ -24,6 +25,7 @@ export default function AuthRoutes() {
             <Stack.Screen name="Welcome" component={Welcome} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="EmailConfirmation" component={EmailConfirmation} />
             <Stack.Screen name="PasswordReset" component={PasswordReset} />
             <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
             <Stack.Screen name="SetNewPassword" component={SetNewPassword}/>

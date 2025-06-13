@@ -1,6 +1,7 @@
 import Login from './login-signup/loginScreen'
 import SignUp from './login-signup/signupScreen'
 import Welcome from './login-signup/welcomeScreen'
+import EmailConfirmation from './login-signup/emailConfirmationScreen';
 
 import PasswordReset from './password-reset/passwordResetScreen';
 import VerifyEmail from './password-reset/verifyEmailScreen';
@@ -28,6 +29,7 @@ export {
     Login,
     SignUp,
     Welcome,
+    EmailConfirmation,
     PasswordReset,
     VerifyEmail,
     SetNewPassword,

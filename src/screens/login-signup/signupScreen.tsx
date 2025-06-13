@@ -10,7 +10,6 @@ import { Input } from "../../components/input/input"
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button"
-import CustomModal from "../../components/modal/modal"
 import validator from 'validator';
 
 function capitalizeFirstLetter(string: string) {
@@ -44,10 +43,10 @@ export default function SignUp() {
 	// Load animation
 	const [isLoading, setIsLoading] = useState(false);
 
-    // Modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalText, setModalText] = useState("");
+    // Alert
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [alertText, setAlertText] = useState("");
+    const [alertColor, setAlertColor] = useState("text-gray-400")
 	
 	const validateEmail = (email: string): boolean => {
         return validator.isEmail(email);
@@ -57,11 +56,12 @@ export default function SignUp() {
 		setIsEmailValid(true);
 		setIsPasswordValid(true);
 		setIsConfirmPasswordValid(true);
+        setIsAlertOpen(false);
 	
 		if (!email.trim() || !senha.trim() || !nome.trim()) {
-            setIsModalOpen(true);
-            setModalTitle("Cadastro Incompleto");
-            setModalText("Por favor, preencha todos os campos")
+            setAlertText("Por favor, preencha todos os campos");
+            setAlertColor("text-warning");
+            setIsAlertOpen(true);
 			return;
 		}
 	
@@ -83,24 +83,20 @@ export default function SignUp() {
 			const data = await signup({ nome, email, senha });
 	
 			if (data.emailEnviado) {
-                setIsModalOpen(true);
-                setModalTitle("Inscrição");
-                setModalText("Um e-mail de confirmação foi enviado com sucesso!")
-
+                navigation.navigate("EmailConfirmation", { email: email });
+                
 				// Limpa os campos
 				setNome("");
 				setEmail("");
 				setSenha("");
 				setConfirmPassword("");
-				
-				navigation.navigate('Login');
 			}
 	
 		} catch (error: any) {
 			const errorMessage = error?.response?.data?.message || 'Falha ao processar o cadastramento';
-			setIsModalOpen(true);
-            setModalTitle("Erro na Inscrição");
-            setModalText(errorMessage)
+			setIsAlertOpen(true);
+            setAlertColor("text-danger");
+            setAlertText(errorMessage);
 		} finally {
 			setIsLoading(false);
 		}
@@ -110,9 +106,6 @@ export default function SignUp() {
         <SafeAreaView className="flex-1 bg-blue-900 items-center">
 			<AppLayout>
 				<BackButton/>
-
-                {/* Modal de avisos */}
-                <CustomModal visible={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle} text={modalText}/>
 
 				<View className={`mt-8 gap-1`}>
                     <Text className="text-white text-[24px] font-poppinsSemiBold">
@@ -211,6 +204,12 @@ export default function SignUp() {
                         {!isConfirmPasswordValid && (
                             <Text className="text-[12px] text-danger font-inter">
                                 As senhas não coincidem!
+                            </Text>
+                        )}
+
+                        {isAlertOpen && (
+                            <Text className={`text-sm mt-2 font-inter ${alertColor}`}>
+                                {alertText}
                             </Text>
                         )}
                     </View>

@@ -1,4 +1,4 @@
-import { Text, View, Pressable } from 'react-native';
+import { Text, View, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from '../../routes/auth.routes';
@@ -17,11 +17,15 @@ export default function Welcome() {
         <SafeAreaView className="bg-blue-900 flex-1 items-center">
             <AppLayout>
                 <View className="flex-col w-full h-full py-24 gap-10">
-                    <View className="flex-1 w-full bg-background rounded-lg">
-                        {/* Ilustração */}
+                    <View className="w-full max-w-[400px] h-[400px] rounded-lg">
+                        <Image
+                            source={require("../../../assets/welcome/team.png")}
+                            style={{ width: '100%', height: '100%' }}
+                            resizeMode="contain"
+                        />
                     </View>
 
-                    <View className="flex-col gap-3 mt-6">
+                    <View className="flex-col gap-3">
                         <Text className="text-white text-2xl font-poppinsSemiBold">
                             Venha viver a Secomp
                         </Text>
