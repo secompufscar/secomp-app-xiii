@@ -70,7 +70,7 @@ Para rodar o aplicativo localmente, siga os passos adicionais abaixo:
 [git-url]: https://git-scm.com/
 [git-logo]: https://img.shields.io/badge/Git-f14e32?style=for-the-badge&logo=git&logoColor=white
 [expo-url]: https://docs.expo.dev/
-[expo-logo]: https://img.shields.io/badge/Expo-3ddc84?style=for-the-badge&logo=expo&logoColor=white
+[expo-logo]: https://img.shields.io/badge/Expo-000000?style=for-the-badge&logo=expo&logoColor=white
 [node-url]: https://nodejs.org/en
-[node-logo]: https://img.shields.io/badge/Node-1389fd?style=for-the-badge&logo=javascript&logoColor=white
+[node-logo]: https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
 [demo]: assets/images/demo.gif
