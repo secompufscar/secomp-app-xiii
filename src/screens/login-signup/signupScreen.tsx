@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { View, Alert, Text, Platform, Pressable, ActivityIndicator } from "react-native"
+import { View, Text, Pressable, ActivityIndicator } from "react-native"
 import { MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
 import { AuthTypes } from "../../routes/auth.routes"
@@ -7,9 +7,10 @@ import { colors } from "../../styles/colors"
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signup } from "../../services/users";
 import { Input } from "../../components/input/input"
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button"
+import CustomModal from "../../components/modal/modal"
 import validator from 'validator';
 
 function capitalizeFirstLetter(string: string) {
@@ -41,28 +42,26 @@ export default function SignUp() {
 	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
 	// Load animation
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(false);
+
+    // Modal
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalText, setModalText] = useState("");
 	
 	const validateEmail = (email: string): boolean => {
         return validator.isEmail(email);
     };
 
-	// Função para exibir os alertas
-	const showAlert = (title: string, message: string) => {
-		if (Platform.OS === 'web') {
-			window.alert(message);
-		} else {
-			Alert.alert(title, message);
-		}
-	};
-	
 	const handleRegister = async () =>  {
 		setIsEmailValid(true);
 		setIsPasswordValid(true);
 		setIsConfirmPasswordValid(true);
 	
 		if (!email.trim() || !senha.trim() || !nome.trim()) {
-			showAlert("Criar conta", "Por favor, preencha todos os campos!");
+            setIsModalOpen(true);
+            setModalTitle("Cadastro Incompleto");
+            setModalText("Por favor, preencha todos os campos")
 			return;
 		}
 	
@@ -84,7 +83,9 @@ export default function SignUp() {
 			const data = await signup({ nome, email, senha });
 	
 			if (data.emailEnviado) {
-				showAlert("Inscrição", "Um e-mail de confirmação foi enviado com sucesso!");
+                setIsModalOpen(true);
+                setModalTitle("Inscrição");
+                setModalText("Um e-mail de confirmação foi enviado com sucesso!")
 
 				// Limpa os campos
 				setNome("");
@@ -96,8 +97,10 @@ export default function SignUp() {
 			}
 	
 		} catch (error: any) {
-			const errorMessage = error?.response?.data?.message || 'Falha ao processar o cadastramento.';
-			showAlert("Inscreva-se", errorMessage);
+			const errorMessage = error?.response?.data?.message || 'Falha ao processar o cadastramento';
+			setIsModalOpen(true);
+            setModalTitle("Erro na Inscrição");
+            setModalText(errorMessage)
 		} finally {
 			setIsLoading(false);
 		}
@@ -107,6 +110,9 @@ export default function SignUp() {
         <SafeAreaView className="flex-1 bg-blue-900 items-center">
 			<AppLayout>
 				<BackButton/>
+
+                {/* Modal de avisos */}
+                <CustomModal visible={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle} text={modalText}/>
 
 				<View className={`mt-8 gap-1`}>
                     <Text className="text-white text-[24px] font-poppinsSemiBold">

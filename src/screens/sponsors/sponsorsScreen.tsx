@@ -2,7 +2,7 @@ import { View, Text, Image, Pressable, Linking } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { sponsors } from "./sponsorsData";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import AntDesign from '@expo/vector-icons/AntDesign';
 

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/button/backButton";
-import AppLayout from "../../components/appLayout";
+import AppLayout from "../../components/app/appLayout";
 
 export default function EventGuide() {
     return (
