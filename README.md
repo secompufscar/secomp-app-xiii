@@ -51,7 +51,7 @@ npm start
 Para rodar o aplicativo localmente, siga os passos adicionais abaixo:
 
 1. **Configure o backend** conforme as instruções disponíveis no README do repositório correspondente
-2. Ajuste a URL da API no frontend, alterando o arquivo *.env* para refletir o novo endereço.
+2. Ajuste a URL da API no frontend, alterando o arquivo *src/services/api.ts* para refletir o novo endereço local (*seuip:3000*).
 
 <div align="center">
   <br/>
