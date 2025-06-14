@@ -14,6 +14,13 @@ Antes de mais nada, certifique-se de ter os seguintes programas instalados:
 
 <br>
 
+## **🛠️ Tecnologias**
+Tecnologias utilizadas no frontend do aplicativo: React Native, Expo, TypeScript, Tailwind(Nativewind).
+
+![Skills](https://skills.syvixor.com/api/icons?i=reactnative,expo,ts,tailwind)
+
+<br>
+
 ## ⚙️ Guia de Execução
 
 Clone o repositório
