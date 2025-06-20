@@ -1,147 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import ScheduleItemComponent from '../../components/scheduleItem';
-import { useNavigation } from "@react-navigation/native";
-import { ScheduleItemProps } from '../../entities/schedule-item';
-import { AntDesign } from '@expo/vector-icons';
-import WeekCalendar from '../../components/calendar';
-import { getActivities } from '../../services/activities';
+import React, { useState } from "react";
+import { View, Text, StatusBar, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useAuth } from "../../hooks/AuthContext";
+import BackButton from "../../components/button/backButton";
+import DaysFilter from "../../components/schedule/DaysFilter";
+import ActivityList from "../../components/schedule/activityList"; 
 
-const formatDate = (date: Date) => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-};
+export default function Activities() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const { user: { user } }: any = useAuth(); // Destructuring user correctly
 
-const getCurrentWeekDates = () => {
-    const currentDate = new Date('2024-10-28');
-    const startOfWeek = currentDate.getDate() - currentDate.getDay();
-    const weekDates = Array.from({ length: 7 }).map((_, index) => {
-        const date = new Date(currentDate);
-        date.setDate(startOfWeek + index);
-        return date;
-    });
+  // Estado para armazenar o dia selecionado no filtro
+  const [selectedDay, setSelectedDay] = useState<string>("SEG"); // Initial state set to 'SEG'
 
-    weekDates.pop()
-    weekDates.shift()
+  // Callback ao selecionar um dia no DaysFilter
+  const handleSelectDay = (day: string) => {
+    setSelectedDay(day);
+    console.log("Dia selecionado:", day);
+  };
 
-    return weekDates;
-};
+  // Callback ao pressionar uma atividade
+  const handlePressActivity = (item: Activity) => {
+    navigation.navigate("ScheduleDetails", { item });
+  };
 
+  return (
+    <SafeAreaView className="bg-blue-900 flex-1 items-center">
+      <View className="flex-1 w-full">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor='transparent'
+          translucent={Platform.OS === 'android'}
+        />
 
-export default function Schedule() {
-    const navigation = useNavigation();
-    const currentDateString = formatDate(new Date());
-    const [weekDates, setWeekDates] = useState(getCurrentWeekDates());
-    const [selectedDate, setSelectedDate] = useState(formatDate(weekDates[0])); // Define a primeira data como padrão
-    const [items, setItems] = useState<Activity[]>([]);
-    const [loading, setLoading] = useState(false);
+        <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
+          <BackButton />
 
-    // useEffect para carregar os itens do cronograma todas as vezes que o atributo selectedDate mudar
-    useEffect(() => {
-        const fetchItems = async () => {
-            setLoading(true);
-            try {
-                const activities: Activity[] = await getActivities();
-                console.log('Data selecionada:', selectedDate);
-                console.log('Atividades:', activities);
+          {/* Cabeçalho */}
+          <View className="mb-8">
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
+              Cronograma
+            </Text>
+            <Text className="text-gray-400 font-inter text-">
+              Veja todas as atividades da semana
+            </Text>
+          </View>
 
-                // Filtra as atividades de acordo com a data selecionada
-                const filteredActivities = activities
-                    .filter(activity => activity.data.substring(0, 10) === selectedDate)
-                    .sort((a, b) => a.data.substring(11, 16).localeCompare(b.data.substring(11, 16))); // Ordena pela hora
+          {/* Filtro de Dias */}
+          <View className="w-full mb-3">
+            <DaysFilter onSelect={handleSelectDay} />
+          </View>
 
-                setItems(filteredActivities);
-            } catch (error) {
-                console.error('Erro ao buscar atividades:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchItems();
-    }, [selectedDate]);
-
-
-
-    const handlePress = (item: Activity) => {
-        // @ts-ignore
-        navigation.navigate('ScheduleDetails', { item });
-    };
-
-    return (
-        <SafeAreaView className='bg-white flex-1 px-8 pb-2'>
-
-
-            <View>
-
-                <View className='flex-row justify-start items-center pt-10 mb-4'>
-                    <Text style={{ fontFamily: 'Inter_700Bold' }} className='text-3xl text-black/80'>Cronograma</Text>
-                </View>
-
-                <View className='mt-4 pb-6'>
-                    <View className='flex-row justify-between'>
-                        {weekDates.map((date, index) => {
-                            const dateString = formatDate(date);
-                            const isSelected = dateString === selectedDate;
-                            return (
-                                <TouchableOpacity
-                                    key={index}
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        width: '18%',
-                                        height: 56,
-                                        backgroundColor: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'rgba(229, 231, 235, 0.3)',
-                                        borderRadius: 8,
-                                    }}
-                                    onPress={() => setSelectedDate(dateString)}
-                                >
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Inter_600SemiBold',
-                                            color: !isSelected ? 'rgba(107, 114, 128, 0.7)' : '#445BE6', // text-blue-old ou text-neutral-500/70
-                                            fontSize: 16,
-                                        }}
-                                    >
-                                        {date.getDate()}
-                                    </Text>
-
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Inter_400Regular',
-                                            color: !isSelected ? 'rgba(107, 114, 128, 0.7)' : '#445BE6', // text-blue-old ou text-neutral-500/70
-                                            fontSize: 14,
-                                        }}
-                                    >
-                                        {date.toLocaleString('default', { weekday: 'short' })}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
-                    </View>
-                </View>
-            </View>
-            {loading ? (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#445BE6" />
-                </View>
-            ) : (
-                <ScrollView className='flex'>
-                    <View className='flex-row flex-wrap justify-around'>
-                        {items.map((item, index) => (
-                            <View className='w-full mb-3 border border-neutral-200/70 rounded-xl' key={index}>
-                                <ScheduleItemComponent
-                                    scheduleItem={item}
-                                    onClick={() => handlePress(item)}
-                                />
-                            </View>
-                        ))}
-                    </View>
-                </ScrollView>
-            )}
-        </SafeAreaView>
-    );
+          {/* Lista de Atividades */}
+          <View className="w-full flex-1">
+            <ActivityList
+              selectedDay={selectedDay} // Pass the selectedDay state to ActivityList
+              onPressActivity={handlePressActivity}
+            />
+          </View>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
