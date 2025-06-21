@@ -37,14 +37,14 @@ export default function QRCode() {
 
                 // Verificando se leitura recebeu os valores corretor
                 console.log(userId);
-                console.log(activityId);
+                console.log("activity id:"+activityId);
+                
 
-                const activity: Activity | undefined = await getActivityId(activityId);
+                const activity: Activity | undefined = await getActivityId(activityId as string);
                 if (!activity) {
                     console.log('Atividade não encontrada');
                     return;
                 }
-                console.log(activity);
                 
                 if (userId && activityId) {
 
@@ -53,6 +53,7 @@ export default function QRCode() {
 
                         // Verificado resultado do checkIn
                         // console.log(response);
+                        console.log(response)
 
                         Alert.alert(
                             'Check-In',
