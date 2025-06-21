@@ -13,20 +13,26 @@ export default function EmailConfirmation(){
     return (
         <SafeAreaView className="flex-1 bg-blue-900 items-center">
             <AppLayout>
-                <View className="w-full max-w-[400px] h-[400px] mt-16 flex items-center justify-center">
-                    <Image
-                        source={require("../../../assets/email/email.png")}
-                        style={{ width: '100%', height: '100%' }}
-                        resizeMode="cover"
-                    />
-                </View>
+                <View className="flex-col w-full h-full py-24 gap-10 items-center">
+                    <View className="w-full max-w-[400px] max-h-[400px] rounded-lg flex items-center">
+                        <Image
+                            source={require("../../../assets/email/email.png")}
+                            style={{
+                            width: '100%',
+                            aspectRatio: 1,
+                            maxHeight: 380,
+                            }}
+                            resizeMode="contain"
+                        />
+                    </View>
 
-                <View className="w-full flex-col items-start">
-                    <Text className="text-white text-xl font-poppinsSemiBold mb-2">Confirme seu e-mail</Text>
-                    <Text className="text-gray-400 text-base font-inter">Um e-mail foi enviado para <Text className="text-green">{email}</Text>.</Text>
+                    <View className="w-full flex-col items-start">
+                        <Text className="text-white text-xl font-poppinsSemiBold mb-2">Confirme seu e-mail</Text>
+                        <Text className="text-gray-400 text-base font-inter">Um e-mail foi enviado para <Text className="text-green">{email}</Text>.</Text>
+                    </View>
+                    
+                    <Button className="w-full" title="Login" onPress={() => navigation.navigate("Login")}/>
                 </View>
-
-                <Button className="mt-10" title="Login" onPress={() => navigation.navigate("Login")}/>
             </AppLayout>
         </SafeAreaView>
     )
