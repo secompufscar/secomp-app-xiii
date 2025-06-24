@@ -13,6 +13,7 @@ import { colors } from "../../styles/colors";
 import AppLayout from "../../components/app/appLayout";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import { scheduleNotification } from "../../services/notificationService";
 
 export default function Home() {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -89,6 +90,12 @@ export default function Home() {
                         </View>
                     </Pressable>
                 </View>
+
+                {/*botao de teste de notificacao*/}
+                <Pressable onPress={() => { scheduleNotification({ title: "Teste", body : "Esta é uma notificação de teste", data: { eventId: 1 }, trigger: { seconds: 2 } }) }} className="mb-4">
+                    <Text className="text-white text-sm font-inter">Clique aqui para testar uma notificação</Text>
+                </Pressable>
+
 
                 {/* Inscrição no evento */}
                 <LinearGradient

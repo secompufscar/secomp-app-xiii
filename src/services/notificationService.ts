@@ -20,7 +20,7 @@ export async function registerForPushNotifications() {
     console.warn('Must use physical device for Push Notifications');
     return null;
   }
-
+  
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
   let finalStatus = existingStatus;
 
@@ -54,6 +54,17 @@ export async function registerForPushNotifications() {
   }
 
   return token;
+}
+
+export async function scheduleNotification(params: any) {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: params.title,
+      body: params.body,
+      data: params.data,
+    },
+    trigger: params.trigger,
+  });
 }
 
 // Listener para notificações recebidas
