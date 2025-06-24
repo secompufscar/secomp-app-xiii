@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Secomp",
-    "slug": "secompufscar-email",
+    "slug": "secomp",
     "scheme": "secompapp",
     "description": "A Semana Acadêmica da Computação da Universidade Federal de São Carlos (SECOMP UFSCar) surgiu da necessidade de trazer assuntos que fossem de interesse tanto da comunidade acadêmica quanto de entusiastas.",
     "newArchEnabled": true,
@@ -66,8 +66,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "d88cbc81-c78c-4dc7-99c3-516f8b9e1d61"
+        "projectId": "8ef095aa-258d-47a3-8d50-2d9e15932daf"
       }
-    }
+    },
+    "owner": "daniel_0017"
   }
 }
