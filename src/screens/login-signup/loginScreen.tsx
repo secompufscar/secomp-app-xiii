@@ -25,7 +25,7 @@ export default function Login() {
 
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertText, setAlertText] = useState("");
-    const [alertColor, setAlertColor] = useState("text-gray-400")
+    const [alertColor, setAlertColor] = useState("text-gray-400");
 
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -59,11 +59,11 @@ export default function Login() {
             setIsPasswordValid(true);
         }
 
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
-            const data = await login({ email, senha })
-            await signIn(data)
+            const data = await login({ email, senha });
+            await signIn(data);
         } catch (error) {
             const err = error as any;
             const errorMessage = err.response?.data?.message || 'Falha ao processar o login.';
@@ -72,7 +72,7 @@ export default function Login() {
             setAlertColor("text-danger");
             setIsAlertOpen(true);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 

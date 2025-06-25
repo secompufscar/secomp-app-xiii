@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
@@ -13,28 +13,50 @@ import Button  from "../../components/button/button";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 export default function PasswordReset() {
-  const [email, setEmail] = useState("");
   const navigation = useNavigation<AuthTypes>();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [email, setEmail] = useState("");
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertText, setAlertText] = useState("");
+  const [alertColor, setAlertColor] = useState("text-gray-400");
 
   const validateEmail = (email: string): boolean => {
     return validator.isEmail(email);
   };
 
   async function replacePass() {
-    if (!validateEmail(email)) {
-      alert("É preciso informar um e-mail válido para redefinir a senha.");
+    setIsAlertOpen(false);
+
+    // Campo vazio
+    if (!email.trim()) {
+      setAlertText("Por favor, preencha todos os campos");
+      setAlertColor("text-warning");
+      setIsAlertOpen(true);
       return;
     }
+
+    // Email válido
+    if (!validateEmail(email)) {
+      setAlertText("Por favor, digite um email válido!");
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
+      return;
+    }
+
+    setIsLoading(true);
   
     try {
       await sendForgotPasswordEmail({ email }); 
       navigation.navigate("VerifyEmail", { email });
     } catch (error: any) {
-      console.error("Erro ao enviar email de recuperação:", error);
-      alert(
-        error?.response?.data?.message ||
-        "Ocorreu um erro ao tentar enviar o e-mail de redefinição. Insira outro e-mail ou tente novamente mais tarde."
-      );
+      // Erros
+      setAlertText("Ocorreu um erro ao tentar enviar o e-mail de redefinição.");
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -65,8 +87,17 @@ export default function PasswordReset() {
           />
         </Input>
 
-        <Button className="mt-4" title="Enviar" onPress={replacePass}/>
+        {isAlertOpen && (
+          <Text className={`text-[12px] text-danger font-inter mb-1 ${alertColor}`}>
+              {alertText}
+          </Text>
+        )}
 
+        {isLoading ? (
+          <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+        ) : (
+          <Button className="mt-4" title="Enviar" onPress={replacePass}/>
+        )}
       </AppLayout>
     </SafeAreaView>
   );
