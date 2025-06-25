@@ -94,9 +94,9 @@ export default function SignUp() {
 	
 		} catch (error: any) {
 			const errorMessage = error?.response?.data?.message || 'Falha ao processar o cadastramento';
-			setIsAlertOpen(true);
-            setAlertColor("text-danger");
             setAlertText(errorMessage);
+            setAlertColor("text-danger");
+            setIsAlertOpen(true);
 		} finally {
 			setIsLoading(false);
 		}

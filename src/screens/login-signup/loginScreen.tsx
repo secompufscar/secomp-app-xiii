@@ -19,8 +19,14 @@ export default function Login() {
 
     const [email, setEmail] = useState("");
     const [isEmailValid, setIsEmailValid] = useState(true);
+
     const [senha, setSenha] = useState("");
     const [isPasswordValid, setIsPasswordValid] = useState(true);
+
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [alertText, setAlertText] = useState("");
+    const [alertColor, setAlertColor] = useState("text-gray-400")
+
     const [isLoading, setIsLoading] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -31,13 +37,12 @@ export default function Login() {
     const handleLogin = async () => {
         setIsEmailValid(true);
         setIsPasswordValid(true);
+        setIsAlertOpen(false);
         
         if (!email.trim() || !senha.trim()) {
-            if (Platform.OS === 'web') {
-                window.alert("Por favor, preencha todos os campos!");
-            } else {
-                Alert.alert("Login incompleto!", "Por favor, preencha todos os campos.");
-            }
+            setAlertText("Por favor, preencha todos os campos");
+            setAlertColor("text-warning");
+            setIsAlertOpen(true);
             return;
         }
         
@@ -62,13 +67,10 @@ export default function Login() {
         } catch (error) {
             const err = error as any;
             const errorMessage = err.response?.data?.message || 'Falha ao processar o login.';
-
-            if (Platform.OS === 'web') {
-                window.alert(`Erro: não foi possível realizar o login`);
-            } else {
-                Alert.alert("Erro no login", errorMessage);
-            }
-
+            
+            setAlertText(errorMessage);
+            setAlertColor("text-danger");
+            setIsAlertOpen(true);
         } finally {
             setIsLoading(false)
         }
@@ -137,7 +139,13 @@ export default function Login() {
                         )}
                     </View>
         
-                    <View className="w-full items-end">
+                    <View className={`w-full flex flex-row items-center ${isAlertOpen ? "justify-between" : "justify-end"}`}>
+                        {isAlertOpen && (
+                            <Text className={`text-sm font-inter ${alertColor}`}>
+                                {alertText}
+                            </Text>
+                        )}
+
                         <Pressable onPress={() => navigation.navigate("PasswordReset")}>
                             {({ pressed }) => (
                             <Text className={`text-xs font-poppins underline ${pressed ? "text-white" : "text-gray-400"}`}>
