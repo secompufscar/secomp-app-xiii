@@ -22,13 +22,13 @@ export default function Login() {
 
     const [senha, setSenha] = useState("");
     const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertText, setAlertText] = useState("");
     const [alertColor, setAlertColor] = useState("text-gray-400");
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const validateEmail = (email: string): boolean => {
         return validator.isEmail(email);
