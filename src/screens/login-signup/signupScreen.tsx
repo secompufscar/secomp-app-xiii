@@ -83,7 +83,7 @@ export default function SignUp() {
 			const data = await signup({ nome, email, senha });
 	
 			if (data.emailEnviado) {
-                navigation.navigate("EmailConfirmation", { email: email });
+                navigation.navigate("EmailConfirmation", { email: email }); 
                 
 				// Limpa os campos
 				setNome("");
