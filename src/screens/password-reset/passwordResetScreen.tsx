@@ -31,7 +31,7 @@ export default function PasswordReset() {
 
     // Campo vazio
     if (!email.trim()) {
-      setAlertText("Não deixe o campo de e-mail vazio!");
+      setAlertText("Não deixe o campo de email vazio!");
       setAlertColor("text-warning");
       setIsAlertOpen(true);
       return;
