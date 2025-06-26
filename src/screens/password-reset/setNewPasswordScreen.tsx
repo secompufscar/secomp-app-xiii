@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, Text, Modal, Pressable, Alert} from "react-native";
+import { View, Image, Text, Modal, Pressable, Alert, ActivityIndicator} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
@@ -15,33 +15,51 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function SetNewPassword() {
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);  
+
   const [successVisible, setSuccessVisible] = useState(false);
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertText, setAlertText] = useState("");
+  const [alertColor, setAlertColor] = useState("text-gray-400");
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigation = useNavigation<AuthTypes>();
   const route = useRoute();
   const { token } = route.params as { token: string };
 
   const handleUpdatePassword = async () => {
+    setIsAlertOpen(false);
+
     if (!password || !confirmPassword) {
-      Alert.alert("Erro", "Preencha ambos os campos de senha.");
+      setAlertText("Por favor, preencha todos os campos");
+      setAlertColor("text-warning");
+      setIsAlertOpen(true);
       return;
     }
+
     if (password !== confirmPassword) {
-      Alert.alert("Erro", "As senhas não coincidem.");
+      setAlertText("As senhas não coincidem!");
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
       return;
     }
+
+    setIsLoading(true);
 
     try {
       await updatePassword(token, password); 
       setSuccessVisible(true);
     } catch (error: any) {
-      console.error(error);
-      Alert.alert(
-        "Erro",
-        error?.response?.data?.message || "Falha ao redefinir a senha. Tente novamente."
-      );
+      setAlertText("Falha ao redefinir a senha. Tente novamente.");
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -105,9 +123,19 @@ export default function SetNewPassword() {
               />
             </Pressable>
           </Input>
-        </View>
 
-        <Button className="mt-4" title="Atualizar senha" onPress={handleUpdatePassword}/>
+          {isAlertOpen && (
+            <Text className={`text-sm font-inter ${alertColor}`}>
+              {alertText}
+            </Text>
+          )}
+        </View>
+        
+        {isLoading ? (
+          <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+        ) : (
+          <Button className="mt-4" title="Atualizar senha" onPress={handleUpdatePassword}/>
+        )}
       </AppLayout>
       
       <Modal visible={successVisible} transparent animationType="fade">
