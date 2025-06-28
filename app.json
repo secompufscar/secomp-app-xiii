@@ -64,7 +64,11 @@
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "1bd575c7-c645-4cb0-a841-362d02173d65"
       }
-    }
+    },
+    "owner": "enzomurayama"
   }
 }
