@@ -22,11 +22,11 @@ export default function Sponsors() {
           </Text>
         </View>
 
-        {sponsors.map((sponsor, index) => (
+        {sponsors.map((sponsor) => (
           <Pressable onPress={() => {Linking.openURL(sponsor.link)}}>
             {({ pressed }) => (
               <LinearGradient
-                key={index}
+                key={sponsor.name}
                 colors={["#2E364B", "#161F36"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
