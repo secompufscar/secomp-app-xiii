@@ -46,5 +46,9 @@ export async function updatePassword(token: string, newPassword: string) {
   return response.data; 
 }
 
+export const getUserRanking = async (id: string) => {
+  const response = await api.get(`/users/getUserRanking/${id}`);
+  return response.data;
+}
 
   
