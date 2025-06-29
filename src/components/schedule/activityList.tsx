@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
-import { getCategories } from "../../services/categories";
-import { parseISO, addHours, format, getDay, isPast } from "date-fns";
+import { parseISO, addHours, getDay, isPast } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faMessage, faLaptopCode, faTrophy, faGamepad, faUsers, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone, faLaptopCode, faTrophy, faGamepad, faUsers, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 // Props esperadas pelo componente ActivityList
@@ -19,8 +18,8 @@ const categoryIconMap: { [key: string]: IconDefinition } = {
   'minicursos': faLaptopCode,
   '1': faLaptopCode,
   
-  'palestra': faMessage,
-  '2': faMessage,
+  'palestra': faMicrophone,
+  '2': faMicrophone,
 
   'competicoes': faTrophy,
   '3': faTrophy,
@@ -150,7 +149,7 @@ export default function ActivityList({
           
           >
             {/* Bloco com o ÍCONE da categoria */}
-            <View className="items-center justify-center mr-4 w-[60px] h-[60px]">
+            <View className="items-center justify-center mr-4 w-[48px] h-[56px]">
               <FontAwesomeIcon icon={activityIcon} size={48} color={iconColor} />
             </View>
 
