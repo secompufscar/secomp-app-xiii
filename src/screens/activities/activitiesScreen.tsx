@@ -4,8 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "../../hooks/AuthContext";
-import BackButton from "../../components/button/backButton";
-import AppLayout from "../../components/app/appLayout";
 import ActivityList from "../../components/activity/activityList";
 import CategoryFilter from "../../components/activity/categoryFilter";
 
@@ -27,24 +25,6 @@ export default function Activities() {
     navigation.navigate("ScheduleDetails", { item });
   };
 
-  // Função para obter o ícone de categoria (caso decida reaproveitar)
-  const getIconName = (categoryName: string): string => {
-    switch (categoryName) {
-      case "Minicursos":
-        return "laptop-file";
-      case "Palestras":
-        return "chalkboard-user";
-      case "Competições":
-        return "trophy";
-      case "Workshops":
-        return "people-group";
-      case "SECOMP":
-        return "id-badge";
-      default:
-        return "list";
-    }
-  };
-
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <View className="flex-1 w-full">
@@ -54,9 +34,7 @@ export default function Activities() {
           translucent={Platform.OS === 'android'}
         />
         
-        <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
-          <BackButton />
-
+        <View className="w-full flex-1 mt-16 px-6 max-w-[1000px] mx-auto">
           {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
