@@ -158,14 +158,20 @@ export default function ActivityList({
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
             {/* Bloco com nome da atividade e horário*/}
-            <View className="flex-1 flex-col flex-wrap justify-between py-1">
-              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium">
+            <View className="flex-1 flex-col flex-wrap">
+              <Text numberOfLines={1} className="text-white text-[14px] mb-1 font-poppinsMedium">
                 {item.nome}
               </Text>
 
-              <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}h</Text>
-              </Text>
+              <View className="flex flex-row gap-4">
+                <Text className="text-default text-[13px] font-inter">
+                  Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
+                </Text>
+
+                <Text className="text-default text-[13px] font-inter">
+                  Local: <Text className="text-green font-inter">{item.local}</Text>
+                </Text>
+              </View>
             </View>
           </Pressable>
         );

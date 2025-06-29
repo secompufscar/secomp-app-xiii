@@ -149,7 +149,7 @@ export default function ActivityList({
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}h</Text>
+                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
               </Text>
             </View>
           </Pressable>
