@@ -140,7 +140,7 @@ export default function ActivityList({
         const hasOccurred = isPast(activityDateTime); 
 
         // Cor do icone
-        const iconColor = hasOccurred ? '#3B465E' : '#4153DF'; // Grey out if past, otherwise white
+        const iconColor = hasOccurred ? '#3B465E' : '#4153DF';
   
         return (
           <Pressable
