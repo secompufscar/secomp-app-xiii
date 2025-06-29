@@ -22,7 +22,7 @@ export default function Activities() {
 
   // Callback ao pressionar uma atividade
   const handlePressActivity = (item: Activity) => {
-    navigation.navigate("ScheduleDetails", { item });
+    navigation.navigate(" ", { item });
   };
 
   return (

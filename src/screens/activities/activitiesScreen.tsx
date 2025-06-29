@@ -22,7 +22,7 @@ export default function Activities() {
 
   const handlePressActivity = (item: Activity) => {
     // Ao clicar numa atividade, navega para os detalhes
-    navigation.navigate("ScheduleDetails", { item });
+    navigation.navigate(" ", { item });
   };
 
   return (

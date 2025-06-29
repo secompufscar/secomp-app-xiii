@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, ScrollView, TextInput, Animated } from 'r
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { ScheduleItemProps } from '../../entities/schedule-item';
-import MyEvent from '../../components/myEvent';
 import { getActivityId, getUserSubscribedActivities } from '../../services/activities';
 import { useAuth } from '../../hooks/AuthContext';
 
@@ -141,9 +140,6 @@ export default function MyEvents() {
                     <View className='flex-row flex-wrap justify-around'>
                         {items.map((item, index) => (
                             <View className='pb-4 bg-white' key={index}>
-                                <MyEvent
-                                    scheduleItem={item}
-                                />
                             </View>
                         ))}
                     </View>
@@ -152,9 +148,6 @@ export default function MyEvents() {
                     <View className='flex-row flex-wrap justify-around'>
                         {items.map((item, index) => (
                             <View className='pb-4 bg-white' key={index}>
-                                <MyEvent
-                                    scheduleItem={item}
-                                />
                             </View>
                         ))}
                     </View>
