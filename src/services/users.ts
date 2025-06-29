@@ -29,26 +29,22 @@ export const login = async (data: Login): Promise<User> => {
 }
 
 export const signup = async (data: SignUp): Promise<SignupResponse> => {
-    const response = await api.post("/users/signup", data)
-
-    return response.data
-}
-
-export async function sendForgotPasswordEmail(data: { email: string }) {
-  const response = await api.post("/users/sendForgotPasswordEmail", data);
-
+  const response = await api.post("/users/signup", data);
   return response.data;
 }
 
-export async function updatePassword(token: string, newPassword: string) {
+export const sendForgotPasswordEmail = async (data: { email: string }) => {
+  const response = await api.post("/users/sendForgotPasswordEmail", data);
+  return response.data;
+}
+
+export const updatePassword = async (token: string, newPassword: string) => {
   const response = await api.patch(`/users/updatePassword/${token}`, { newPassword });
-  
   return response.data; 
 }
 
-export const getUserRanking = async (id: string) => {
+export const getUserRanking = async (id: string): Promise<{ rank: number }> => {
   const response = await api.get(`/users/getUserRanking/${id}`);
   return response.data;
 }
-
   
