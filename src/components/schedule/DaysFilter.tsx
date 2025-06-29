@@ -26,11 +26,11 @@ export default function DaysFilter({ onSelect }: { onSelect?: (day: string) => v
             <Pressable
               key={day}
               onPress={() => handlePress(day)}
-              className={`flex-1 px-5 py-1.5 rounded-full justify-center items-center
+              className={`flex-1 px-5 py-2 rounded-full justify-center items-center
                 ${isSelected ? 'bg-green' : 'border border-neutral-200'}`}
             >
               <Text
-                className={`text-[11px] font-poppinsMedium transition duration-500 ease-in-out
+                className={`text-xs font-poppinsMedium transition duration-500 ease-in-out
                   ${isSelected ? 'text-blue-900' : 'text-neutral-200'}`}
               >
                 {day}

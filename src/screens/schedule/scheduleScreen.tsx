@@ -10,15 +10,14 @@ import ActivityList from "../../components/schedule/activityList";
 
 export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { user: { user } }: any = useAuth(); // Destructuring user correctly
+  const { user: { user } }: any = useAuth(); 
 
   // Estado para armazenar o dia selecionado no filtro
-  const [selectedDay, setSelectedDay] = useState<string>("SEG"); // Initial state set to 'SEG'
+  const [selectedDay, setSelectedDay] = useState<string>("SEG"); 
 
   // Callback ao selecionar um dia no DaysFilter
   const handleSelectDay = (day: string) => {
     setSelectedDay(day);
-    console.log("Dia selecionado:", day);
   };
 
   // Callback ao pressionar uma atividade
@@ -44,7 +43,7 @@ export default function Activities() {
               Cronograma
             </Text>
             <Text className="text-gray-400 font-inter text-">
-              Veja todas as atividades da semana
+              Calendário de atividades do evento
             </Text>
           </View>
 

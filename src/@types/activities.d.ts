@@ -4,7 +4,7 @@ interface Activity {
     palestranteNome: string
     data: string
     vagas: int
-    detalhes: int
+    detalhes: string
     categoriaId: string
     local: string
 }

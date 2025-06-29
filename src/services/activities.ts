@@ -1,18 +1,6 @@
 import { useAuth } from '../hooks/AuthContext'
 import api from './api'
 
-type Activity = ({
-    id: string
-    nome: string
-    palestranteNome: string
-    data: string
-    vagas: string
-    detalhes: string
-    categoriaId: string
-    local: string
-})
-
-
 export const getActivities = async (): Promise<Activity[]> => {
    const response = await api.get('/activities/')
 
@@ -45,6 +33,3 @@ export const unsubscribeToActivity = async (userId: string, eventId: string) => 
 
     return response
 }
-
-
-export type { Activity };

@@ -9,22 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMessage, faLaptopCode, faTrophy, faGamepad, faUsers, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-interface Activity {
-  id: string;
-  nome: string;
-  data: string;
-  palestranteNome: string;
-  categoriaId: string;
-  detalhes: string;
-  vagas: number;
-  local: string;
-}
-
-interface Category {
-  id: string;
-  nome: string;
-}
-
 // Props esperadas pelo componente ActivityList
 type ActivityListProps = {
   selectedDay?: string;
@@ -59,25 +43,28 @@ export default function ActivityList({
 
   // Busca as atividades E categorias na montagem do componente
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const cats = await getCategories();
         setAllCategories(cats);
-
-        const acts = await getActivities();
+  
+        const acts: Activity[] = await getActivities();
         const sortedActivities = acts.sort((a, b) => {
-          const dateA = parseISO(a.data).getTime();
+          const dateA = parseISO(a.data).getTime(); // Certifique-se que 'data' é uma ISO string
           const dateB = parseISO(b.data).getTime();
           return dateA - dateB;
         });
+  
         setAllActivities(sortedActivities);
-      } catch (err: any) {
+      } catch (err) {
         console.error("Erro ao buscar dados:", err);
         setErrorMsg("Falha ao obter dados.");
       } finally {
         setLoading(false);
       }
-    })();
+    };
+  
+    fetchData();
   }, []);
 
   const getFilteredActivitiesByDay = (): Activity[] => {
@@ -126,9 +113,9 @@ export default function ActivityList({
   // Nenhuma atividade encontrada para o dia selecionado
   if (filteredActivities.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
+      <View className="flex-1 items-center justify-start mt-8">
         <Text className="text-gray-400 text-center text-sm font-inter">
-          Nenhuma atividade em "{selectedDay}"
+          Nenhuma atividade registrada neste dia
         </Text>
       </View>
     );
