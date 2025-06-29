@@ -16,12 +16,22 @@ type ActivityListProps = {
 };
 
 const categoryIconMap: { [key: string]: IconDefinition } = {
-  'palestra': faMessage,
-  'competicoes': faTrophy,
   'minicursos': faLaptopCode,
+  '1': faLaptopCode,
+  
+  'palestra': faMessage,
+  '2': faMessage,
+
+  'competicoes': faTrophy,
+  '3': faTrophy,
+
   'gamenight': faGamepad,
+  '4': faGamepad,
+
   'sociocultural': faUsers,
-  'default': faCalendarDays, // default
+  '5': faUsers,
+
+  'default': faCalendarDays,
 };
 
 export default function ActivityList({

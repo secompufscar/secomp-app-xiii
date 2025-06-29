@@ -55,7 +55,7 @@ export default function Activities() {
           {/* Lista de Atividades */}
           <View className="w-full flex-1">
             <ActivityList
-              selectedDay={selectedDay} // Pass the selectedDay state to ActivityList
+              selectedDay={selectedDay}
               onPressActivity={handlePressActivity}
             />
           </View>
