@@ -33,6 +33,11 @@ export const signup = async (data: SignUp): Promise<SignupResponse> => {
   return response.data;
 }
 
+export const getProfile = async () => {
+  const response = await api.get('/users/getProfile');
+  return response.data;
+}
+
 export const sendForgotPasswordEmail = async (data: { email: string }) => {
   const response = await api.post("/users/sendForgotPasswordEmail", data);
   return response.data;
