@@ -39,7 +39,6 @@ export default function ActivityList({
   onPressActivity,
 }: ActivityListProps) {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -55,9 +54,6 @@ export default function ActivityList({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cats = await getCategories();
-        setAllCategories(cats);
-  
         const acts: Activity[] = await getActivities();
         const sortedActivities = acts.sort((a, b) => {
           const dateA = parseISO(a.data).getTime(); // Certifique-se que 'data' é uma ISO string
@@ -135,7 +131,8 @@ export default function ActivityList({
     <FlatList
       data={filteredActivities}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
+      contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         const activityIcon = categoryIconMap[item.categoriaId] || categoryIconMap['default'];
 
@@ -146,16 +143,15 @@ export default function ActivityList({
         // Cor do icone
         const iconColor = hasOccurred ? '#3B465E' : '#4153DF'; // Grey out if past, otherwise white
   
-
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg p-4 mx-4 mb-4 shadow-sm active:bg-background/70"
+            className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
           
           >
             {/* Bloco com o ÍCONE da categoria */}
             <View className="items-center justify-center mr-4 w-[60px] h-[60px]">
-              <FontAwesomeIcon icon={activityIcon} size={48} color={iconColor} /> {/* Dynamic icon color */}
+              <FontAwesomeIcon icon={activityIcon} size={48} color={iconColor} />
             </View>
 
             {/* Linha vertical separadora */}
