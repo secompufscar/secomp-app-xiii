@@ -7,6 +7,7 @@ interface AuthContextData {
   loading: boolean;
   signIn: (data: User) => Promise<void>;
   signOut: () => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 // Criação do contexto com tipo indefinido inicialmente
@@ -62,7 +63,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, setUser }}>
       {children}
     </AuthContext.Provider>
   );
