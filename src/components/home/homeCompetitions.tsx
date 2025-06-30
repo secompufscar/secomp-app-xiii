@@ -8,7 +8,7 @@ export default function HomeCompetitions() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [pressedItemId, setPressedItemId] = useState<string | null>(null);
-  const categoriaId = "4";
+  const categoriaId = "3";
 
   const formatDate = (date: Date) => {
     const day = date.getUTCDate().toString().padStart(2, '0');
