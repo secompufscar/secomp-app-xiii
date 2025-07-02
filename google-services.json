@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "464007259839",
+    "project_id": "secomp-c0e83",
+    "storage_bucket": "secomp-c0e83.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464007259839:android:9a3cdfb8552afefffa480a",
+        "android_client_info": {
+          "package_name": "com.secompufscar.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoKmtZjR5aYgRim4nQISQnBU4TpJZv-k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464007259839:android:22b2fcdc5825332afa480a",
+        "android_client_info": {
+          "package_name": "com.ufscar.secomp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoKmtZjR5aYgRim4nQISQnBU4TpJZv-k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

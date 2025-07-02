@@ -10,10 +10,7 @@ import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@exp
 import { colors } from './styles/colors';
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from 'expo-system-ui';
-import { useEffect } from 'react';
-import { registerForPushNotifications, setupNotificationListeners } from './services/notificationService';
-import { useNavigation } from '@react-navigation/native';
-import { Platform } from 'react-native';
+
 
 NavigationBar.setPositionAsync("absolute");
 NavigationBar.setBackgroundColorAsync("#ffffff00");
@@ -35,15 +32,6 @@ export default function App() {
         <ActivityIndicator size="large" color={colors.blue[500]} />
       </View>
     );
-  }
-
-  if (Platform.OS !== 'web') {
-    const navigation = useNavigation();
-    // Registrar notificações e configurar listeners
-    useEffect(() => {
-      registerForPushNotifications();
-      setupNotificationListeners(navigation);
-    }, []);
   }
 
   return (
