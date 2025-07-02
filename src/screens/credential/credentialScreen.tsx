@@ -17,7 +17,7 @@ export default function Credential() {
         <SafeAreaView className="flex-1 bg-blue-900 items-center">
             <AppLayout>
                 {/* Header */}
-                <View className="w-full justify-center items-center mt-16 mb-10">
+                <View className="w-full justify-center items-center mt-[60px] mb-10">
                     <Text className="text-white text-xl font-poppinsSemiBold text-center">
                         Credencial
                     </Text>

@@ -1,13 +1,14 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
+import { getUserRanking, getProfile } from "../../services/users";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
@@ -15,42 +16,33 @@ import { getUserProfile } from "../../services/users";
 
 export default function UserProfile() {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-	const { signOut, user, setUser, loading }: any = useAuth()
+	const { signOut, user: userFromContext }: any = useAuth()
 
-	// Enquanto o AuthContext estiver carregando, mostre um spinner full-screen:
-	if (loading) {
-		return (
-			<View className="flex-1 justify-center items-center bg-blue-900">
-				<ActivityIndicator size="large" color="#3DCC87" />
-				<Text className="text-white mt-4">Carregando perfil...</Text>
-			</View>
-		);
-	}
-	
-	const nomeCompleto = new BeautifulName(user.nome).beautifulName;
+	const [user, setUser] = useState(userFromContext);
+	const [ranking, setRanking] = useState<number | null>(null);
 
-
-	// Agora que loading===false, user já veio do AsyncStorage.
-	// Disparamos o fetch toda vez que ganhamos foco EM CIMA do usuário carregado:
 	useFocusEffect(
 		useCallback(() => {
-			// Se por algum motivo user for ainda null (não logado), não faz nada:
-			if (!user) return;
-
-			(async () => {
-				try {
-					const profile = await getUserProfile();
-					setUser(profile); // atualiza nome, email, points etc.
-				} catch (error) {
-					console.error("Erro ao buscar perfil:", error);
-				}
-			})();
-		}, [user, setUser])
+		  async function fetchData() {
+			try {
+			  // Buscar perfil atualizado
+			  const freshUser = await getProfile();
+			  setUser(freshUser);
+	
+			  // Buscar ranking usando o id atualizado
+			  const rankingData = await getUserRanking(freshUser.id);
+			  setRanking(rankingData.rank);
+			} catch (error) {
+			  console.error("Erro ao buscar dados do perfil:", error);
+			}
+		  }
+		  fetchData();
+		}, [])
 	);
 
+	const nomeCompleto = new BeautifulName(userFromContext.nome).beautifulName;
 
-
-	return (
+  	return (
 		<SafeAreaView className="bg-blue-900 flex-1 items-center">
 			<AppLayout>
 				<View className="flex-row justify-between items-center">
@@ -75,7 +67,7 @@ export default function UserProfile() {
 					</Text>
 
 					<Text className="text-gray-400 font-poppins text-base">
-						{user?.email}
+						{user.email}
 					</Text>
 				</View>
 
@@ -85,7 +77,7 @@ export default function UserProfile() {
 
 					<View className="items-center">
 						<Text className="text-white text-4xl font-poppinsSemiBold">
-							27
+							{ranking ?? "-"}
 						</Text>
 						<Text className="text-gray-500 font-inter text-xs uppercase">
 							No rank
@@ -94,7 +86,7 @@ export default function UserProfile() {
 
 					<View className="items-center">
 						<Text className="text-white text-4xl font-poppinsSemiBold">
-							{user?.points}
+							{user.points}
 						</Text>
 						<Text className="text-gray-500 font-inter text-xs uppercase">
 							Pontos
@@ -112,94 +104,97 @@ export default function UserProfile() {
 				</View>
 
 				{/* Notificações */}
-				<Pressable onPress={() => { }}>
-					{({ pressed }) => (
-						<View
-							className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${pressed ? "bg-background/60" : "bg-background"
-								}`}
-						>
-							<View className="flex-row items-center gap-4">
-								<View className="w-6 flex items-center justify-center">
-									<FontAwesomeIcon icon={faBell} size={20} color="#A9B4F4" />
-								</View>
-
-								<Text className="text-white text-base font-inter">Notificações</Text>
-							</View>
-
+				<Pressable onPress={() => {}}>
+				{({ pressed }) => (
+					<View
+					className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
+						pressed ? "bg-background/60" : "bg-background"
+					}`}
+					>
+						<View className="flex-row items-center gap-4">
 							<View className="w-6 flex items-center justify-center">
-								<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+								<FontAwesomeIcon icon={faBell} size={20} color="#A9B4F4" />
 							</View>
+							
+							<Text className="text-white text-base font-inter">Notificações</Text>
 						</View>
-					)}
-				</Pressable>
 
+						<View className="w-6 flex items-center justify-center">
+							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+						</View>
+					</View>
+				)}
+				</Pressable>
+				
 				{/* Credencial */}
-				<Pressable onPress={() => { navigation.navigate("Credential") }}>
-					{({ pressed }) => (
-						<View
-							className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${pressed ? "bg-background/60" : "bg-background"
-								}`}
-						>
-							<View className="flex-row items-center gap-4">
-								<View className="w-6 flex items-center justify-center">
-									<FontAwesomeIcon icon={faQrcode} size={20} color="#A9B4F4" />
-								</View>
-
-								<Text className="text-white text-base font-inter">Credencial</Text>
-							</View>
-
+				<Pressable onPress={() => {navigation.navigate("Credential")}}>
+				{({ pressed }) => (
+					<View
+					className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
+						pressed ? "bg-background/60" : "bg-background"
+					}`}
+					>
+						<View className="flex-row items-center gap-4">
 							<View className="w-6 flex items-center justify-center">
-								<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+								<FontAwesomeIcon icon={faQrcode} size={20} color="#A9B4F4" />
 							</View>
+							
+							<Text className="text-white text-base font-inter">Credencial</Text>
 						</View>
-					)}
-				</Pressable>
 
+						<View className="w-6 flex items-center justify-center">
+							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+						</View>
+					</View>
+				)}
+				</Pressable>
+				
 				{/* Minhas atividades */}
-				<Pressable onPress={() => { }}>
-					{({ pressed }) => (
-						<View
-							className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${pressed ? "bg-background/60" : "bg-background"
-								}`}
-						>
-							<View className="flex-row items-center gap-4">
-								<View className="w-6 flex items-center justify-center">
-									<FontAwesomeIcon icon={faCalendarDays} size={20} color="#A9B4F4" />
-								</View>
-
-								<Text className="text-white text-base font-inter">Minhas Atividades</Text>
-							</View>
-
+				<Pressable onPress={() => {}}>
+				{({ pressed }) => (
+					<View
+						className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
+							pressed ? "bg-background/60" : "bg-background"
+						}`}
+					>
+						<View className="flex-row items-center gap-4">
 							<View className="w-6 flex items-center justify-center">
-								<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+								<FontAwesomeIcon icon={faCalendarDays} size={20} color="#A9B4F4" />
 							</View>
+							
+							<Text className="text-white text-base font-inter">Minhas Atividades</Text>
 						</View>
-					)}
-				</Pressable>
 
+						<View className="w-6 flex items-center justify-center">
+							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+						</View>
+					</View>
+				)}
+				</Pressable>
+				
 				{/* Sair */}
 				<Pressable onPress={signOut}>
-					{({ pressed }) => (
-						<View
-							className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 border border-iconbg ${pressed ? "bg-background/60" : ""
-								}`}
-						>
-							<View className="flex-row items-center gap-4">
-								<View className="w-6 flex items-center justify-center">
-									<FontAwesomeIcon icon={faArrowRightFromBracket} size={20} color="#A9B4F4" />
-								</View>
-
-								<Text className="text-white text-base font-inter">Sair</Text>
-							</View>
-
+				{({ pressed }) => (
+					<View
+						className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 border border-iconbg ${
+							pressed ? "bg-background/60" : ""
+						}`}
+					>
+						<View className="flex-row items-center gap-4">
 							<View className="w-6 flex items-center justify-center">
-								<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+								<FontAwesomeIcon icon={faArrowRightFromBracket} size={20} color="#A9B4F4" />
 							</View>
+							
+							<Text className="text-white text-base font-inter">Sair</Text>
 						</View>
-					)}
+
+						<View className="w-6 flex items-center justify-center">
+							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+						</View>
+					</View>
+				)}
 				</Pressable>
 			</AppLayout>
 		</SafeAreaView>
-	);
+  	);
 }
-

@@ -29,12 +29,12 @@ export default function CategoryFilter({ onSelect }: { onSelect?: (category: str
             <Pressable
               key={category}
               onPress={() => handlePress(category)} 
-              className={`px-5 py-1.5 rounded-full
+              className={`px-5 py-2.5 rounded-full
                 ${isSelected ? 'bg-green' : 'border border-neutral-200'}
                 justify-center items-center`}
             >
               <Text
-                className={`text-[11px] font-poppinsMedium transition duration-500 ease-in-out
+                className={`text-xs font-poppinsMedium transition duration-500 ease-in-out
                   ${isSelected ? 'text-blue-900' : 'text-neutral-200'}`} 
               >
                 {category}

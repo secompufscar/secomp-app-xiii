@@ -14,12 +14,8 @@ import UserProfile from './profile/userProfileScreen'
 import AdminProfile from './profile/adminProfileScreen'
 
 import Schedule from './schedule/scheduleScreen'
-import ScheduleDetails from './schedule/scheduleDetailsScreen'
 import MyEvents from './user-activities/userActivitiesScreen'
 import Credential from './credential/credentialScreen'
-
-import Registration from './activity-registration/registrationScreen'
-import RegistrationDetails from './activity-registration/registrationDetailsScreen'
 
 import Activities from './activities/activitiesScreen'
 
@@ -42,11 +38,8 @@ export {
     EditProfile,
     AdminProfile,
     Schedule,
-    ScheduleDetails,
     MyEvents,
     Credential,
-    Registration,
-    RegistrationDetails,
     Activities,
     QRCode,
 }

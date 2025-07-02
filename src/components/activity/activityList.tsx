@@ -120,7 +120,8 @@ export default function ActivityList({
     <FlatList
       data={filtered}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
+      contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         const rawDate = parseISO(item.data);
         const dataObj = addHours(rawDate, 3); // Corrige para UTC-3 (Brasília)
@@ -148,7 +149,7 @@ export default function ActivityList({
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}h</Text>
+                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
               </Text>
             </View>
           </Pressable>
