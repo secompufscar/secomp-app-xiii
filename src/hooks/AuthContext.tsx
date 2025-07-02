@@ -1,16 +1,24 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Definindo o tipo User 
+interface User {
+  id: number;
+  nome: string;
+  email: string;
+  points: number;
+}
+
 // Tipo do contexto de autenticação
 interface AuthContextData {
   user: User | null;
   loading: boolean;
   signIn: (data: User) => Promise<void>;
   signOut: () => Promise<void>;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  updateUser: (data: User) => Promise<void>; // <-- 1. ADICIONADO
 }
 
-// Criação do contexto com tipo indefinido inicialmente
+// Criação do contexto
 const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 // Tipo das props do provider
@@ -43,6 +51,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  // Atualiza o usuário no estado e no AsyncStorage
+  const updateUser = async (data: User) => {
+    try {
+      setUser(data);
+      await AsyncStorage.setItem("user", JSON.stringify(data));
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+    }
+  };
+
   // Recuperar usuário do AsyncStorage (login automático)
   useEffect(() => {
     const loadUserFromStorage = async () => {
@@ -63,7 +81,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut, setUser }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signOut, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

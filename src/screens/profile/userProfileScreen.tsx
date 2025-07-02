@@ -8,17 +8,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import { getUserRanking, getProfile } from "../../services/users";
+import { colors } from "../../styles/colors";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
-import { getUserProfile } from "../../services/users";
 
 export default function UserProfile() {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-	const { signOut, user: userFromContext }: any = useAuth()
+	const { signOut, user: userFromContext, updateUser }: any = useAuth()
 
 	const [user, setUser] = useState(userFromContext);
 	const [ranking, setRanking] = useState<number | null>(null);
+
+	if (!user) {
+        return (
+            <SafeAreaView className="bg-blue-900 flex-1 items-center justify-center">
+                <ActivityIndicator size="large" color={colors.blue[500]} />
+            </SafeAreaView>
+        );
+    }
 
 	useFocusEffect(
 		useCallback(() => {
@@ -26,6 +34,7 @@ export default function UserProfile() {
 			try {
 			  // Buscar perfil atualizado
 			  const freshUser = await getProfile();
+			  await updateUser(freshUser);
 			  setUser(freshUser);
 	
 			  // Buscar ranking usando o id atualizado
