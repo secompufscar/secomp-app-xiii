@@ -17,6 +17,11 @@ interface SignupResponse {
   emailEnviado: boolean;
 }
 
+export type UpdateProfile = {
+  nome?: string;
+  email?: string;
+};
+
 export const login = async (data: Login): Promise<User> => {
     const response = await api.post("/users/login", data)
 
@@ -48,8 +53,17 @@ export const updatePassword = async (token: string, newPassword: string) => {
   return response.data; 
 }
 
+export const updateProfile = async (data: UpdateProfile) => {
+  const response = await api.patch('/users/updateProfile', data)
+  return response.data
+}
+
+export const getUserProfile = async (): Promise<User> => {
+  const response = await api.get("/users/getProfile");
+  return response.data;
+};
+
 export const getUserRanking = async (id: string): Promise<{ rank: number }> => {
   const response = await api.get(`/users/getUserRanking/${id}`);
   return response.data;
 }
-  

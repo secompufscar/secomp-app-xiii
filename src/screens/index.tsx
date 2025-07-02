@@ -21,6 +21,8 @@ import Activities from './activities/activitiesScreen'
 
 import QRCode from './credential/qrCodeReaderScreen'
 
+import EditProfile from './profile/editProfileScreen'
+
 export {
     Login,
     SignUp,
@@ -33,6 +35,7 @@ export {
     EventGuide,
     Sponsors,
     UserProfile,
+    EditProfile,
     AdminProfile,
     Schedule,
     MyEvents,

@@ -10,6 +10,7 @@ import {
     Credential,
     Activities,
     QRCode,
+    EditProfile
 } from '../screens'
 
 import { ScheduleItemProps } from '../entities/schedule-item';
@@ -26,6 +27,7 @@ type StackNavigation = {
     Credential: undefined;
     Activities: undefined;
     QRCode: { id: string };
+    EditProfile: undefined;
   };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -43,6 +45,7 @@ export default function StackRoutes() {
             <Stack.Screen name="Credential" component={Credential} />
             <Stack.Screen name="Activities" component={Activities} />
             <Stack.Screen name="QRCode" component={QRCode} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
         </Stack.Navigator>
     );
 }

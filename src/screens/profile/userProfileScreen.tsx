@@ -1,16 +1,18 @@
 import { useCallback, useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import { getUserRanking, getProfile } from "../../services/users";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
+import { getUserProfile } from "../../services/users";
 
 export default function UserProfile() {
 	const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -196,4 +198,3 @@ export default function UserProfile() {
 		</SafeAreaView>
   	);
 }
-
