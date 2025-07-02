@@ -16,7 +16,7 @@ export default function Button({ title, ...rest }: Props) {
       onPressOut={() => setIsPressed(false)}
     >
       <View
-        className={`w-full p-4 items-center justify-center rounded-lg transition-transform duration-100 transform bg-blue-500 
+        className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform bg-blue-500 
         ${isPressed ? "opacity-80" : "opacity-100"}`}
       >
         <Text className="text-white text-base font-interMedium">{title}</Text>
