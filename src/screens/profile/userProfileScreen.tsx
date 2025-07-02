@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name"
