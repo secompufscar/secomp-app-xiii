@@ -158,7 +158,7 @@ export default function UserProfile() {
 				</Pressable>
 				
 				{/* Minhas atividades */}
-				<Pressable onPress={() => {}}>
+				<Pressable onPress={() => {navigation.navigate("MyEvents")}}>
 				{({ pressed }) => (
 					<View
 						className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
