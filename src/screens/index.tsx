@@ -6,6 +6,7 @@ import EmailConfirmation from './login-signup/emailConfirmationScreen';
 import PasswordReset from './password-reset/passwordResetScreen';
 import VerifyEmail from './password-reset/verifyEmailScreen';
 import SetNewPassword from './password-reset/setNewPasswordScreen';
+import ActivityDetails from './activity-details/activityDetailsScreen';
 
 import Home from './home/homeScreen'
 import EventGuide from './event-guide/eventGuideScreen';
@@ -42,4 +43,5 @@ export {
     Credential,
     Activities,
     QRCode,
+    ActivityDetails,
 }
