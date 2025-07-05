@@ -111,6 +111,29 @@ export default function UserProfile() {
 					</View>
 				</View>
 
+				{/* Minhas atividades */}
+				<Pressable onPress={() => {navigation.navigate("MyEvents")}}>
+				{({ pressed }) => (
+					<View
+						className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
+							pressed ? "bg-background/60" : "bg-background"
+						}`}
+					>
+						<View className="flex-row items-center gap-4">
+							<View className="w-6 flex items-center justify-center">
+								<FontAwesomeIcon icon={faCalendarDays} size={20} color="#A9B4F4" />
+							</View>
+							
+							<Text className="text-white text-base font-inter">Minhas Atividades</Text>
+						</View>
+
+						<View className="w-6 flex items-center justify-center">
+							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+						</View>
+					</View>
+				)}
+				</Pressable>
+
 				{/* Notificações */}
 				<Pressable onPress={() => {}}>
 				{({ pressed }) => (
@@ -148,29 +171,6 @@ export default function UserProfile() {
 							</View>
 							
 							<Text className="text-white text-base font-inter">Credencial</Text>
-						</View>
-
-						<View className="w-6 flex items-center justify-center">
-							<FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-						</View>
-					</View>
-				)}
-				</Pressable>
-				
-				{/* Minhas atividades */}
-				<Pressable onPress={() => {navigation.navigate("MyEvents")}}>
-				{({ pressed }) => (
-					<View
-						className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
-							pressed ? "bg-background/60" : "bg-background"
-						}`}
-					>
-						<View className="flex-row items-center gap-4">
-							<View className="w-6 flex items-center justify-center">
-								<FontAwesomeIcon icon={faCalendarDays} size={20} color="#A9B4F4" />
-							</View>
-							
-							<Text className="text-white text-base font-inter">Minhas Atividades</Text>
 						</View>
 
 						<View className="w-6 flex items-center justify-center">
