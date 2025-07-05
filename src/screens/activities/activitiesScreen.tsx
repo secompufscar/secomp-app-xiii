@@ -40,7 +40,7 @@ export default function Activities() {
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
               Atividades
             </Text>
-            <Text className="text-gray-400 font-inter text-">
+            <Text className="text-gray-400 font-inter">
               Veja todas as atividades disponíveis no evento
             </Text>
           </View>

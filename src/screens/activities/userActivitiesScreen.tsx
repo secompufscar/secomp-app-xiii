@@ -1,12 +1,10 @@
-// src/screens/MySubscriptions.tsx
 import React from "react";
 import { View, Text, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import BackButton from "../../components/button/backButton";
-import AppLayout from "../../components/app/appLayout";
 import { SubscribedActivityList } from "../../components/activity/subscribedActivityList";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
+import BackButton from "../../components/button/backButton";
 
 export default function MyEvents() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -35,12 +33,12 @@ const handlePressActivity = (item: ActivityItem): void => {
         <BackButton />
 
         {/* Cabeçalho */}
-        <View className="mb-8 mt-4">
+        <View className="mb-8">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
             Atividades Inscritas
           </Text>
-          <Text className="text-gray-400 font-inter text-sm">
-            Uma lista com todas as suas atividades
+          <Text className="text-gray-400 font-inter">
+            Uma lista com todas as suas inscrições
           </Text>
         </View>
 

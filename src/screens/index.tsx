@@ -14,7 +14,7 @@ import UserProfile from './profile/userProfileScreen'
 import AdminProfile from './profile/adminProfileScreen'
 
 import Schedule from './schedule/scheduleScreen'
-import MyEvents from './user-activities/userActivitiesScreen'
+import MyEvents from './activities/userActivitiesScreen'
 import Credential from './credential/credentialScreen'
 
 import Activities from './activities/activitiesScreen'

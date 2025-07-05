@@ -50,7 +50,7 @@ export default function ActivityList({
   // Tela de loading
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center pb-24">
         <ActivityIndicator size="large" color={colors.blue[500]} />
       </View>
     );
@@ -59,7 +59,7 @@ export default function ActivityList({
   // Tela de erro
   if (errorMsg) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
+      <View className="flex-1 items-center justify-center px-4 pb-24">
         <Text className="text-danger text-center font-inter text-sm">
           {errorMsg}
         </Text>
@@ -70,7 +70,7 @@ export default function ActivityList({
   // Exibe aviso enquanto categorias ainda carregam
   if (selectedCategory && allCategories.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
+      <View className="flex-1 items-center justify-center px-4 pb-24">
         <Text className="text-gray-400 text-center font-inter text-sm">
           Carregando categorias...
         </Text>
@@ -108,7 +108,7 @@ export default function ActivityList({
   // Nenhuma atividade encontrada para a categoria
   if (filtered.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center px-4">
+      <View className="flex-1 items-center justify-center px-4 pb-24">
         <Text className="text-gray-400 text-center text-sm font-inter">
           Nenhuma atividade em “{selectedCategory}”
         </Text>
@@ -144,7 +144,7 @@ export default function ActivityList({
 
             {/* Bloco com nome da atividade e horário */}
             <View className="flex-1 flex-col flex-wrap justify-between py-1">
-              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium">
+              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium mb-1">
                 {item.nome}
               </Text>
 
