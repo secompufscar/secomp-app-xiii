@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, ScrollView, Text, Pressable } from 'react-native';
 
 // Lista fixa de categorias exibidas como botões
-const categories = ['Palestra', 'Minicurso', 'Competições', 'Outros'];
+const categories = ['Palestras', 'Minicursos', 'Competições', 'Outros'];
 
 // Componente que exibe filtros de categoria em botões
 export default function CategoryFilter({ onSelect }: { onSelect?: (category: string) => void }) {
   // Estado para rastrear qual categoria está atualmente selecionada
-  const [selectedCategory, setSelectedCategory] = useState<string>('Palestra');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Palestras');
 
   // Ao pressionar uma categoria, atualiza o estado e chama o callback do pai (se houver)
   const handlePress = (category: string) => {
