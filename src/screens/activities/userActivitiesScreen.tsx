@@ -33,7 +33,7 @@ const handlePressActivity = (item: ActivityItem): void => {
         <BackButton />
 
         {/* Cabeçalho */}
-        <View className="mb-8">
+        <View className="mb-6">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
             Atividades Inscritas
           </Text>
