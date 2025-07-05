@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable} from "react-native";
 import { getActivities } from "../../services/activities";
 import { getCategories } from "../../services/categories";
 import { parseISO, addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Props esperadas pelo componente ActivityList
 type ActivityListProps = {
@@ -30,22 +31,44 @@ export default function ActivityList({
       .toLowerCase();
 
   // Busca as categorias e atividades na montagem do componente
-  useEffect(() => {
-    (async () => {
-      try {
-        const cats = await getCategories();
-        setAllCategories(cats);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true; // Flag para evitar updates de estado em componente desmontado
 
-        const acts = await getActivities();
-        setAllActivities(acts);
-      } catch (err: any) {
-        console.error("Erro ao buscar dados:", err);
-        setErrorMsg("Falha ao obter dados.");
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+      const fetchData = async () => {
+        setLoading(true); // Mostra o loading a cada atualização
+        try {
+          // Otimização: busca categorias e atividades em paralelo
+          const [cats, acts] = await Promise.all([
+            getCategories(),
+            getActivities()
+          ]);
+          
+          if (isActive) {
+            setAllCategories(cats);
+            setAllActivities(acts);
+            setErrorMsg(null); // Limpa erros anteriores
+          }
+        } catch (err: any) {
+          console.error("Erro ao buscar dados:", err);
+          if (isActive) {
+            setErrorMsg("Falha ao obter dados.");
+          }
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
+
+      fetchData();
+
+      // 3. Função de limpeza que roda quando a tela perde o foco
+      return () => {
+        isActive = false;
+      };
+    }, []) // O array de dependências do useCallback continua vazio
+  );
 
   // Tela de loading
   if (loading) {

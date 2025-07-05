@@ -41,7 +41,7 @@ export default function ActivityDetails() {
         setSubscriptionLoading(false);
         return;
       };
-      
+
       setSubscriptionLoading(true);
       try {
         await userSubscription(user.id, activity.id);
@@ -89,43 +89,44 @@ export default function ActivityDetails() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <AppLayout>
+      <View className="w-full h-72 absolute bg-iconbg/40 -z-10">
+        {/* Imagem */}
+      </View>
 
-        <View className="mb-4">
-            <BackButton />
-        </View>
+      <AppLayout>
+        <BackButton />
 
         {/* titulo da atividade */}
-        <View className="mb-6">
+        <View className="mb-6 mt-36">
             <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
-            <Text className="text-white text-3xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
+            <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
         </View>
 
         {/* info*/}
         <View className="mb-8 space-y-4">
-            <InfoRow 
-                icon={faLocationDot} 
-                mainText="Departamento de Computação"
-                subText={activity.local}
-            >
-                {/*link pro google maps*/}
-                <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.local)}`)}>
-                    <Text className="text-green underline">Ver no mapa</Text>
-                </Pressable>
-            </InfoRow>
+          <InfoRow 
+              icon={faLocationDot} 
+              mainText="UFSCar"
+              subText={activity.local}
+          >
+              {/*link pro google maps*/}
+              <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}>
+                  <Text className="text-green underline">Ver no mapa</Text>
+              </Pressable>
+          </InfoRow>
 
-            <InfoRow 
-                icon={faCalendarDays} 
-                mainText={getDate()}
-                subText={getTime()}
-            />
+          <InfoRow 
+              icon={faCalendarDays} 
+              mainText={getDate()}
+              subText={getTime()}
+          />
 
-            <InfoRow 
-                icon={faUsers} 
-                mainText="Vagas"
-                subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
-            >
-            </InfoRow>
+          <InfoRow 
+              icon={faUsers} 
+              mainText="Vagas"
+              subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
+          >
+          </InfoRow>
         </View>
         
         <View className="mb-8">

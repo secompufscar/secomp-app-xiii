@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { parseISO, addHours, getDay, isPast } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { useFocusEffect } from '@react-navigation/native';
 import { colors } from "../../styles/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMicrophone, faLaptopCode, faTrophy, faGamepad, faUsers, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
@@ -49,28 +49,44 @@ export default function ActivityList({
     'SEX': 5,
   };
 
-  // Busca as atividades E categorias na montagem do componente
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const acts: Activity[] = await getActivities();
-        const sortedActivities = acts.sort((a, b) => {
-          const dateA = parseISO(a.data).getTime(); // Certifique-se que 'data' é uma ISO string
-          const dateB = parseISO(b.data).getTime();
-          return dateA - dateB;
-        });
-  
-        setAllActivities(sortedActivities);
-      } catch (err) {
-        console.error("Erro ao buscar dados:", err);
-        setErrorMsg("Falha ao obter dados.");
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchData();
-  }, []);
+  // Busca as atividades e categorias na montagem do componente
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true; 
+
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const acts: Activity[] = await getActivities();
+          
+          if (isActive) {
+            const sortedActivities = acts.sort((a, b) => {
+              const dateA = parseISO(a.data).getTime();
+              const dateB = parseISO(b.data).getTime();
+              return dateA - dateB;
+            });
+            setAllActivities(sortedActivities);
+            setErrorMsg(null); 
+          }
+        } catch (err) {
+          console.error("Erro ao buscar dados:", err);
+          if (isActive) {
+            setErrorMsg("Falha ao obter dados.");
+          }
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
+
+      fetchData();
+
+      return () => {
+        isActive = false;
+      };
+    }, []) 
+  );
 
   const getFilteredActivitiesByDay = (): Activity[] => {
     if (!selectedDay || allActivities.length === 0) {

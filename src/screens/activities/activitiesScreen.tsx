@@ -12,7 +12,7 @@ export default function Activities() {
   const { user: { user } }: any = useAuth();
 
   // Estado para armazenar a categoria selecionada no filtro
-  const [selectedCategory, setSelectedCategory] = useState<string>("Palestra");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Palestras");
 
   const handleSelectCategory = (category: string) => {
     setSelectedCategory(category);
