@@ -1,14 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Definindo o tipo User 
-interface User {
-  id: number;
-  nome: string;
-  email: string;
-  points: number;
-}
-
 // Tipo do contexto de autenticação
 interface AuthContextData {
   user: User | null;

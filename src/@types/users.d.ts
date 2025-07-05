@@ -5,5 +5,6 @@ interface User {
     tipo: string
     qrCode: string
     points: int
+    registrationStatus: int
 }
 

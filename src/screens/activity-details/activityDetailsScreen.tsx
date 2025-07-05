@@ -8,20 +8,21 @@ import { faLocationDot, faCalendarDays, faUsers, faUserCircle } from '@fortaweso
 import { useAuth } from '../../hooks/AuthContext';
 import { subscribeToActivity, unsubscribeToActivity } from '../../services/activities';
 import { userSubscription } from '../../services/userAtActivities';
-import AppLayout from '../../components/app/appLayout';
-import BackButton from '../../components/button/backButton';
-import Button from '../../components/button/button';
 import { colors } from '../../styles/colors';
 import { format, parseISO, addHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import AppLayout from '../../components/app/appLayout';
+import BackButton from '../../components/button/backButton';
+import Button from '../../components/button/button';
 import InfoRow from '../../components/info/infoRow';
 
 const categoryIdToName: { [key: string]: string } = {
   '1': 'Minicurso',
   '2': 'Palestra',
   '3': 'Competição',
-  '4': 'Game Night',
+  '4': 'Gamenight',
   '5': 'Sociocultural',
+  '6': 'Credenciamento',
   'default': 'Atividade'
 };
 
@@ -30,7 +31,6 @@ export default function ActivityDetails() {
   const route = useRoute();
   const { item: activity } = route.params as { item: Activity };
   const { user } = useAuth();
-
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
@@ -41,6 +41,7 @@ export default function ActivityDetails() {
         setSubscriptionLoading(false);
         return;
       };
+      
       setSubscriptionLoading(true);
       try {
         await userSubscription(user.id, activity.id);
