@@ -114,7 +114,7 @@ export default function ActivityList({
   // Tela de loading
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 items-center justify-center pb-24">
         <ActivityIndicator size="large" color={colors.blue[500]} />
       </View>
     );
