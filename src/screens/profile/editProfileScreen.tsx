@@ -75,10 +75,12 @@ export default function EditProfileScreen() {
       setAlertColor("text-success");
       setIsAlertOpen(true);
     } catch (error) {
-      setAlertText("Erro: não foi possível atualizar o perfil");
+      const err = error as any;
+      const errorMessage = err.response?.data?.message || "Erro: não foi possível atualizar o perfil";
+
+      setAlertText(errorMessage);
       setAlertColor("text-danger");
       setIsAlertOpen(true);
-      console.error(error);
     } finally {
       setIsLoading(false); 
     }
@@ -147,7 +149,7 @@ export default function EditProfileScreen() {
           </View>
 
           {isAlertOpen && (
-            <Text className={`text-sm mt-2 font-inter ${alertColor}`}>
+            <Text className={`text-sm font-inter ${alertColor}`}>
                 {alertText}
             </Text>
           )}
