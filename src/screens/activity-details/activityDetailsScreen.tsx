@@ -34,6 +34,7 @@ export default function ActivityDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+  const [isPressed, setIsPressed] = useState(false);
 
   useEffect(() => {
     const checkSubscription = async () => {
@@ -110,8 +111,12 @@ export default function ActivityDetails() {
             subText={activity.local}
           >
             {/*link pro google maps*/}
-            <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}>
-              <Text className="text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md active:bg-blue-500/10">Ver no mapa</Text>
+            <Pressable 
+              onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}
+              onPressIn={() => setIsPressed(true)}
+              onPressOut={() => setIsPressed(false)}
+            >
+              <Text className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${isPressed ? "bg-blue-500/20" : "bg-blue-500/10"}`}>Ver no mapa</Text>
             </Pressable>
           </InfoRow>
 
