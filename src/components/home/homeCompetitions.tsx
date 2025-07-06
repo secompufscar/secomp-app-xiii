@@ -40,7 +40,7 @@ export default function HomeCompetitions() {
           return (
             <Pressable
               key={item.id.toString()}
-              onPress={() => navigation.navigate('RegistrationDetails', { item })}
+              onPress={() => navigation.navigate('ActivityDetails', { item })}
               onPressIn={() => setPressedItemId(item.id)}
               onPressOut={() => setPressedItemId(null)}
             >

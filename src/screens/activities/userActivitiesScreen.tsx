@@ -19,7 +19,7 @@ interface ScheduleDetailsParams {
 }
 
 const handlePressActivity = (item: ActivityItem): void => {
-    navigation.navigate("ScheduleDetails", { item } as ScheduleDetailsParams);
+    navigation.navigate("ActivityDetails", { item } as ScheduleDetailsParams);
 };
 
   return (
