@@ -154,9 +154,9 @@ export default function ActivityDetails() {
         {/* button */}
         <View className="mt-auto mb-10">
             {user?.tipo === 'ADMIN' ? (
-              <View className="space-y-4">
-                <Button title="Ver Lista de Inscritos" onPress={() => Alert.alert("Funcionalidade futura", "A lista de inscritos será exibida aqui.")} />
-                <Button title="Ler Presença (QR Code)" onPress={handleScanPresence} />
+              <View className="flex flex-row gap-4">
+                <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1"/>
+                <Button title="Lista de Inscritos" onPress={() => {}}/>
               </View>
             ) : (
               subscriptionLoading || isLoading ? (
