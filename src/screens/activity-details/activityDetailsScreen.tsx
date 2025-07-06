@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation, ParamListBase } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLocationDot, faCalendarDays, faUsers, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faCalendarDay, faUsers, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../hooks/AuthContext';
 import { subscribeToActivity, unsubscribeToActivity } from '../../services/activities';
 import { userSubscription } from '../../services/userAtActivities';
@@ -103,67 +103,70 @@ export default function ActivityDetails() {
         </View>
 
         {/* info*/}
-        <View className="mb-8 space-y-4">
+        <View className="mb-6">
           <InfoRow 
-              icon={faLocationDot} 
-              mainText="UFSCar"
-              subText={activity.local}
+            icon={faLocationDot} 
+            mainText="UFSCar"
+            subText={activity.local}
           >
-              {/*link pro google maps*/}
-              <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}>
-                  <Text className="text-green underline">Ver no mapa</Text>
-              </Pressable>
+            {/*link pro google maps*/}
+            <Pressable onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}>
+              <Text className="text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md active:bg-blue-500/10">Ver no mapa</Text>
+            </Pressable>
           </InfoRow>
 
-          <InfoRow 
-              icon={faCalendarDays} 
+          <View className="flex flex-row w-full gap-4">
+            <InfoRow 
+              icon={faCalendarDay} 
               mainText={getDate()}
               subText={getTime()}
-          />
+              className="w-[60%]"
+            />
 
-          <InfoRow 
+            <InfoRow 
               icon={faUsers} 
               mainText="Vagas"
               subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
-          >
-          </InfoRow>
+              className="w-[35%]"
+            >
+            </InfoRow>
+          </View>
         </View>
         
-        <View className="mb-8">
-            <Text className="text-white text-lg font-poppinsMedium mb-2">Detalhes</Text>
-            <Text className="text-default text-base font-inter leading-relaxed">{activity.detalhes}</Text>
+        <View className="mb-10">
+            <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
+            <Text className="text-gray-400 text-base font-inter leading-relaxed">{activity.detalhes}</Text>
         </View>
 
         {/* Palestrante */}
-        <View className="mb-12">
-            <Text className="text-white text-lg font-poppinsMedium mb-3">Palestrante</Text>
-            <View className="flex-row items-center">
-                 {/* Imagem para adicionar depois */}
-                <FontAwesomeIcon icon={faUserCircle} size={48} color={colors.border} />
-                <View className="ml-4">
-                    <Text className="text-white text-base font-poppinsMedium">{activity.palestranteNome}</Text>
-                     {/* subtitulo do palestrante para depois */}
-                    <Text className="text-gray-400 text-sm">Organização da SECOMP</Text>
-                </View>
+        <View className="mb-10">
+          <View className="flex-row items-center">
+            {/* Imagem para adicionar depois */}
+            <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
+            <View className="ml-4">
+                <Text className="text-white text-base font-poppinsSemiBold">{activity.palestranteNome}</Text>
+                {/* subtitulo do palestrante para depois */}
+                <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
             </View>
+          </View>
         </View>
 
         {/* button */}
-        <View className="mt-auto mb-4">
+        <View className="mt-auto mb-10">
             {user?.tipo === 'ADMIN' ? (
               <View className="space-y-4">
                 <Button title="Ver Lista de Inscritos" onPress={() => Alert.alert("Funcionalidade futura", "A lista de inscritos será exibida aqui.")} />
                 <Button title="Ler Presença (QR Code)" onPress={handleScanPresence} />
               </View>
             ) : (
-                subscriptionLoading || isLoading ? (
-                    <ActivityIndicator size="large" color={colors.blue[500]} />
-                ) : (
-                    <Button 
-                        title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"} 
-                        onPress={handleSubscription} 
-                    />
-                )
+              subscriptionLoading || isLoading ? (
+                <ActivityIndicator size="large" color={colors.blue[500]} />
+              ) : (
+                <Button 
+                    title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"} 
+                    onPress={handleSubscription} 
+                />
+              )
             )}
         </View>
 

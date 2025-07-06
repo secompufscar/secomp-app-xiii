@@ -9,11 +9,12 @@ interface InfoRowProps {
   mainText: string;
   subText?: string;
   children?: ReactNode;
+  className?: string;
 }
 
-export default function InfoRow({ icon, mainText, subText, children }: InfoRowProps) {
+export default function InfoRow({ icon, mainText, subText, children, className }: InfoRowProps) {
   return (
-    <View className="flex-row items-center w-full mb-4">
+    <View className={`flex-row items-center mb-4 items-center ${className || ''}`}>
       {/* icone */}
       <View className="w-10 h-10 bg-background rounded items-center justify-center mr-4">
         <FontAwesomeIcon icon={icon} size={18} color={colors.blue[500]} />
@@ -28,7 +29,7 @@ export default function InfoRow({ icon, mainText, subText, children }: InfoRowPr
       </View>
 
       {children && (
-        <View className="ml-auto">
+        <View className="flex ml-auto items-center justify-center">
           {children}
         </View>
       )}
