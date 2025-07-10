@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { act, useCallback, useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,7 +7,7 @@ import { BeautifulName } from "beautiful-name"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
-import { getUserRanking, getProfile } from "../../services/users";
+import { getUserRanking, getProfile, getUserActivitiesCount } from "../../services/users";
 import { colors } from "../../styles/colors";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
@@ -19,6 +19,7 @@ export default function UserProfile() {
 
 	const [user, setUser] = useState(userFromContext);
 	const [ranking, setRanking] = useState<number | null>(null);
+	const [activities, setActivities] = useState(0);
 
 	if (!user) {
         return (
@@ -40,6 +41,11 @@ export default function UserProfile() {
 			  // Buscar ranking usando o id atualizado
 			  const rankingData = await getUserRanking(freshUser.id);
 			  setRanking(rankingData.rank);
+
+			  // Buscar o número de atividades inscritas pelo usuário
+			  const numActivities = await getUserActivitiesCount(freshUser.id);
+			  console.log(numActivities.activities)
+			  setActivities(numActivities.activities);
 			} catch (error) {
 			  console.error("Erro ao buscar dados do perfil:", error);
 			}
@@ -103,7 +109,7 @@ export default function UserProfile() {
 
 					<View className="items-center">
 						<Text className="text-white text-4xl font-poppinsSemiBold">
-							04
+							{activities ?? 0}
 						</Text>
 						<Text className="text-gray-500 font-inter text-xs uppercase">
 							Atividades
