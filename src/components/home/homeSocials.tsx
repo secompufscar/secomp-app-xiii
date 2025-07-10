@@ -28,13 +28,13 @@ export default function HomeSocials() {
         <View className="flex-row justify-between items-center gap-3">
             {socialLinks.map(({ key, url, icon }) => (
                 <LinearGradient
+                    key={key}
                     colors={["#29303F", "#2A3B5E"]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     className="flex-1 p-5 items-center justify-center rounded-[6px] overflow-hidden active:opacity-80"
                 >
                     <Pressable
-                        key={key}
                         onPress={() => openLink(url)}
                     >
                         {icon}
