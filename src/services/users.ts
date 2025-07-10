@@ -68,7 +68,7 @@ export const getUserRanking = async (id: string): Promise<{ rank: number }> => {
   return response.data;
 }
 
-export const getUserActivitiesCount = async (id: string): Promise<{ activities: number }> => {
-  const response = await api.get(`/${id}/activities/count`);
+export const getUserActivitiesCount = async (id: string): Promise<{ totalActivities: number }> => {
+  const response = await api.get(`/users/${id}/activities/count`);
   return response.data;
 }

@@ -44,8 +44,7 @@ export default function UserProfile() {
 
 			  // Buscar o número de atividades inscritas pelo usuário
 			  const numActivities = await getUserActivitiesCount(freshUser.id);
-			  console.log(numActivities.activities)
-			  setActivities(numActivities.activities);
+			  setActivities(numActivities.totalActivities);
 			} catch (error) {
 			  console.error("Erro ao buscar dados do perfil:", error);
 			}
