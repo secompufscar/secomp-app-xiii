@@ -1,12 +1,59 @@
-import { View, Text, Image, Pressable, Linking } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { View, Text, Image, Pressable, Linking, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
+import { colors } from "../../styles/colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { sponsors } from "./sponsorsData";
+import { getSponsors }  from "../../services/sponsors";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Sponsors() {
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSponsors = async () => {
+        try {
+          const data = await getSponsors();
+          setSponsors(data);
+          setError(null);
+        } catch (err) {
+          console.error("Erro ao buscar patrocinadores:", err);
+          setError("Não foi possível carregar os patrocinadores. Tente novamente mais tarde.");
+        } finally {
+          if (isLoading) {
+            setIsLoading(false);
+          }
+        }
+      };
+
+      fetchSponsors();
+    }, [isLoading])
+  );
+
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-blue-900 items-center justify-center">
+        <ActivityIndicator size="large" color={colors.blue[500]} />
+      </SafeAreaView>
+    );
+  }
+
+  if (error && sponsors.length === 0) {
+    return (
+      <SafeAreaView className="flex-1 bg-blue-900 items-center">
+        <AppLayout>
+          <BackButton />
+          <Text className="text-red-500 text-center font-inter mt-4">{error}</Text>
+        </AppLayout>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
       <AppLayout>
@@ -23,12 +70,14 @@ export default function Sponsors() {
         {sponsors.map((sponsor) => (
           <Pressable
             onPress={() => {
-              Linking.openURL(sponsor.link);
+              if (sponsor.link) {
+                Linking.openURL(sponsor.link);
+              }
             }}
+            key={sponsor.id}
           >
             {({ pressed }) => (
               <LinearGradient
-                key={sponsor.name}
                 colors={["#2E364B", "#161F36"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
@@ -39,7 +88,7 @@ export default function Sponsors() {
                   <View className="flex-row items-center gap-3">
                     <View className="w-[42px] h-[42px] p-1 flex items-center justify-center">
                       <Image
-                        source={sponsor.logo}
+                        source={{uri: sponsor.logoUrl}}
                         style={{
                           width: "100%",
                           height: "100%",

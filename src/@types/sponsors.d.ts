@@ -1,8 +1,9 @@
 interface Sponsor {
   id?: string;
   name: string;
-  logoUrl: string;
+  logoUrl: undefined;
   description: string;
   starColor: string;
   link: string;
+  tags: string[];
 }
