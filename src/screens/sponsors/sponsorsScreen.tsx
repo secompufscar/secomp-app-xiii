@@ -4,18 +4,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { sponsors } from "./sponsorsData";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Sponsors() {
-    return (
+  return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
       <AppLayout>
-        <BackButton/>
+        <BackButton />
 
         <View className="mb-8">
-          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-            Patrocinadores
-          </Text>
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Patrocinadores</Text>
 
           <Text className="text-gray-400 font-inter text-base">
             Empresas que confiam em nós e fazem o evento acontecer
@@ -23,7 +21,11 @@ export default function Sponsors() {
         </View>
 
         {sponsors.map((sponsor) => (
-          <Pressable onPress={() => {Linking.openURL(sponsor.link)}}>
+          <Pressable
+            onPress={() => {
+              Linking.openURL(sponsor.link);
+            }}
+          >
             {({ pressed }) => (
               <LinearGradient
                 key={sponsor.name}
@@ -36,12 +38,19 @@ export default function Sponsors() {
                 <View className="w-full flex-row items-center justify-between mb-5">
                   <View className="flex-row items-center gap-3">
                     <View className="w-[42px] h-[42px] p-1 flex items-center justify-center">
-                      <Image 
+                      <Image
                         source={sponsor.logo}
-                        style={{ width: "100%", height: "100%", resizeMode: 'cover', borderRadius: 3}}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          resizeMode: "cover",
+                          borderRadius: 3,
+                        }}
                       />
                     </View>
-                    <Text className="text-white text-[16px] font-poppinsMedium">{sponsor.name}</Text>
+                    <Text className="text-white text-[16px] font-poppinsMedium">
+                      {sponsor.name}
+                    </Text>
                   </View>
 
                   <View className="w-6 h-6 mb-1 flex items-center justify-center">

@@ -9,18 +9,18 @@ import BackButton from "../../components/button/backButton";
 export default function MyEvents() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-interface ActivityItem {
+  interface ActivityItem {
     id: string;
     [key: string]: any;
-}
+  }
 
-interface ScheduleDetailsParams {
+  interface ScheduleDetailsParams {
     item: ActivityItem;
-}
+  }
 
-const handlePressActivity = (item: ActivityItem): void => {
+  const handlePressActivity = (item: ActivityItem): void => {
     navigation.navigate("ActivityDetails", { item } as ScheduleDetailsParams);
-};
+  };
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -37,9 +37,7 @@ const handlePressActivity = (item: ActivityItem): void => {
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
             Atividades Inscritas
           </Text>
-          <Text className="text-gray-400 font-inter">
-            Uma lista com todas as suas inscrições
-          </Text>
+          <Text className="text-gray-400 font-inter">Uma lista com todas as suas inscrições</Text>
         </View>
 
         {/* Lista de Inscrições */}

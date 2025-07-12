@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { updateProfile, UpdateProfile } from '../../services/users';
+import { updateProfile, UpdateProfile } from "../../services/users";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../styles/colors";
@@ -11,18 +11,18 @@ import { useAuth } from "../../hooks/AuthContext";
 import { Input } from "../../components/input/input";
 import AppLayout from "../../components/app/appLayout";
 import Button from "../../components/button/button";
-import validator from 'validator';
+import validator from "validator";
 
 export default function EditProfileScreen() {
   const navigation = useNavigation();
-  const { user, updateUser }: any = useAuth()
-  
+  const { user, updateUser }: any = useAuth();
+
   const [fullName, setFullName] = useState(user?.nome || "");
   const [email, setEmail] = useState(user?.email || "");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertText, setAlertText] = useState("");
-  const [alertColor, setAlertColor] = useState("text-gray-400")
+  const [alertColor, setAlertColor] = useState("text-gray-400");
   const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (email: string): boolean => {
@@ -42,9 +42,9 @@ export default function EditProfileScreen() {
 
     if (email && !validateEmail(email)) {
       setIsEmailValid(false);
-      return; 
+      return;
     }
-    setIsEmailValid(true); 
+    setIsEmailValid(true);
 
     const dataToSend: UpdateProfile = {};
 
@@ -70,19 +70,20 @@ export default function EditProfileScreen() {
 
       const updatedUserData = { ...user, ...dataToSend };
       await updateUser(updatedUserData);
-      
+
       setAlertText("Perfil atualizado com sucesso!");
       setAlertColor("text-success");
       setIsAlertOpen(true);
     } catch (error) {
       const err = error as any;
-      const errorMessage = err.response?.data?.message || "Erro: não foi possível atualizar o perfil";
+      const errorMessage =
+        err.response?.data?.message || "Erro: não foi possível atualizar o perfil";
 
       setAlertText(errorMessage);
       setAlertColor("text-danger");
       setIsAlertOpen(true);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -91,68 +92,58 @@ export default function EditProfileScreen() {
       <AppLayout>
         {/* Cabeçalho */}
         <View className="w-full justify-center items-center mt-[60px] mb-10">
-            <Text className="text-white text-xl font-poppinsSemiBold text-center">
-                Editar Perfil
-            </Text>
+          <Text className="text-white text-xl font-poppinsSemiBold text-center">Editar Perfil</Text>
 
-            <View className="absolute left-0">
-                <Pressable
-                    className="w-[32px] h-[32px] rounded-[4px] bg-[#29303F] active:bg-[#29303F]/80"
-                    onPress={() => navigation.goBack()}
-                >
-                    <View className={`flex items-center justify-center p-2 `}>
-                        <FontAwesomeIcon icon={faChevronLeft} size={16} color={colors.blue[200]} />
-                    </View>
-                </Pressable>
-            </View>
+          <View className="absolute left-0">
+            <Pressable
+              className="w-[32px] h-[32px] rounded-[4px] bg-[#29303F] active:bg-[#29303F]/80"
+              onPress={() => navigation.goBack()}
+            >
+              <View className={`flex items-center justify-center p-2 `}>
+                <FontAwesomeIcon icon={faChevronLeft} size={16} color={colors.blue[200]} />
+              </View>
+            </Pressable>
+          </View>
         </View>
 
         <View className="flex-col w-full gap-2 mt-2">
           {/* Nome Completo */}
           <View className="w-full">
-            <Text className="text-white text-sm font-interMedium mb-2">
-              Nome
-            </Text>
+            <Text className="text-white text-sm font-interMedium mb-2">Nome</Text>
             <Input>
-                <Ionicons name="person" size={20} color={colors.border} />
+              <Ionicons name="person" size={20} color={colors.border} />
 
-                <Input.Field
-                    placeholder="Nome completo"
-                    onChangeText={setFullName}
-                    value={fullName}
-                />
+              <Input.Field
+                placeholder="Nome completo"
+                onChangeText={setFullName}
+                value={fullName}
+              />
             </Input>
           </View>
 
           {/* Email */}
           <View className="w-full mt-2">
-            <Text className="text-white text-sm font-interMedium mb-2">
-              E-mail
-            </Text>
+            <Text className="text-white text-sm font-interMedium mb-2">E-mail</Text>
             <Input>
-                <MaterialIcons name="email" size={20} color={colors.border} />
+              <MaterialIcons name="email" size={20} color={colors.border} />
 
-                <Input.Field
-                    placeholder="E-mail"
-                    onChangeText={setEmail}
-                    value={email}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                />
+              <Input.Field
+                placeholder="E-mail"
+                onChangeText={setEmail}
+                value={email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
             </Input>
 
             {!isEmailValid && (
               <Text className="text-sm text-danger font-inter mt-1">
-                  Por favor, digite um email válido!
+                Por favor, digite um email válido!
               </Text>
             )}
           </View>
 
-          {isAlertOpen && (
-            <Text className={`text-sm font-inter ${alertColor}`}>
-                {alertText}
-            </Text>
-          )}
+          {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
 
           {/* Botão Atualizar */}
           <View className="mt-4">

@@ -24,12 +24,12 @@ export const colors = {
     900: "#0B372A",
     950: "#051913",
     1000: "#0D3022",
-    1050: "#0A241A"
+    1050: "#0A241A",
   },
 
   "blue-old": "#445BE6",
 
-  "blue": {
+  blue: {
     100: "#C5CCF7",
     200: "#A9B4F4",
     500: "#4153DF",
@@ -50,7 +50,4 @@ export const colors = {
   // Text input, elements bg
   border: "#536080",
   background: "#212735",
-}
-
-
-
+};

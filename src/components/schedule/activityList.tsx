@@ -2,11 +2,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { parseISO, addHours, getDay, isPast } from "date-fns";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import { colors } from "../../styles/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faMicrophone, faLaptopCode, faTrophy, faGamepad, faUsers, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import {
+  faMicrophone,
+  faLaptopCode,
+  faTrophy,
+  faGamepad,
+  faUsers,
+  faCalendarDays,
+} from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 // Props esperadas pelo componente ActivityList
 type ActivityListProps = {
@@ -15,50 +22,47 @@ type ActivityListProps = {
 };
 
 const categoryIconMap: { [key: string]: IconDefinition } = {
-  'minicursos': faLaptopCode,
-  '1': faLaptopCode,
-  
-  'palestra': faMicrophone,
-  '2': faMicrophone,
+  minicursos: faLaptopCode,
+  "1": faLaptopCode,
 
-  'competicoes': faTrophy,
-  '3': faTrophy,
+  palestra: faMicrophone,
+  "2": faMicrophone,
 
-  'gamenight': faGamepad,
-  '4': faGamepad,
+  competicoes: faTrophy,
+  "3": faTrophy,
 
-  'sociocultural': faUsers,
-  '5': faUsers,
+  gamenight: faGamepad,
+  "4": faGamepad,
 
-  'default': faCalendarDays,
+  sociocultural: faUsers,
+  "5": faUsers,
+
+  default: faCalendarDays,
 };
 
-export default function ActivityList({
-  selectedDay,
-  onPressActivity,
-}: ActivityListProps) {
+export default function ActivityList({ selectedDay, onPressActivity }: ActivityListProps) {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const dayNameToDayOfWeek: { [key: string]: number } = {
-    'SEG': 1,
-    'TER': 2,
-    'QUA': 3,
-    'QUI': 4,
-    'SEX': 5,
+    SEG: 1,
+    TER: 2,
+    QUA: 3,
+    QUI: 4,
+    SEX: 5,
   };
 
   // Busca as atividades e categorias na montagem do componente
   useFocusEffect(
     useCallback(() => {
-      let isActive = true; 
+      let isActive = true;
 
       const fetchData = async () => {
         setLoading(true);
         try {
           const acts: Activity[] = await getActivities();
-          
+
           if (isActive) {
             const sortedActivities = acts.sort((a, b) => {
               const dateA = parseISO(a.data).getTime();
@@ -66,7 +70,7 @@ export default function ActivityList({
               return dateA - dateB;
             });
             setAllActivities(sortedActivities);
-            setErrorMsg(null); 
+            setErrorMsg(null);
           }
         } catch (err) {
           console.error("Erro ao buscar dados:", err);
@@ -85,7 +89,7 @@ export default function ActivityList({
       return () => {
         isActive = false;
       };
-    }, []) 
+    }, []),
   );
 
   const getFilteredActivitiesByDay = (): Activity[] => {
@@ -100,7 +104,7 @@ export default function ActivityList({
       return [];
     }
 
-    return allActivities.filter(activity => {
+    return allActivities.filter((activity) => {
       const rawDate = parseISO(activity.data);
       const dataObj = addHours(rawDate, 3); // UTC-3 (Brasília)
       const activityDayOfWeek = getDay(dataObj);
@@ -124,9 +128,7 @@ export default function ActivityList({
   if (errorMsg) {
     return (
       <View className="flex-1 items-center justify-center px-4">
-        <Text className="text-danger text-center font-inter text-sm">
-          {errorMsg}
-        </Text>
+        <Text className="text-danger text-center font-inter text-sm">{errorMsg}</Text>
       </View>
     );
   }
@@ -149,20 +151,19 @@ export default function ActivityList({
       contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
-        const activityIcon = categoryIconMap[item.categoriaId] || categoryIconMap['default'];
+        const activityIcon = categoryIconMap[item.categoriaId] || categoryIconMap["default"];
 
         const rawDate = parseISO(item.data);
         const activityDateTime = addHours(rawDate, 3); // Horario de brasilia
-        const hasOccurred = isPast(activityDateTime); 
+        const hasOccurred = isPast(activityDateTime);
 
         // Cor do icone
-        const iconColor = hasOccurred ? '#3B465E' : '#4153DF';
-  
+        const iconColor = hasOccurred ? "#3B465E" : "#4153DF";
+
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
             className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
-          
           >
             {/* Bloco com o ÍCONE da categoria */}
             <View className="items-center justify-center mr-4 w-[48px] h-[56px]">
@@ -180,7 +181,8 @@ export default function ActivityList({
 
               <View className="flex flex-row gap-4">
                 <Text className="text-default text-[13px] font-inter">
-                  Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
+                  Horário:{" "}
+                  <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
                 </Text>
 
                 <Text className="text-default text-[13px] font-inter">

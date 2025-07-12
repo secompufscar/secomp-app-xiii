@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { getActivities } from '../../services/activities';
-import { Pressable, View, Text, Image } from 'react-native';
-import { ParamListBase, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useEffect, useState } from "react";
+import { getActivities } from "../../services/activities";
+import { Pressable, View, Text, Image } from "react-native";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function HomeCompetitions() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -11,8 +11,8 @@ export default function HomeCompetitions() {
   const categoriaId = "3";
 
   const formatDate = (date: Date) => {
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
     return `${day}/${month}`;
   };
 
@@ -29,7 +29,7 @@ export default function HomeCompetitions() {
     fetchActivities();
   }, []);
 
-  const filteredActivities = activities.filter(activity => activity.categoriaId === categoriaId);
+  const filteredActivities = activities.filter((activity) => activity.categoriaId === categoriaId);
 
   return (
     <View className="w-full flex-1">
@@ -40,13 +40,11 @@ export default function HomeCompetitions() {
           return (
             <Pressable
               key={item.id.toString()}
-              onPress={() => navigation.navigate('ActivityDetails', { item })}
+              onPress={() => navigation.navigate("ActivityDetails", { item })}
               onPressIn={() => setPressedItemId(item.id)}
               onPressOut={() => setPressedItemId(null)}
             >
-              <View
-                className="w-full flex-row py-3 gap-1 border-b-[1px] border-[#242936]"
-              >
+              <View className="w-full flex-row py-3 gap-1 border-b-[1px] border-[#242936]">
                 <View className="flex-1 flex-col gap-2">
                   <Text className="text-white text-[13px] font-inter">{item.nome}</Text>
 
@@ -65,12 +63,12 @@ export default function HomeCompetitions() {
 
                 <View className="flex items-center justify-center">
                   <Image
-                    source={require('../../../assets/home/arrow.png')}
+                    source={require("../../../assets/home/arrow.png")}
                     style={{
-                        height: 42,
-                        width: 42,
-                        opacity: isPressed ? 0.9 : 1,
-                        transform: isPressed ? [{ scale: 1.1 }] : [{ scale: 1 }],
+                      height: 42,
+                      width: 42,
+                      opacity: isPressed ? 0.9 : 1,
+                      transform: isPressed ? [{ scale: 1.1 }] : [{ scale: 1 }],
                     }}
                   />
                 </View>

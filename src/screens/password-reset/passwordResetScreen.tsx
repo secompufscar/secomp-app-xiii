@@ -6,11 +6,11 @@ import { AuthTypes } from "../../routes/auth.routes";
 import { sendForgotPasswordEmail } from "../../services/users";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
-import validator from 'validator';
+import validator from "validator";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
-import Button  from "../../components/button/button";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Button from "../../components/button/button";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function PasswordReset() {
   const navigation = useNavigation<AuthTypes>();
@@ -46,9 +46,9 @@ export default function PasswordReset() {
     }
 
     setIsLoading(true);
-  
+
     try {
-      await sendForgotPasswordEmail({ email }); 
+      await sendForgotPasswordEmail({ email });
       navigation.navigate("VerifyEmail", { email });
     } catch (error: any) {
       // Erros
@@ -63,12 +63,10 @@ export default function PasswordReset() {
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
       <AppLayout>
-        <BackButton/>
+        <BackButton />
 
         <View className="my-8">
-          <Text className="text-white text-2xl font-poppinsSemiBold mb-3">
-            Recuperar senha
-          </Text>
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-3">Recuperar senha</Text>
 
           <Text className="text-gray-400 font-inter text-base">
             Por favor, insira seu e-mail para redefinir sua senha
@@ -89,14 +87,14 @@ export default function PasswordReset() {
 
         {isAlertOpen && (
           <Text className={`text-[12px] text-danger font-inter mb-1 ${alertColor}`}>
-              {alertText}
+            {alertText}
           </Text>
         )}
 
         {isLoading ? (
           <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
         ) : (
-          <Button className="mt-4" title="Enviar" onPress={replacePass}/>
+          <Button className="mt-4" title="Enviar" onPress={replacePass} />
         )}
       </AppLayout>
     </SafeAreaView>

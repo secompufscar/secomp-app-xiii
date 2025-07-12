@@ -9,7 +9,9 @@ import CategoryFilter from "../../components/activity/categoryFilter";
 
 export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { user: { user } }: any = useAuth();
+  const {
+    user: { user },
+  }: any = useAuth();
 
   // Estado para armazenar a categoria selecionada no filtro
   const [selectedCategory, setSelectedCategory] = useState<string>("Palestras");
@@ -30,16 +32,14 @@ export default function Activities() {
       <View className="flex-1 w-full">
         <StatusBar
           barStyle="light-content"
-          backgroundColor='transparent'
-          translucent={Platform.OS === 'android'}
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
         />
-        
+
         <View className="w-full flex-1 mt-16 px-6 max-w-[1000px] mx-auto">
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-              Atividades
-            </Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Atividades</Text>
             <Text className="text-gray-400 font-inter">
               Veja todas as atividades disponíveis no evento
             </Text>
