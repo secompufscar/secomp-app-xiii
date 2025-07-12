@@ -58,7 +58,7 @@ export default function ActivityDetails() {
     };
     checkSubscription();
   }, [user, activity.id]);
-  
+
   const handleSubscription = async () => {
     if (!user) return;
     setIsLoading(true);
@@ -73,10 +73,10 @@ export default function ActivityDetails() {
         setIsSubscribed(true);
       }
     } catch (error: any) {
-        const errorMessage = error.response?.data?.message || "Ocorreu um erro.";
-        Alert.alert("Erro", errorMessage);
+      const errorMessage = error.response?.data?.message || "Ocorreu um erro.";
+      Alert.alert("Erro", errorMessage);
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -99,19 +99,19 @@ export default function ActivityDetails() {
 
         {/* titulo da atividade */}
         <View className="mb-6 mt-36">
-            <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
-            <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
+          <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
+          <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
         </View>
 
         {/* info*/}
         <View className="mb-6">
-          <InfoRow 
-            icon={faLocationDot} 
+          <InfoRow
+            icon={faLocationDot}
             mainText="UFSCar"
             subText={activity.local}
           >
             {/*link pro google maps*/}
-            <Pressable 
+            <Pressable
               onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}
               onPressIn={() => setIsPressed(true)}
               onPressOut={() => setIsPressed(false)}
@@ -121,15 +121,15 @@ export default function ActivityDetails() {
           </InfoRow>
 
           <View className="flex flex-row w-full gap-4">
-            <InfoRow 
-              icon={faCalendarDay} 
+            <InfoRow
+              icon={faCalendarDay}
               mainText={getDate()}
               subText={getTime()}
               className="w-[60%]"
             />
 
-            <InfoRow 
-              icon={faUsers} 
+            <InfoRow
+              icon={faUsers}
               mainText="Vagas"
               subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
               className="w-[35%]"
@@ -137,10 +137,10 @@ export default function ActivityDetails() {
             </InfoRow>
           </View>
         </View>
-        
+
         <View className="mb-10">
-            <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
-            <Text className="text-gray-400 text-base font-inter leading-relaxed">{activity.detalhes}</Text>
+          <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
+          <Text className="text-gray-400 text-base font-inter leading-relaxed">{activity.detalhes}</Text>
         </View>
 
         {/* Palestrante */}
@@ -149,30 +149,33 @@ export default function ActivityDetails() {
             {/* Imagem para adicionar depois */}
             <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
             <View className="ml-4">
-                <Text className="text-white text-base font-poppinsSemiBold">{activity.palestranteNome}</Text>
-                {/* subtitulo do palestrante para depois */}
-                <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
+              <Text className="text-white text-base font-poppinsSemiBold">{activity.palestranteNome}</Text>
+              {/* subtitulo do palestrante para depois */}
+              <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
             </View>
           </View>
         </View>
 
         {/* button */}
         <View className="mt-auto mb-10">
-            {user?.tipo === 'ADMIN' ? (
-              <View className="flex flex-row gap-4">
-                <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1"/>
-                <Button title="Lista de Inscritos" onPress={() => {}}/>
-              </View>
+          {user?.tipo === 'ADMIN' ? (
+            <View className="flex flex-row gap-4">
+              <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
+              <Button title="Lista de Inscritos" onPress={() => navigation.navigate("ParticipantsList", {
+                activityId: activity.id,
+                activityName: activity.nome
+              })} className="flex-1" />
+            </View>
+          ) : (
+            subscriptionLoading || isLoading ? (
+              <ActivityIndicator size="large" color={colors.blue[500]} />
             ) : (
-              subscriptionLoading || isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} />
-              ) : (
-                <Button 
-                    title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"} 
-                    onPress={handleSubscription} 
-                />
-              )
-            )}
+              <Button
+                title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"}
+                onPress={handleSubscription}
+              />
+            )
+          )}
         </View>
 
       </AppLayout>
