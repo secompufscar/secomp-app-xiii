@@ -54,7 +54,7 @@ export default function StackRoutes() {
       <Stack.Screen name="QRCode" component={QRCode} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="ActivityDetails" component={ActivityDetails} />
-      <Stack.Screen name="ParticipantsList" component={ParticipantsList} options={{ headerShown: false }} />
+      <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
     </Stack.Navigator>
   );
 }

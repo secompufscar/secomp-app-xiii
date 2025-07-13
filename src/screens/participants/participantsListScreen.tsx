@@ -1,10 +1,10 @@
 // screens/ParticipantsList.tsx
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, View, Text, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, FlatList, ActivityIndicator, StatusBar, Platform } from 'react-native'
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, RouteProp } from '@react-navigation/native'
-import AppLayout from '../../components/app/appLayout'
-import BackButton from '../../components/button/backButton'
 import { getParticipantsByActivity } from '../../services/userAtActivities'
+import BackButton from '../../components/button/backButton'
 
 type ParticipantsListRouteParams = {
   ParticipantsList: {
@@ -55,46 +55,52 @@ export default function ParticipantsList() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-blue-900">
-      <AppLayout>
-        <View className="flex-1 w-full px-6 max-w-[1000px] mx-auto">
-          <BackButton />
-          <View className="mb-6">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-              Participantes Inscritos
-            </Text>
-            <Text className="text-blue-200 font-inter">{activityName}</Text>
-          </View>
+    <SafeAreaView className="flex-1 bg-blue-900 items-center">
+      <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
+        />
+
+        <BackButton />
+
+        <View className="mb-8">
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Participantes</Text>
+
+          <Text className="text-blue-200 font-inter text-base">
+            {activityName}
+          </Text>
         </View>
 
         <FlatList
           data={list}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingHorizontal: 6, paddingBottom: 16 }}
+          contentContainerStyle={{ paddingBottom: 16 }}
           ItemSeparatorComponent={() => (
             <View className="h-[1px] bg-border opacity-50 my-2 mx-6" />
           )}
           renderItem={({ item }) => (
-            <View className="flex-row justify-between items-center px-6 py-3">
+            <View className="flex-row justify-between items-center py-3">
               {/* Exibe apenas o userId */}
-              <Text className="text-white font-inter">{item.userId}</Text>
+              <Text className="text-default font-inter">{item.userId}</Text>
               <Text
-                className={`font-inter ${item.presente ? 'text-green' : 'text-gray-500'
+                className={`font-interMedium ${item.presente ? 'text-green' : 'text-gray-500'
                   }`}
               >
-                {item.presente ? 'Presente' : 'Ausente'}
+                {item.presente ? 'presente' : 'ausente'}
               </Text>
             </View>
           )}
           ListEmptyComponent={() => (
-            <View className="flex-1 items-center justify-center px-4">
+            <View className="flex-1 items-center justify-center px-4 mt-8">
               <Text className="text-gray-400 text-center font-inter text-sm">
-                Nenhum participante encontrado.
+                Nenhum participante encontrado
               </Text>
             </View>
           )}
         />
-      </AppLayout>
+      </View>
     </SafeAreaView>
   )
 }
