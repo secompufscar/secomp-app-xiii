@@ -4,18 +4,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faBell,
-  faArrowRightFromBracket,
-  faChevronRight,
-  faQrcode,
-  faFlag,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
+import ProfileButton from "../../components/button/profileButton";
 
 export default function AdminProfile() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -46,68 +40,23 @@ export default function AdminProfile() {
           <Text className="text-gray-400 font-poppins text-base">{user.email}</Text>
         </View>
 
-        {/* Notificações */}
-        <Pressable onPress={() => {}}>
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faBell} size={20} color="#A9B4F4" />
-                </View>
-                <Text className="text-white text-base font-inter">Notificações</Text>
-              </View>
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
+        <ProfileButton
+          icon={faQrcode}
+          label="Credenciamento"
+          onPress={() => {}}
+        />
 
-        {/* Criar notificação */}
-        <Pressable onPress={() => {}}>
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faFlag} size={20} color="#A9B4F4" />
-                </View>
-                <Text className="text-white text-base font-inter">Criar notificação</Text>
-              </View>
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
+        <ProfileButton
+          icon={faBell}
+          label="Notificações"
+          onPress={() => {}}
+        />
 
-        {/* Credenciamento */}
-        <Pressable onPress={() => {}}>
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faQrcode} size={20} color="#A9B4F4" />
-                </View>
-                <Text className="text-white text-base font-inter">Credenciamento</Text>
-              </View>
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
+        <ProfileButton
+          icon={faFlag}
+          label="Criar notificação"
+          onPress={() => {}}
+        />
 
         {/* Sair */}
         <Pressable onPress={signOut}>

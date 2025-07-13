@@ -5,20 +5,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faBell,
-  faArrowRightFromBracket,
-  faChevronRight,
-  faQrcode,
-  faCalendarDays,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import { getUserRanking, getProfile, getUserActivitiesCount } from "../../services/users";
 import { colors } from "../../styles/colors";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
+import ProfileButton from "../../components/button/profileButton";
 
 export default function UserProfile() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -108,82 +102,23 @@ export default function UserProfile() {
           </View>
         </View>
 
-        {/* Minhas atividades */}
-        <Pressable
-          onPress={() => {
-            navigation.navigate("MyEvents");
-          }}
-        >
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faCalendarDays} size={20} color="#A9B4F4" />
-                </View>
+        <ProfileButton
+          icon={faCalendarDays}
+          label="Minhas Atividades"
+          onPress={() => {navigation.navigate("MyEvents");}}
+        />
 
-                <Text className="text-white text-base font-inter">Minhas Atividades</Text>
-              </View>
+        <ProfileButton
+          icon={faBell}
+          label="Notificações"
+          onPress={() => {}}
+        />
 
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
-
-        {/* Notificações */}
-        <Pressable onPress={() => {}}>
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faBell} size={20} color="#A9B4F4" />
-                </View>
-
-                <Text className="text-white text-base font-inter">Notificações</Text>
-              </View>
-
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
-
-        {/* Credencial */}
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Credential");
-          }}
-        >
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 ${
-                pressed ? "bg-background/60" : "bg-background"
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faQrcode} size={20} color="#A9B4F4" />
-                </View>
-
-                <Text className="text-white text-base font-inter">Credencial</Text>
-              </View>
-
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
+        <ProfileButton
+          icon={faQrcode}
+          label="Credencial"
+          onPress={() => {navigation.navigate("Credential");}}
+        />
 
         {/* Sair */}
         <Pressable onPress={signOut}>
