@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser, faStar, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
@@ -54,7 +54,19 @@ export default function AdminProfile() {
 
         <ProfileButton
           icon={faFlag}
-          label="Criar notificação"
+          label="Atividades"
+          onPress={() => {}}
+        />
+
+        <ProfileButton
+          icon={faStar}
+          label="Patrocinadores"
+          onPress={() => {}}
+        />
+
+        <ProfileButton
+          icon={faTicket}
+          label="Eventos"
           onPress={() => {}}
         />
 
@@ -62,7 +74,7 @@ export default function AdminProfile() {
         <Pressable onPress={signOut}>
           {({ pressed }) => (
             <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 border border-iconbg ${
+              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-24 border border-iconbg ${
                 pressed ? "bg-background/60" : ""
               }`}
             >
