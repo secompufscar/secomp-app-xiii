@@ -3,10 +3,11 @@ import SignUp from "./login-signup/signupScreen";
 import Welcome from "./login-signup/welcomeScreen";
 import EmailConfirmation from "./login-signup/emailConfirmationScreen";
 
-import PasswordReset from "./password-reset/passwordResetScreen";
-import VerifyEmail from "./password-reset/verifyEmailScreen";
-import SetNewPassword from "./password-reset/setNewPasswordScreen";
-import ActivityDetails from "./activity-details/activityDetailsScreen";
+import PasswordReset from './password-reset/passwordResetScreen';
+import VerifyEmail from './password-reset/verifyEmailScreen';
+import SetNewPassword from './password-reset/setNewPasswordScreen';
+import ActivityDetails from './activity-details/activityDetailsScreen';
+import ParticipantsList from './participants/participantsListScreen';
 
 import Home from "./home/homeScreen";
 import EventGuide from "./event-guide/eventGuideScreen";
@@ -44,4 +45,5 @@ export {
   Activities,
   QRCode,
   ActivityDetails,
+  ParticipantsList
 };

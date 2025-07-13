@@ -15,7 +15,8 @@ import {
   QRCode,
   EditProfile,
   ActivityDetails,
-} from "../screens";
+  ParticipantsList
+} from '../screens'
 
 import { ScheduleItemProps } from "../entities/schedule-item";
 
@@ -33,13 +34,16 @@ type StackNavigation = {
   QRCode: { id: string };
   EditProfile: undefined;
   ActivityDetails: { item: Activity };
+  ParticipantsList: { activityId: string; activityName: string; }
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
 
 export default function StackRoutes() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}>
+    <Stack.Navigator
+        screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}
+    >
       <Stack.Screen name="App" component={TabRoutes} />
       <Stack.Screen name="Schedule" component={Schedule} />
       <Stack.Screen name="EventGuide" component={EventGuide} />
@@ -50,6 +54,7 @@ export default function StackRoutes() {
       <Stack.Screen name="QRCode" component={QRCode} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="ActivityDetails" component={ActivityDetails} />
+      <Stack.Screen name="ParticipantsList" component={ParticipantsList} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
