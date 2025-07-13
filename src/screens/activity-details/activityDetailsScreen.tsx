@@ -172,7 +172,7 @@ export default function ActivityDetails() {
           {user?.tipo === "ADMIN" ? (
             <View className="flex flex-row gap-4">
               <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
-              <Button title="Lista de Inscritos" className="flex-1" onPress={() => navigation.navigate("ParticipantsList", {
+              <Button title="Participantes" className="w-[40%]" onPress={() => navigation.navigate("ParticipantsList", {
                   activityId: activity.id,
                   activityName: activity.nome
                 })}
