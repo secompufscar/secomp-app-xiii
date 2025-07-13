@@ -1,29 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ActivityIndicator, Alert, Linking } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute, useNavigation, ParamListBase } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLocationDot, faCalendarDay, faUsers, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../hooks/AuthContext';
-import { subscribeToActivity, unsubscribeToActivity } from '../../services/activities';
-import { userSubscription } from '../../services/userAtActivities';
-import { colors } from '../../styles/colors';
-import { format, parseISO, addHours } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import AppLayout from '../../components/app/appLayout';
-import BackButton from '../../components/button/backButton';
-import Button from '../../components/button/button';
-import InfoRow from '../../components/info/infoRow';
+import React, { useState, useEffect } from "react";
+import { View, Text, Pressable, ActivityIndicator, Alert, Linking } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRoute, useNavigation, ParamListBase } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faLocationDot,
+  faCalendarDay,
+  faUsers,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../hooks/AuthContext";
+import { subscribeToActivity, unsubscribeToActivity } from "../../services/activities";
+import { userSubscription } from "../../services/userAtActivities";
+import { colors } from "../../styles/colors";
+import { format, parseISO, addHours } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import AppLayout from "../../components/app/appLayout";
+import BackButton from "../../components/button/backButton";
+import Button from "../../components/button/button";
+import InfoRow from "../../components/info/infoRow";
 
 const categoryIdToName: { [key: string]: string } = {
-  '1': 'Minicurso',
-  '2': 'Palestra',
-  '3': 'Competição',
-  '4': 'Gamenight',
-  '5': 'Sociocultural',
-  '6': 'Credenciamento',
-  'default': 'Atividade'
+  "1": "Minicurso",
+  "2": "Palestra",
+  "3": "Competição",
+  "4": "Gamenight",
+  "5": "Sociocultural",
+  "6": "Credenciamento",
+  default: "Atividade",
 };
 
 export default function ActivityDetails() {
@@ -38,10 +43,10 @@ export default function ActivityDetails() {
 
   useEffect(() => {
     const checkSubscription = async () => {
-      if (!user || user.tipo === 'ADMIN') {
+      if (!user || user.tipo === "ADMIN") {
         setSubscriptionLoading(false);
         return;
-      };
+      }
 
       setSubscriptionLoading(true);
       try {
@@ -81,18 +86,17 @@ export default function ActivityDetails() {
   };
 
   const handleScanPresence = () => {
-    navigation.navigate('QRCode', { id: activity.id });
+    navigation.navigate("QRCode", { id: activity.id });
   };
 
-  const getDate = () => format(addHours(parseISO(activity.data), 3), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  const getDate = () =>
+    format(addHours(parseISO(activity.data), 3), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   const getTime = () => format(addHours(parseISO(activity.data), 3), "HH:mm'h'", { locale: ptBR });
-  const categoryName = categoryIdToName[activity.categoriaId] || categoryIdToName['default'];
+  const categoryName = categoryIdToName[activity.categoriaId] || categoryIdToName["default"];
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <View className="w-full h-72 absolute bg-iconbg/40 -z-10">
-        {/* Imagem */}
-      </View>
+      <View className="w-full h-72 absolute bg-iconbg/40 -z-10">{/* Imagem */}</View>
 
       <AppLayout>
         <BackButton />
@@ -105,18 +109,22 @@ export default function ActivityDetails() {
 
         {/* info*/}
         <View className="mb-6">
-          <InfoRow
-            icon={faLocationDot}
-            mainText="UFSCar"
-            subText={activity.local}
-          >
+          <InfoRow icon={faLocationDot} mainText="UFSCar" subText={activity.local}>
             {/*link pro google maps*/}
             <Pressable
-              onPress={() => Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`)}
+              onPress={() =>
+                Linking.openURL(
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`,
+                )
+              }
               onPressIn={() => setIsPressed(true)}
               onPressOut={() => setIsPressed(false)}
             >
-              <Text className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${isPressed ? "bg-blue-500/20" : "bg-blue-500/10"}`}>Ver no mapa</Text>
+              <Text
+                className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${isPressed ? "bg-blue-500/20" : "bg-blue-500/10"}`}
+              >
+                Ver no mapa
+              </Text>
             </Pressable>
           </InfoRow>
 
@@ -133,14 +141,15 @@ export default function ActivityDetails() {
               mainText="Vagas"
               subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
               className="w-[35%]"
-            >
-            </InfoRow>
+            ></InfoRow>
           </View>
         </View>
 
         <View className="mb-10">
           <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
-          <Text className="text-gray-400 text-base font-inter leading-relaxed">{activity.detalhes}</Text>
+          <Text className="text-gray-400 text-base font-inter leading-relaxed">
+            {activity.detalhes}
+          </Text>
         </View>
 
         {/* Palestrante */}
@@ -149,7 +158,9 @@ export default function ActivityDetails() {
             {/* Imagem para adicionar depois */}
             <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
             <View className="ml-4">
-              <Text className="text-white text-base font-poppinsSemiBold">{activity.palestranteNome}</Text>
+              <Text className="text-white text-base font-poppinsSemiBold">
+                {activity.palestranteNome}
+              </Text>
               {/* subtitulo do palestrante para depois */}
               <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
             </View>
@@ -158,26 +169,24 @@ export default function ActivityDetails() {
 
         {/* button */}
         <View className="mt-auto mb-10">
-          {user?.tipo === 'ADMIN' ? (
+          {user?.tipo === "ADMIN" ? (
             <View className="flex flex-row gap-4">
               <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
-              <Button title="Lista de Inscritos" onPress={() => navigation.navigate("ParticipantsList", {
-                activityId: activity.id,
-                activityName: activity.nome
-              })} className="flex-1" />
-            </View>
-          ) : (
-            subscriptionLoading || isLoading ? (
-              <ActivityIndicator size="large" color={colors.blue[500]} />
-            ) : (
-              <Button
-                title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"}
-                onPress={handleSubscription}
+              <Button title="Lista de Inscritos" className="flex-1" onPress={() => navigation.navigate("ParticipantsList", {
+                  activityId: activity.id,
+                  activityName: activity.nome
+                })}
               />
-            )
+            </View>
+          ) : subscriptionLoading || isLoading ? (
+            <ActivityIndicator size="large" color={colors.blue[500]} />
+          ) : (
+            <Button
+              title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"}
+              onPress={handleSubscription}
+            />
           )}
         </View>
-
       </AppLayout>
     </SafeAreaView>
   );

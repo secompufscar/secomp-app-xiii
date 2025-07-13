@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, Pressable} from "react-native";
+import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { getCategories } from "../../services/categories";
 import { parseISO, addHours, format } from "date-fns";
@@ -14,21 +14,14 @@ type ActivityListProps = {
 };
 
 // Componente principal que lista atividades filtradas por categoria
-export default function ActivityList({
-  selectedCategory,
-  onPressActivity,
-}: ActivityListProps) {
+export default function ActivityList({ selectedCategory, onPressActivity }: ActivityListProps) {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Função auxiliar para normalizar strings (acentos e caixa baixa)
-  const normalize = (str: string) =>
-    str
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .toLowerCase();
+  const normalize = (str: string) => str.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
   // Busca as categorias e atividades na montagem do componente
   useFocusEffect(
@@ -39,11 +32,8 @@ export default function ActivityList({
         setLoading(true); // Mostra o loading a cada atualização
         try {
           // Otimização: busca categorias e atividades em paralelo
-          const [cats, acts] = await Promise.all([
-            getCategories(),
-            getActivities()
-          ]);
-          
+          const [cats, acts] = await Promise.all([getCategories(), getActivities()]);
+
           if (isActive) {
             setAllCategories(cats);
             setAllActivities(acts);
@@ -67,7 +57,7 @@ export default function ActivityList({
       return () => {
         isActive = false;
       };
-    }, []) // O array de dependências do useCallback continua vazio
+    }, []), // O array de dependências do useCallback continua vazio
   );
 
   // Tela de loading
@@ -83,9 +73,7 @@ export default function ActivityList({
   if (errorMsg) {
     return (
       <View className="flex-1 items-center justify-center px-4 pb-24">
-        <Text className="text-danger text-center font-inter text-sm">
-          {errorMsg}
-        </Text>
+        <Text className="text-danger text-center font-inter text-sm">{errorMsg}</Text>
       </View>
     );
   }
@@ -113,12 +101,10 @@ export default function ActivityList({
     if (selNorm === "outros") {
       targetName = ["workshop", "gamenight", "sociocultural"];
     } else {
-      targetName = [selNorm]; 
+      targetName = [selNorm];
     }
 
-    const catObj = allCategories.find(
-      (c) => targetName.includes(normalize(c.nome))
-    );
+    const catObj = allCategories.find((c) => targetName.includes(normalize(c.nome)));
     if (!catObj) {
       return [];
     }
@@ -148,8 +134,8 @@ export default function ActivityList({
       renderItem={({ item }) => {
         const rawDate = parseISO(item.data);
         const dataObj = addHours(rawDate, 3); // Corrige para UTC-3 (Brasília)
-        const dia = format(dataObj, 'dd', { locale: ptBR });
-        const mes = format(dataObj, 'MMMM', { locale: ptBR });
+        const dia = format(dataObj, "dd", { locale: ptBR });
+        const mes = format(dataObj, "MMMM", { locale: ptBR });
 
         return (
           <Pressable
@@ -172,7 +158,8 @@ export default function ActivityList({
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
+                Horário:{" "}
+                <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
               </Text>
             </View>
           </Pressable>

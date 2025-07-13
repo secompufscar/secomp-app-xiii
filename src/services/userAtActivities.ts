@@ -6,7 +6,7 @@ export async function getParticipantsByActivity(
 ): Promise<UserAtActivity[]> {
   const response = await api.get(`/userAtActivities/${activityId}`)
   return response.data
-}
+};
 
 // Busca um vínculo específico entre usuário e atividade
 export const userSubscription = async (
@@ -15,6 +15,7 @@ export const userSubscription = async (
 ): Promise<UserAtActivity> => {
   const response = await api.get(
     `/userAtActivities/user-activity/${userId}/${activityId}`
-  )
-  return response.data
-}
+  );
+  return response.data;
+};
+

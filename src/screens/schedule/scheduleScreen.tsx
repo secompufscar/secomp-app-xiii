@@ -6,14 +6,16 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "../../hooks/AuthContext";
 import BackButton from "../../components/button/backButton";
 import DaysFilter from "../../components/schedule/DaysFilter";
-import ActivityList from "../../components/schedule/activityList"; 
+import ActivityList from "../../components/schedule/activityList";
 
 export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { user: { user } }: any = useAuth(); 
+  const {
+    user: { user },
+  }: any = useAuth();
 
   // Estado para armazenar o dia selecionado no filtro
-  const [selectedDay, setSelectedDay] = useState<string>("SEG"); 
+  const [selectedDay, setSelectedDay] = useState<string>("SEG");
 
   // Callback ao selecionar um dia no DaysFilter
   const handleSelectDay = (day: string) => {
@@ -30,16 +32,14 @@ export default function Activities() {
       <View className="flex-1 w-full">
         <StatusBar
           barStyle="light-content"
-          backgroundColor='transparent'
-          translucent={Platform.OS === 'android'}
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
         />
 
         <View className="w-full flex-1 mt-16 px-6 max-w-[1000px] mx-auto">
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-              Cronograma
-            </Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Cronograma</Text>
             <Text className="text-gray-400 font-inter text-">
               Calendário de atividades do evento
             </Text>
@@ -52,10 +52,7 @@ export default function Activities() {
 
           {/* Lista de Atividades */}
           <View className="w-full flex-1">
-            <ActivityList
-              selectedDay={selectedDay}
-              onPressActivity={handlePressActivity}
-            />
+            <ActivityList selectedDay={selectedDay} onPressActivity={handlePressActivity} />
           </View>
         </View>
       </View>

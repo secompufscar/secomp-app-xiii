@@ -21,9 +21,7 @@ type SubscribedActivityListProps = {
   onPressActivity?: (item: Activity) => void;
 };
 
-export function SubscribedActivityList({
-  onPressActivity,
-}: SubscribedActivityListProps) {
+export function SubscribedActivityList({ onPressActivity }: SubscribedActivityListProps) {
   const { user, loading: authLoading } = useAuth();
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,9 +61,7 @@ export function SubscribedActivityList({
   if (errorMsg) {
     return (
       <View className="flex-1 items-center justify-center px-4 pb-24">
-        <Text className="text-red-500 text-center font-inter text-sm">
-          {errorMsg}
-        </Text>
+        <Text className="text-red-500 text-center font-inter text-sm">{errorMsg}</Text>
       </View>
     );
   }
@@ -112,7 +108,8 @@ export function SubscribedActivityList({
               </Text>
 
               <Text className="text-default text-[13px] font-inter">
-                Horário: <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
+                Horário:{" "}
+                <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
               </Text>
             </View>
           </Pressable>

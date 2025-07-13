@@ -1,4 +1,5 @@
 # APP da SECOMP UFSCar
+
 Aplicativo desenvolvido pela equipe de TI da SECOMP UFSCar especialmente para o evento.
 
 Ele é utilizado pelos participantes para realizar a inscrição no evento e em suas atividades, acompanhar novidades e acessar informações importantes. Para a organização, o aplicativo oferece ferramentas que facilitam o controle do evento, como o gerenciamento de atividades e a leitura de presença dos participantes.
@@ -6,15 +7,17 @@ Ele é utilizado pelos participantes para realizar a inscrição no evento e em 
 <br>
 
 ## 📋 Requisitos
+
 Antes de mais nada, certifique-se de ter os seguintes programas instalados:
 
-[![git][git-logo]][git-url] 
-[![expo][expo-logo]][expo-url] 
+[![git][git-logo]][git-url]
+[![expo][expo-logo]][expo-url]
 [![node][node-logo]][node-url]
 
 <br>
 
 ## **🛠️ Tecnologias**
+
 Tecnologias utilizadas no frontend do aplicativo: React Native, Expo, TypeScript, Tailwind(Nativewind).
 
 ![Skills](https://skills.syvixor.com/api/icons?i=reactnative,expo,ts,tailwind)
@@ -24,6 +27,7 @@ Tecnologias utilizadas no frontend do aplicativo: React Native, Expo, TypeScript
 ## ⚙️ Guia de Execução
 
 Clone o repositório
+
 ```
 git clone https://github.com/secompufscar/secomp-app-xiii.git
 ```
@@ -55,10 +59,11 @@ npm start
 <br>
 
 ## 💻 Rodar Localmente
+
 Para rodar o aplicativo localmente, siga os passos adicionais abaixo:
 
 1. **Configure o backend** conforme as instruções disponíveis no README do repositório correspondente
-2. Ajuste a URL da API no frontend, alterando o arquivo *src/services/api.ts* para refletir o novo endereço local (*seuip:3000*).
+2. Ajuste a URL da API no frontend, alterando o arquivo _src/services/api.ts_ para refletir o novo endereço local (_seuip:3000_).
 
 <div align="center">
   <br/>
