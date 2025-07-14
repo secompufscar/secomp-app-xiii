@@ -67,7 +67,7 @@ export default function AdminProfile() {
         <ProfileButton
           icon={faTicket}
           label="Eventos"
-          onPress={() => {}}
+          onPress={() => { navigation.navigate("EventAdmin") }}
         />
 
         {/* Sair */}

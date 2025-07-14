@@ -10,10 +10,12 @@ import ActivityDetails from './activity-details/activityDetailsScreen';
 import ParticipantsList from './participants/participantsListScreen';
 
 import Home from "./home/homeScreen";
-import EventGuide from "./event-guide/eventGuideScreen";
+import EventGuide from "./event/eventGuideScreen";
 import Sponsors from "./sponsors/sponsorsScreen";
 import UserProfile from "./profile/userProfileScreen";
+
 import AdminProfile from "./profile/adminProfileScreen";
+import EventAdmin from "./event/eventAdmin";
 
 import Schedule from "./schedule/scheduleScreen";
 import MyEvents from "./activities/userActivitiesScreen";
@@ -39,6 +41,7 @@ export {
   UserProfile,
   EditProfile,
   AdminProfile,
+  EventAdmin,
   Schedule,
   MyEvents,
   Credential,
