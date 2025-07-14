@@ -106,13 +106,8 @@ export default function ActivityDetails() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1 w-full"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
         <View className="w-full h-[300px] absolute bg-iconbg/40 -z-10">{/* Imagem */}</View>
-        <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
+        <View className="w-full px-6 max-w-[1000px] mx-auto flex-1">
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
@@ -121,8 +116,14 @@ export default function ActivityDetails() {
 
           <BackButton />
 
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            className="flex-1 mt-[200px] w-full"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+
           {/* titulo da atividade */}
-          <View className="mb-6 mt-[200px]">
+          <View className="mb-6">
             <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
             <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
           </View>
@@ -212,8 +213,8 @@ export default function ActivityDetails() {
               />
             )}
           </View>
+          </ScrollView>
         </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
