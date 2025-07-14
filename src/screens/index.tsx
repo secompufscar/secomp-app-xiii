@@ -16,6 +16,7 @@ import UserProfile from "./profile/userProfileScreen";
 
 import AdminProfile from "./profile/adminProfileScreen";
 import EventAdmin from "./event/eventAdmin";
+import EventAdminCreate from "./event/eventAdminCreate";
 
 import Schedule from "./schedule/scheduleScreen";
 import MyEvents from "./activities/userActivitiesScreen";
@@ -42,6 +43,7 @@ export {
   EditProfile,
   AdminProfile,
   EventAdmin,
+  EventAdminCreate,
   Schedule,
   MyEvents,
   Credential,

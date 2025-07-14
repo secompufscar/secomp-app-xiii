@@ -1,33 +1,36 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { BeautifulName } from "beautiful-name";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser, faStar, faTicket } from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from "../../hooks/AuthContext";
-import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
-import EditButton from "../../components/button/editButton";
-import ProfileButton from "../../components/button/profileButton";
+import Button from "../../components/button/button";
 
 export default function EventAdmin() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { signOut, user }: any = useAuth();
-
-  const nomeCompleto = new BeautifulName(user.nome).beautifulName;
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
-      <AppLayout>
-        <View className="flex-row justify-between items-center">
-          <BackButton />
+      <View className="flex-1 w-full">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
+        />
 
-          <Text className="text-white text-xl font-poppinsSemiBold text-center mt-8">Painel de Eventos</Text>
+        <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
+          <BackButton/>
 
-          <EditButton />
+          {/* Cabeçalho */}
+          <View className="mb-8">
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de eventos</Text>
+            <Text className="text-gray-400 font-inter">
+              Painel de administração dos eventos
+            </Text>
+          </View>
+
+          <Button title="Criar evento" onPress={() => {navigation.navigate("EventAdminCreate")}}/>
         </View>
-      </AppLayout>
+      </View>
     </SafeAreaView>
   );
 }
