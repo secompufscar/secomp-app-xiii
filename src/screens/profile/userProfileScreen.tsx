@@ -124,7 +124,7 @@ export default function UserProfile() {
         <Pressable onPress={signOut}>
           {({ pressed }) => (
             <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-3 border border-iconbg ${
+              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-24 border border-iconbg ${
                 pressed ? "bg-background/60" : ""
               }`}
             >
