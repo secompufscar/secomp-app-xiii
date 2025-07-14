@@ -43,15 +43,22 @@ export default function HomeSocials() {
   return (
     <View className="flex-row justify-between items-center gap-3">
       {socialLinks.map(({ key, url, icon }) => (
-        <LinearGradient
+        <Pressable
           key={key}
-          colors={["#29303F", "#2A3B5E"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="flex-1 p-5 items-center justify-center rounded-[6px] overflow-hidden active:opacity-80"
+          onPress={() => openLink(url)}
+          className="flex-1 rounded-[6px] overflow-hidden"
         >
-          <Pressable onPress={() => openLink(url)}>{icon}</Pressable>
-        </LinearGradient>
+          {({ pressed }) => (
+            <LinearGradient
+              colors={["#29303F", "#2A3B5E"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              className={`p-5 items-center justify-center transition-opacity ${pressed ? "opacity-70" : "opacity-100"}`}
+            >
+              {icon}
+            </LinearGradient>
+          )}
+        </Pressable>
       ))}
     </View>
   );
