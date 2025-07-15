@@ -134,15 +134,15 @@ export default function EventAdminCreate() {
           </View>
 
           <View className="w-full rounded-lg border-[1.5px] border-warning bg-warning/10 p-6 mb-8">
-            <Text className="text-warning font-inter leading-relaxed">
+            <Text className="text-sm text-warning font-inter leading-relaxed">
               Ao criar um novo evento, este se torna o ativo, desativando automaticamente o anterior.
             </Text>
           </View>
 
-          <View className="flex-col w-full gap-4 text-center justify-center">
+          <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
             {/* Ano da edição */}
             <View className="w-full">
-              <Text className="text-white text-sm font-interMedium mb-2">Ano da edição</Text>
+              <Text className="text-blue-200 text-sm font-interMedium mb-2">Ano da edição</Text>
               <Input>
                 <FontAwesome5 name="calendar-week" size={20} color={colors.border} />
 
@@ -158,7 +158,7 @@ export default function EventAdminCreate() {
             <View className="w-full z-10 mb-2">
               {Platform.OS === 'web' ? (
                 <View>
-                  <Text className="text-white text-sm font-interMedium mb-2">Data de início</Text>
+                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de início</Text>
                   <DatePicker
                     selected={startDate}
                     onChange={(date: Date | null) => {
@@ -185,10 +185,11 @@ export default function EventAdminCreate() {
                 </View>
               ) : (
                 <Pressable onPress={() => setShowStartDatePicker(true)}>
-                  <View className="w-full h-[56px] bg-blue-800 rounded-lg border-[1.5px] border-border flex-row items-center px-4" pointerEvents="none">
-                    <FontAwesome5 name="calendar-week" size={20} color={colors.border} />
+                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de início</Text>
+                  <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                    <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
                     <Text className="text-white font-inter text-base ml-4">
-                      {`Início: ${startDate.toLocaleDateString('pt-BR')}`}
+                      {`${startDate.toLocaleDateString('pt-BR')}`}
                     </Text>
                   </View>
                 </Pressable>
@@ -199,7 +200,7 @@ export default function EventAdminCreate() {
             <View className="w-full">
               {Platform.OS === 'web' ? (
                 <View>
-                  <Text className="text-white text-sm font-interMedium mb-2">Data de fim</Text>
+                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de fim</Text>
                   <DatePicker
                     selected={endDate}
                     onChange={(date: Date | null) => {
@@ -215,7 +216,7 @@ export default function EventAdminCreate() {
                     popperClassName="z-50"
                     customInput={
                       <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
-                        <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
+                        <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
                         <Text className="text-white font-inter text-base ml-4">
                           {endDate.toLocaleDateString('pt-BR')}
                         </Text>
@@ -225,10 +226,11 @@ export default function EventAdminCreate() {
                 </View>
               ) : (
                 <Pressable onPress={() => setShowEndDatePicker(true)}>
-                  <View className="w-full h-[56px] bg-blue-800 rounded-lg border-[1.5px] border-border flex-row items-center px-4" pointerEvents="none">
+                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de fim</Text>
+                  <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center px-4" pointerEvents="none">
                     <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
                     <Text className="text-white font-inter text-base ml-4">
-                      {`Fim: ${endDate.toLocaleDateString('pt-BR')}`}
+                      {`${endDate.toLocaleDateString('pt-BR')}`}
                     </Text>
                   </View>
                 </Pressable>
@@ -240,7 +242,7 @@ export default function EventAdminCreate() {
             {isLoading ? (
               <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
             ) : (
-              <Button title="Criar" className="mt-4" onPress={handleCreateEvent}/>
+              <Button title="Criar" className="mt-auto mb-12" onPress={handleCreateEvent}/>
             )}
           </View>
         </View>
