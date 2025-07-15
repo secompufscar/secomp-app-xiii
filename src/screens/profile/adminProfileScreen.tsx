@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
@@ -19,7 +19,13 @@ export default function AdminProfile() {
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
-      <AppLayout>
+      <View className="w-full px-6 max-w-[1000px] mx-auto flex-1">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
+        />
+        
         <View className="flex-row justify-between items-center">
           <BackButton />
 
@@ -28,7 +34,7 @@ export default function AdminProfile() {
           <EditButton />
         </View>
 
-        <View className="items-center mb-10">
+        <View className="items-center mb-8">
           <View className="w-32 h-32 rounded-full border-[1px] border-[#3DCC87] bg-[#21353A] flex items-center justify-center mb-4">
             <View className="w-6 h-full flex items-center justify-center">
               <FontAwesomeIcon icon={faUser} size={48} color="#3DCC87" />
@@ -40,59 +46,65 @@ export default function AdminProfile() {
           <Text className="text-gray-400 font-poppins text-base">{user.email}</Text>
         </View>
 
-        <ProfileButton
-          icon={faQrcode}
-          label="Credenciamento"
-          onPress={() => {}}
-        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          className="flex-1 w-full"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <ProfileButton
+            icon={faQrcode}
+            label="Credenciamento"
+            onPress={() => {}}
+          />
 
-        <ProfileButton
-          icon={faBell}
-          label="Notificações"
-          onPress={() => {}}
-        />
+          <ProfileButton
+            icon={faBell}
+            label="Notificações"
+            onPress={() => {}}
+          />
 
-        <ProfileButton
-          icon={faFlag}
-          label="Atividades"
-          onPress={() => {}}
-        />
+          <ProfileButton
+            icon={faFlag}
+            label="Atividades"
+            onPress={() => {}}
+          />
 
-        <ProfileButton
-          icon={faStar}
-          label="Patrocinadores"
-          onPress={() => {}}
-        />
+          <ProfileButton
+            icon={faStar}
+            label="Patrocinadores"
+            onPress={() => {}}
+          />
 
-        <ProfileButton
-          icon={faTicket}
-          label="Eventos"
-          onPress={() => {}}
-        />
+          <ProfileButton
+            icon={faTicket}
+            label="Eventos"
+            onPress={() => { navigation.navigate("EventAdmin") }}
+          />
 
-        {/* Sair */}
-        <Pressable onPress={signOut}>
-          {({ pressed }) => (
-            <View
-              className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-24 border border-iconbg ${
-                pressed ? "bg-background/60" : ""
-              }`}
-            >
-              <View className="flex-row items-center gap-4">
-                <View className="w-6 flex items-center justify-center">
-                  <FontAwesomeIcon icon={faArrowRightFromBracket} size={20} color="#A9B4F4" />
+          {/* Sair */}
+          <Pressable onPress={signOut}>
+            {({ pressed }) => (
+              <View
+                className={`flex-row h-[58px] items-center justify-between rounded-lg p-5 mb-24 border border-iconbg ${
+                  pressed ? "bg-background/60" : ""
+                }`}
+              >
+                <View className="flex-row items-center gap-4">
+                  <View className="w-6 flex items-center justify-center">
+                    <FontAwesomeIcon icon={faArrowRightFromBracket} size={20} color="#A9B4F4" />
+                  </View>
+
+                  <Text className="text-white text-base font-inter">Sair</Text>
                 </View>
 
-                <Text className="text-white text-base font-inter">Sair</Text>
+                <View className="w-6 flex items-center justify-center">
+                  <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
+                </View>
               </View>
-
-              <View className="w-6 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChevronRight} size={16} color="#A9B4F4" />
-              </View>
-            </View>
-          )}
-        </Pressable>
-      </AppLayout>
+            )}
+          </Pressable>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }

@@ -1,7 +1,9 @@
-interface Event {
+interface Events {
   id?: string;
-  year: string;
-  startDate: Date;
-  endDate: Date;
+  year: number;
+  startDate: string;
+  endDate: string;
   isCurrent: boolean;
 }
+
+type UpdateEvent = Partial<Events>;

@@ -56,7 +56,7 @@ export default function Sponsors() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
-      <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
+      <View className="w-full px-6 max-w-[1000px] mx-auto flex-1">
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"

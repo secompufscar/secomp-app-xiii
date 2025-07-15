@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, ActivityIndicator, Alert, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  Alert,
+  Linking,
+  StatusBar,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, useNavigation, ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -96,98 +106,115 @@ export default function ActivityDetails() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <View className="w-full h-72 absolute bg-iconbg/40 -z-10">{/* Imagem */}</View>
+        <View className="w-full h-[300px] absolute bg-iconbg/40 -z-10">{/* Imagem */}</View>
+        <View className="w-full px-6 max-w-[1000px] mx-auto flex-1">
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={Platform.OS === "android"}
+          />
 
-      <AppLayout>
-        <BackButton />
+          <BackButton />
 
-        {/* titulo da atividade */}
-        <View className="mb-6 mt-36">
-          <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
-          <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
-        </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            className="flex-1 mt-[200px] w-full"
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
 
-        {/* info*/}
-        <View className="mb-6">
-          <InfoRow icon={faLocationDot} mainText="UFSCar" subText={activity.local}>
-            {/*link pro google maps*/}
-            <Pressable
-              onPress={() =>
-                Linking.openURL(
-                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`,
-                )
-              }
-              onPressIn={() => setIsPressed(true)}
-              onPressOut={() => setIsPressed(false)}
-            >
-              <Text
-                className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${isPressed ? "bg-blue-500/20" : "bg-blue-500/10"}`}
+          {/* titulo da atividade */}
+          <View className="mb-6">
+            <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
+            <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
+          </View>
+
+          {/* info*/}
+          <View className="mb-6">
+            <InfoRow icon={faLocationDot} mainText="UFSCar" subText={activity.local}>
+              {/*link pro google maps*/}
+              <Pressable
+                onPress={() =>
+                  Linking.openURL(
+                    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`,
+                  )
+                }
+                onPressIn={() => setIsPressed(true)}
+                onPressOut={() => setIsPressed(false)}
               >
-                Ver no mapa
-              </Text>
-            </Pressable>
-          </InfoRow>
+                <Text
+                  className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${isPressed ? "bg-blue-500/20" : "bg-blue-500/10"}`}
+                >
+                  Ver no mapa
+                </Text>
+              </Pressable>
+            </InfoRow>
 
-          <View className="flex flex-row w-full gap-4">
-            <InfoRow
-              icon={faCalendarDay}
-              mainText={getDate()}
-              subText={getTime()}
-              className="w-[60%]"
-            />
-
-            <InfoRow
-              icon={faUsers}
-              mainText="Vagas"
-              subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
-              className="w-[35%]"
-            ></InfoRow>
-          </View>
-        </View>
-
-        <View className="mb-10">
-          <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
-          <Text className="text-gray-400 text-base font-inter leading-relaxed">
-            {activity.detalhes}
-          </Text>
-        </View>
-
-        {/* Palestrante */}
-        <View className="mb-10">
-          <View className="flex-row items-center">
-            {/* Imagem para adicionar depois */}
-            <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
-            <View className="ml-4">
-              <Text className="text-white text-base font-poppinsSemiBold">
-                {activity.palestranteNome}
-              </Text>
-              {/* subtitulo do palestrante para depois */}
-              <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* button */}
-        <View className="mt-auto mb-10">
-          {user?.tipo === "ADMIN" ? (
-            <View className="flex flex-row gap-4">
-              <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
-              <Button title="Participantes" className="w-[40%]" onPress={() => navigation.navigate("ParticipantsList", {
-                  activityId: activity.id,
-                  activityName: activity.nome
-                })}
+            <View className="flex flex-row w-full gap-4">
+              <InfoRow
+                icon={faCalendarDay}
+                mainText={getDate()}
+                subText={getTime()}
+                className="w-[60%]"
               />
+
+              <InfoRow
+                icon={faUsers}
+                mainText="Vagas"
+                subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
+                className="w-[35%]"
+              ></InfoRow>
             </View>
-          ) : subscriptionLoading || isLoading ? (
-            <ActivityIndicator size="large" color={colors.blue[500]} />
-          ) : (
-            <Button
-              title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"}
-              onPress={handleSubscription}
-            />
-          )}
+          </View>
+
+          <View className="mb-10">
+            <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
+            <Text className="text-gray-400 text-base font-inter leading-relaxed">
+              {activity.detalhes}
+            </Text>
+          </View>
+
+          {/* Palestrante */}
+          <View className="mb-10">
+            <View className="flex-row items-center">
+              {/* Imagem para adicionar depois */}
+              <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
+              <View className="ml-4">
+                <Text className="text-white text-base font-poppinsSemiBold">
+                  {activity.palestranteNome}
+                </Text>
+                {/* subtitulo do palestrante para depois */}
+                <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* button */}
+          <View className="mt-auto mb-10">
+            {user?.tipo === "ADMIN" ? (
+              <View className="flex flex-row gap-4">
+                <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
+                <Button
+                  title="Participantes"
+                  className="w-[40%]"
+                  onPress={() =>
+                    navigation.navigate("ParticipantsList", {
+                      activityId: activity.id,
+                      activityName: activity.nome,
+                    })
+                  }
+                />
+              </View>
+            ) : subscriptionLoading || isLoading ? (
+              <ActivityIndicator size="large" color={colors.blue[500]} />
+            ) : (
+              <Button
+                title={isSubscribed ? "Inscrever-se" : "Cancelar Inscrição"}
+                onPress={handleSubscription}
+              />
+            )}
+          </View>
+          </ScrollView>
         </View>
-      </AppLayout>
     </SafeAreaView>
   );
 }
