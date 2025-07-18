@@ -66,7 +66,7 @@ export default function AdminProfile() {
           <ProfileButton
             icon={faFlag}
             label="Atividades"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("ActivityAdmin" )}}
           />
 
           <ProfileButton

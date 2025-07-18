@@ -1,32 +1,31 @@
-import axios from "axios";
+import axios from 'axios'
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const getApi = () => {
-  const api = axios.create({
-    baseURL: "https://api.secompufscar.com.br:3000/api/v1",
-  });
+    const api = axios.create({
+        baseURL: "http://192.168.15.27:3000/api/v1"
+    })  
+  
+    api.interceptors.request.use(async config => {
+        try {
+            // Obtém o token do usuário através do asyncStorage (token criado no Login em 'user.ts login()' )
+            const userToken = await AsyncStorage.getItem("userToken");
 
-  api.interceptors.request.use(async (config) => {
-    try {
-      // Obtém o token do usuário através do asyncStorage (token criado no Login em 'user.ts login()' )
-      const userToken = await AsyncStorage.getItem("userToken");
+            if (typeof userToken =='string' && userToken.trim()!='') {
+                config.headers['Authorization'] = `Bearer ${userToken}`
+            }
+            else{
+                console.log("Erro na obtenção do token do usuário")
+            }
 
-      if (typeof userToken == "string" && userToken.trim() != "") {
-        config.headers["Authorization"] = `Bearer ${userToken}`;
-      } else {
-        console.log("Erro na obtenção do token do usuário");
-      }
+            return config
+        } catch(error) { console.log(error) } finally {
+            return config
+        }
+    })
 
-      return config;
-    } catch (error) {
-      console.log(error);
-    } finally {
-      return config;
-    }
-  });
+    return api
+}
 
-  return api;
-};
-
-export default getApi();
+export default getApi()

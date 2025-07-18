@@ -17,6 +17,7 @@ import {
   ActivityDetails,
   ParticipantsList,
   EventAdmin,
+  ActivityAdmin,
   EventAdminCreate,
 } from '../screens'
 
@@ -61,6 +62,7 @@ export default function StackRoutes() {
       <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
+      <Stack.Screen name="ActivityAdmin" component={ActivityAdmin} />
     </Stack.Navigator>
   );
 }

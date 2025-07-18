@@ -16,6 +16,7 @@ import UserProfile from "./profile/userProfileScreen";
 
 import AdminProfile from "./profile/adminProfileScreen";
 import EventAdmin from "./event/eventAdmin";
+import ActivityAdmin from "./activities/ActivityAdmin";
 import EventAdminCreate from "./event/eventAdminCreate";
 
 import Schedule from "./schedule/scheduleScreen";
@@ -49,6 +50,7 @@ export {
   Credential,
   Activities,
   QRCode,
+  ActivityAdmin,
   ActivityDetails,
   ParticipantsList
 };
