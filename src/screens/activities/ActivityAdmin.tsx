@@ -3,33 +3,33 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { getActivities, deleteActivity } from "../../services/activities"; // Changed to activities service
+import { getActivities, deleteActivity } from "../../services/activities"; 
 import { colors } from "../../styles/colors";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { format, parseISO, addHours } from "date-fns"; // Imported date-fns for formatting
-import { ptBR } from "date-fns/locale"; // Imported locale for date-fns
+import { format, parseISO, addHours } from "date-fns"; 
+import { ptBR } from "date-fns/locale"; 
 
-export default function ActivityAdmin() { // Renamed component
+export default function ActivityAdmin() { 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const [activities, setActivities] = useState<Activity[]>([]); // Changed state variable
+  const [activities, setActivities] = useState<Activity[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
-      const fetchActivities = async () => { // Renamed function
+      const fetchActivities = async () => { 
         setLoading(true);
         setError(null);
 
         try {
-          const data = await getActivities(); // Changed service call
-          setActivities(data); // Changed state variable
+          const data = await getActivities(); 
+          setActivities(data); 
         } catch (err) {
-          console.error("Erro ao carregar atividades:", err); // Updated error message
-          setError("Não foi possível carregar as atividades. Tente novamente."); // Updated error message
+          console.error("Erro ao carregar atividades:", err); 
+          setError("Não foi possível carregar as atividades. Tente novamente."); 
         } finally {
           setLoading(false);
         }
@@ -39,8 +39,8 @@ export default function ActivityAdmin() { // Renamed component
     }, [])
   );
 
-  // Itens da lista
-  const renderActivityItem = ({ item }: { item: Activity }) => ( // Changed type to Activity
+  
+  const renderActivityItem = ({ item }: { item: Activity }) => ( 
     <Pressable
       onPress={() => {
         navigation.navigate("ActivityDetails", { item });
@@ -92,13 +92,13 @@ export default function ActivityAdmin() { // Renamed component
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de Atividades</Text> {/* Updated text */}
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de Atividades</Text> 
             <Text className="text-gray-400 font-inter">
               Painel de administração das atividades
-            </Text> {/* Updated text */}
+            </Text> 
           </View>
 
-          <Button title="Criar atividade" onPress={() => {navigation.navigate("EventAdminCreate")}}/> {/* Updated text and assuming ActivityAdminCreate exists */}
+          <Button title="Criar atividade" onPress={() => {navigation.navigate("ActivityAdminCreate")}}/> 
 
           <View className="flex-1 mt-8">
             {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16"/>}
