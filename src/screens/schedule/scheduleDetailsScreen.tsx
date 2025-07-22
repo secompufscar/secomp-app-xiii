@@ -4,13 +4,14 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { format, addHours } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useEffect } from "react";
 
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
-import { Activity } from "../../components/activity/activityList";
 import { Pressable } from "react-native";
 import { StackTypes } from "../../routes/stack.routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ActivityImageList from "./activityImageList";
 
 
 type ScheduleDetailsProps = {
@@ -25,6 +26,7 @@ export default function ScheduleDetails() {
     const dataFormatada = format(data, "d 'de' MMMM 'de' yyyy", { locale: ptBR });
     const horaInicio = format(data, 'HH:mm');
     const horaFim = format(addHours(data, 1), 'HH:mm');
+    
 
     return (
         <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -81,16 +83,21 @@ export default function ScheduleDetails() {
                             </Text>
                         </View>
                         
+                         <View>
+                            <ActivityImageList activityId={item.id} />
+                        </View>
+
                         <View className="w-full items-center mt-4">
                             <Pressable
                                 onPress={() => navigation.navigate("QRCode", { id: item.id })}
                                 className="bg-blue-600 px-6 py-3 rounded-full active:bg-blue-700"
                             >
                                 <Text className="text-white font-poppinsSemiBold text-base">
-                                Acessar QR Code 
+                                Acessar QR Code
                                 </Text>
                             </Pressable>
                             </View>
+                       
                     </View>
                 </View>
             </AppLayout>
