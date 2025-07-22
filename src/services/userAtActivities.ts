@@ -1,17 +1,21 @@
-import api from './api';
+import api from './api'
 
-type UserAtActivity = {
-    id: string;
-    userId: string;
-    activityId: string;
-    presente: boolean;
-    inscricaoPrevia: boolean;
-    listaEspera: boolean;
+// Busca todos os participantes inscritos ou em lista de espera de uma atividade
+export async function getParticipantsByActivity(
+  activityId: string
+): Promise<UserAtActivity[]> {
+  const response = await api.get(`/userAtActivities/${activityId}`)
+  return response.data
 };
 
-export const userSubscription = async (userId: string, activityId: string): Promise<UserAtActivity> => {
-    // Corrigido para usar crase (backticks) na URL
-    const response = await api.get(`/userAtActivities/user-activity/${userId}/${activityId}`);
-
-    return response.data;
+// Busca um vínculo específico entre usuário e atividade
+export const userSubscription = async (
+  userId: string,
+  activityId: string
+): Promise<UserAtActivity> => {
+  const response = await api.get(
+    `/userAtActivities/user-activity/${userId}/${activityId}`
+  );
+  return response.data;
 };
+

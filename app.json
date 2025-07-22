@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Secomp",
-    "slug": "secompufscar-email",
+    "slug": "secompufscar",
     "scheme": "secompapp",
     "description": "A Semana Acadêmica da Computação da Universidade Federal de São Carlos (SECOMP UFSCar) surgiu da necessidade de trazer assuntos que fossem de interesse tanto da comunidade acadêmica quanto de entusiastas.",
     "newArchEnabled": true,
@@ -14,9 +14,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.secompufscar.app"
@@ -28,10 +26,7 @@
       },
       "package": "com.secompufscar.app",
       "usesCleartextTraffic": true,
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["android.permission.CAMERA", "android.permission.RECORD_AUDIO"],
       "intentFilters": [
         {
           "action": "VIEW",
@@ -43,10 +38,7 @@
               "pathPrefix": "/SetNewPassword"
             }
           ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
+          "category": ["BROWSABLE", "DEFAULT"]
         }
       ]
     },
@@ -66,8 +58,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "d88cbc81-c78c-4dc7-99c3-516f8b9e1d61"
+        "projectId": "1bd575c7-c645-4cb0-a841-362d02173d65"
       }
-    }
+    },
+    "owner": "enzomurayama"
   }
 }
