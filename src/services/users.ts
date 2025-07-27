@@ -43,6 +43,11 @@ export const getProfile = async () => {
   return response.data;
 };
 
+export const getUserDetails = async (id: string): Promise<Omit<User, 'senha' | 'qrCode'>> => {
+  const response = await api.get(`/users/${id}`);
+  return response.data;
+};
+
 export const sendForgotPasswordEmail = async (data: { email: string }) => {
   const response = await api.post("/users/sendForgotPasswordEmail", data);
   return response.data;
