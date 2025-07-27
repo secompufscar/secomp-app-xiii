@@ -80,9 +80,18 @@ export default function ParticipantsList() {
 
   if (error) {
     return (
-      <View className="flex-1 justify-center items-center px-4 bg-blue-900">
-        <Text className="text-red-500 text-center">{error}</Text>
-      </View>
+      <SafeAreaView className="flex-1 bg-blue-900 items-center">
+        <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent={Platform.OS === "android"}
+          />
+
+          <BackButton />
+          <Text className="text-red-500 text-center">{error}</Text>
+        </View>
+      </SafeAreaView>
     )
   }
 
