@@ -18,6 +18,10 @@ import {
   ParticipantsList,
   EventAdmin,
   EventAdminCreate,
+  SponsorsAdmin,
+  SponsorsAdminCreate,
+  SponsorsAdminUpdate,
+  TagsAdmin
 } from '../screens'
 
 import { ScheduleItemProps } from "../entities/schedule-item";
@@ -39,6 +43,10 @@ type StackNavigation = {
   ParticipantsList: { activityId: string; activityName: string; }
   EventAdmin: undefined;
   EventAdminCreate: undefined;
+  SponsorsAdmin: undefined;
+  SponsorsAdminCreate: undefined;
+  SponsorsAdminUpdate: { id: string };
+  TagsAdmin: undefined;
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -61,6 +69,11 @@ export default function StackRoutes() {
       <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
+      <Stack.Screen name="SponsorsAdmin" component={SponsorsAdmin} />
+      <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
+      <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
+      <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
+
     </Stack.Navigator>
   );
 }
