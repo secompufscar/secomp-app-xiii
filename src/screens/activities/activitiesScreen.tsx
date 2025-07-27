@@ -18,8 +18,6 @@ export default function Activities() {
 
   const handleSelectCategory = (category: string) => {
     setSelectedCategory(category);
-    // Aqui você pode passar `category` para o ActivityList ou filtrar localmente
-    console.log("Categoria selecionada:", category);
   };
 
   const handlePressActivity = (item: Activity) => {
