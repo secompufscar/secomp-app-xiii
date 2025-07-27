@@ -9,7 +9,6 @@ import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-
 export default function EventAdmin() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -44,7 +43,7 @@ export default function EventAdmin() {
       className=""
     >
       {({ pressed }) => (
-        <View className={`flex flex-row justify-between p-4 rounded-lg shadow-md mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
+        <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
           <View className="flex-1">
             <Text className="text-lg text-white font-poppinsSemiBold">{item.year}</Text>
 
@@ -52,7 +51,7 @@ export default function EventAdmin() {
               <Text className="text-base text-gray-600 font-inter">
                 {new Date(item.startDate).toLocaleDateString('pt-BR')} -
               </Text>
-              <Text className="text-gray-600 font-inter ml-1">
+              <Text className="text-base text-gray-600 font-inter ml-1">
                 {new Date(item.endDate).toLocaleDateString('pt-BR')}
               </Text>
             </View>
