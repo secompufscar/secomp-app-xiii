@@ -1,9 +1,10 @@
-// screens/ParticipantsList.tsx
-import React, { useEffect, useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text, FlatList, ActivityIndicator, StatusBar, Platform } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRoute, RouteProp } from '@react-navigation/native'
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native'
 import { getParticipantsByActivity } from '../../services/userAtActivities'
+import { getUserDetails } from '../../services/users'
+import { colors } from '../../styles/colors';
 import BackButton from '../../components/button/backButton'
 
 type ParticipantsListRouteParams = {
@@ -13,35 +14,66 @@ type ParticipantsListRouteParams = {
   }
 }
 
+type ParticipantDetails = {
+  id: string;
+  userId: string;
+  userName: string; 
+  activityId: string;
+  presente: boolean;
+  inscricaoPrevia: boolean;
+  listaEspera: boolean;
+}
+
 export default function ParticipantsList() {
   const { activityId, activityName } = useRoute<
     RouteProp<ParticipantsListRouteParams, 'ParticipantsList'>
   >().params
 
-  const [list, setList] = useState<UserAtActivity[]>([])
+  const [list, setList] = useState<ParticipantDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    getParticipantsByActivity(activityId)
-      .then((data) => {
-        // Ordena alfabeticamente pelo userId
-        const sorted = data.sort((a, b) =>
-          a.userId.localeCompare(b.userId)
-        )
-        setList(sorted)
-      })
-      .catch((err) => {
-        console.error(err)
-        setError('Não foi possível carregar os participantes.')
-      })
-      .finally(() => setLoading(false))
-  }, [activityId])
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true
+      const fetchData = async () => {
+        setLoading(true)
+        setError(null)
+
+        try {
+          const participants = await getParticipantsByActivity(activityId)
+          const detailedList = await Promise.all(
+            participants.map(async (p) => {
+              const user = await getUserDetails(p.userId)
+              return {
+                ...p,
+                userName: user.nome,
+              }
+            })
+          )
+          // Ordena a lista de participantes pelo nome do usuário alfabeticamente
+          const sorted = detailedList.sort((a, b) => a.userName.localeCompare(b.userName))
+          if (isActive) setList(sorted)
+        } catch (err) {
+          console.error(err)
+          if (isActive) setError('Não foi possível carregar os participantes.')
+        } finally {
+          if (isActive) setLoading(false)
+        }
+      }
+
+      fetchData()
+
+      return () => {
+        isActive = false
+      }
+    }, [activityId])
+  )
 
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-blue-900">
-        <ActivityIndicator size="large" color="#3DCC87" />
+        <ActivityIndicator size="large" color={colors.blue[500]} />
       </View>
     )
   }
@@ -82,8 +114,7 @@ export default function ParticipantsList() {
           )}
           renderItem={({ item }) => (
             <View className="flex-row justify-between items-center py-3">
-              {/* Exibe apenas o userId */}
-              <Text className="text-default font-inter">{item.userId}</Text>
+              <Text className="text-default font-inter">{item.userName}</Text>
               <Text
                 className={`font-interMedium ${item.presente ? 'text-green' : 'text-gray-500'
                   }`}
