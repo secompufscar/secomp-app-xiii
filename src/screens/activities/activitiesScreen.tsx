@@ -4,45 +4,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "../../hooks/AuthContext";
-import BackButton from "../../components/button/backButton";
-import AppLayout from "../../components/app/appLayout";
 import ActivityList from "../../components/activity/activityList";
 import CategoryFilter from "../../components/activity/categoryFilter";
 
 export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { user: { user } }: any = useAuth();
+  const {
+    user: { user },
+  }: any = useAuth();
 
   // Estado para armazenar a categoria selecionada no filtro
-  const [selectedCategory, setSelectedCategory] = useState<string>("Palestra");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Palestras");
 
   const handleSelectCategory = (category: string) => {
     setSelectedCategory(category);
-    // Aqui você pode passar `category` para o ActivityList ou filtrar localmente
-    console.log("Categoria selecionada:", category);
   };
 
   const handlePressActivity = (item: Activity) => {
     // Ao clicar numa atividade, navega para os detalhes
-    navigation.navigate("ScheduleDetails", { item });
-  };
-
-  // Função para obter o ícone de categoria (caso decida reaproveitar)
-  const getIconName = (categoryName: string): string => {
-    switch (categoryName) {
-      case "Minicursos":
-        return "laptop-file";
-      case "Palestras":
-        return "chalkboard-user";
-      case "Competições":
-        return "trophy";
-      case "Workshops":
-        return "people-group";
-      case "SECOMP":
-        return "id-badge";
-      default:
-        return "list";
-    }
+    navigation.navigate("ActivityDetails", { item });
   };
 
   return (
@@ -50,19 +30,15 @@ export default function Activities() {
       <View className="flex-1 w-full">
         <StatusBar
           barStyle="light-content"
-          backgroundColor='transparent'
-          translucent={Platform.OS === 'android'}
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
         />
-        
-        <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
-          <BackButton />
 
+        <View className="w-full flex-1 mt-16 px-6 max-w-[1000px] mx-auto">
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-              Atividades
-            </Text>
-            <Text className="text-gray-400 font-inter text-">
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Atividades</Text>
+            <Text className="text-gray-400 font-inter">
               Veja todas as atividades disponíveis no evento
             </Text>
           </View>

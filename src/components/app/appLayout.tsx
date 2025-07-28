@@ -8,23 +8,21 @@ interface AppLayoutProps {
 
 // Wrapper do ScrollView para as páginas
 export default function AppLayout({ children }: AppLayoutProps) {
-    return (
-      <View className="flex-1 w-full">
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor='transparent'
-          translucent={Platform.OS === 'android'}
-        />
-        
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="flex-1 w-full"
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
-          <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
-            {children}
-          </View>
-        </ScrollView>
-      </View>
-    );
+  return (
+    <View className="flex-1 w-full">
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent={Platform.OS === "android"}
+      />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="flex-1 w-full"
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">{children}</View>
+      </ScrollView>
+    </View>
+  );
 }

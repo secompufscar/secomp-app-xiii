@@ -1,242 +1,233 @@
-import { useState } from "react"
-import { View, Text, Pressable, ActivityIndicator } from "react-native"
-import { MaterialIcons, Ionicons } from "@expo/vector-icons"
-import { useNavigation } from "@react-navigation/native"
-import { AuthTypes } from "../../routes/auth.routes"
-import { colors } from "../../styles/colors"
+import { useState } from "react";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { AuthTypes } from "../../routes/auth.routes";
+import { colors } from "../../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signup } from "../../services/users";
-import { Input } from "../../components/input/input"
+import { Input } from "../../components/input/input";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
-import Button from "../../components/button/button"
-import CustomModal from "../../components/modal/modal"
-import validator from 'validator';
+import Button from "../../components/button/button";
+import validator from "validator";
 
 function capitalizeFirstLetter(string: string) {
-	const words = string.toLocaleLowerCase().split(" ");
-	
-	for (let i = 0; i < words.length; i++) {
-		words[i] = words[i][0] ? words[i][0].toUpperCase() + words[i].substr(1) : "";
-	}
-	
-	return words.join(" ");
+  const words = string.toLocaleLowerCase().split(" ");
+
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i][0] ? words[i][0].toUpperCase() + words[i].substr(1) : "";
+  }
+
+  return words.join(" ");
 }
 
 export default function SignUp() {
-	const navigation = useNavigation<AuthTypes>();
-	const [nome, setNome] = useState("")
-	
-	// E-mail
-	const [email, setEmail] = useState("")
-	const [isEmailValid, setIsEmailValid] = useState(true);
+  const navigation = useNavigation<AuthTypes>();
+  const [nome, setNome] = useState("");
 
-	// Senha
-	const [senha, setSenha] = useState("")
-	const [isPasswordValid, setIsPasswordValid] = useState(true);
-	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  // E-mail
+  const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
-	// Confirmar senha
-	const [confirmPassword, setConfirmPassword] = useState("");
-	const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
-	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+  // Senha
+  const [senha, setSenha] = useState("");
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-	// Load animation
-	const [isLoading, setIsLoading] = useState(false);
+  // Confirmar senha
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
-    // Modal
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalTitle, setModalTitle] = useState("");
-    const [modalText, setModalText] = useState("");
-	
-	const validateEmail = (email: string): boolean => {
-        return validator.isEmail(email);
-    };
+  // Load animation
+  const [isLoading, setIsLoading] = useState(false);
 
-	const handleRegister = async () =>  {
-		setIsEmailValid(true);
-		setIsPasswordValid(true);
-		setIsConfirmPasswordValid(true);
-	
-		if (!email.trim() || !senha.trim() || !nome.trim()) {
-            setIsModalOpen(true);
-            setModalTitle("Cadastro Incompleto");
-            setModalText("Por favor, preencha todos os campos")
-			return;
-		}
-	
-		const emailValido = validateEmail(email);
-		setIsEmailValid(emailValido);
-		if (!emailValido) return;
-	
-		const senhaValida = senha.length >= 6;
-		setIsPasswordValid(senhaValida);
-		if (!senhaValida) return;
-	
-		const confirmacaoValida = senha === confirmPassword;
-		setIsConfirmPasswordValid(confirmacaoValida);
-		if (!confirmacaoValida) return;
-	
-		setIsLoading(true);
-	
-		try {
-			const data = await signup({ nome, email, senha });
-	
-			if (data.emailEnviado) {
-                setIsModalOpen(true);
-                setModalTitle("Inscrição");
-                setModalText("Um e-mail de confirmação foi enviado com sucesso!")
+  // Alert
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertText, setAlertText] = useState("");
+  const [alertColor, setAlertColor] = useState("text-gray-400");
 
-				// Limpa os campos
-				setNome("");
-				setEmail("");
-				setSenha("");
-				setConfirmPassword("");
-				
-				navigation.navigate('Login');
-			}
-	
-		} catch (error: any) {
-			const errorMessage = error?.response?.data?.message || 'Falha ao processar o cadastramento';
-			setIsModalOpen(true);
-            setModalTitle("Erro na Inscrição");
-            setModalText(errorMessage)
-		} finally {
-			setIsLoading(false);
-		}
-	};
+  const validateEmail = (email: string): boolean => {
+    return validator.isEmail(email);
+  };
 
-	return (
-        <SafeAreaView className="flex-1 bg-blue-900 items-center">
-			<AppLayout>
-				<BackButton/>
+  const handleRegister = async () => {
+    setIsEmailValid(true);
+    setIsPasswordValid(true);
+    setIsConfirmPasswordValid(true);
+    setIsAlertOpen(false);
 
-                {/* Modal de avisos */}
-                <CustomModal visible={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle} text={modalText}/>
+    if (!email.trim() || !senha.trim() || !nome.trim()) {
+      setAlertText("Por favor, preencha todos os campos");
+      setAlertColor("text-warning");
+      setIsAlertOpen(true);
+      return;
+    }
 
-				<View className={`mt-8 gap-1`}>
-                    <Text className="text-white text-[24px] font-poppinsSemiBold">
-                        Criar conta
-                    </Text>
+    const emailValido = validateEmail(email);
+    setIsEmailValid(emailValido);
+    if (!emailValido) return;
 
-					<Text className="text-gray-400 text-base font-inter">
-						Você está próximo de participar do evento!
-                    </Text>
-                </View>
+    const senhaValida = senha.length >= 6;
+    setIsPasswordValid(senhaValida);
+    if (!senhaValida) return;
 
-				<View className="flex-col w-full gap-2 py-8 text-center justify-center">
-					{/* Nome */}
-					<View className="w-full">
-                        <Input>
-							<Ionicons name="person" size={20} color={colors.border} />
+    const confirmacaoValida = senha === confirmPassword;
+    setIsConfirmPasswordValid(confirmacaoValida);
+    if (!confirmacaoValida) return;
 
-                            <Input.Field
-                                placeholder="Nome completo"
-								onChangeText={(text) => setNome(capitalizeFirstLetter(text))}
-                                value={nome}
-                            />
-                        </Input>
-                    </View>
+    setIsLoading(true);
 
-					{/* E-mail */}
-					<View className="w-full">
-                        <Input>
-                            <MaterialIcons name="email" size={20} color={colors.border} />
+    try {
+      const data = await signup({ nome, email, senha });
 
-                            <Input.Field
-                                placeholder="E-mail"
-                                onChangeText={setEmail}
-                                value={email}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                            />
-                        </Input>
+      if (data.emailEnviado) {
+        navigation.navigate("EmailConfirmation", { email: email });
 
-                        {!isEmailValid && (
-                            <Text className="text-[12px] text-danger font-inter mb-1">
-                                Por favor, digite um email válido!
-                            </Text>
-                        )}
-                    </View>
-					
-					{/* Senha */}
-					<View className="w-full">
-                        <Input>
-                            <MaterialIcons name="lock" size={20} color={colors.border} />
+        // Limpa os campos
+        setNome("");
+        setEmail("");
+        setSenha("");
+        setConfirmPassword("");
+      }
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Falha ao processar o cadastramento";
+      setAlertText(errorMessage);
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-                            <Input.Field
-                            placeholder="Senha"
-                            onChangeText={setSenha}
-                            value={senha}
-                            secureTextEntry={!isPasswordVisible}
-                            />
+  return (
+    <SafeAreaView className="flex-1 bg-blue-900 items-center">
+      <AppLayout>
+        <BackButton />
 
-                            <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
-                                <Ionicons
-                                    name={isPasswordVisible ? 'eye' : 'eye-off'}
-                                    size={20}
-                                    color={colors.border}
-                                />
-                            </Pressable>
-                        </Input>
+        <View className={`mt-8 gap-1`}>
+          <Text className="text-white text-[24px] font-poppinsSemiBold">Criar conta</Text>
 
-                        {!isPasswordValid && (
-                            <Text className="text-[12px] text-danger font-inter">
-                                A senha deve conter no mínimo 6 caracteres
-                            </Text>
-                        )}
-                    </View>
-						
-					{/* Confirmar senha */}
-					<View className="w-full">
-                        <Input>
-                            <MaterialIcons name="lock" size={20} color={colors.border} />
+          <Text className="text-gray-400 text-base font-inter">
+            Você está próximo de participar do evento!
+          </Text>
+        </View>
 
-                            <Input.Field
-                            placeholder="Confirmar senha"
-                            onChangeText={setConfirmPassword}
-                            value={confirmPassword}
-                            secureTextEntry={!isConfirmPasswordVisible}
-                            />
+        <View className="flex-col w-full gap-2 py-8 text-center justify-center">
+          {/* Nome */}
+          <View className="w-full">
+            <Input>
+              <Ionicons name="person" size={20} color={colors.border} />
 
-                            <Pressable onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}>
-                                <Ionicons
-                                    name={isConfirmPasswordVisible ? 'eye' : 'eye-off'}
-                                    size={20}
-                                    color={colors.border}
-                                />
-                            </Pressable>
-                        </Input>
+              <Input.Field
+                placeholder="Nome completo"
+                onChangeText={(text) => setNome(capitalizeFirstLetter(text))}
+                value={nome}
+              />
+            </Input>
+          </View>
 
-                        {!isConfirmPasswordValid && (
-                            <Text className="text-[12px] text-danger font-inter">
-                                As senhas não coincidem!
-                            </Text>
-                        )}
-                    </View>
+          {/* E-mail */}
+          <View className="w-full">
+            <Input>
+              <MaterialIcons name="email" size={20} color={colors.border} />
 
-					{isLoading ? (
-                        <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-                    ) : (
-                        <Button className="mt-8" title="Criar" onPress={handleRegister} />
-                    )}
+              <Input.Field
+                placeholder="E-mail"
+                onChangeText={setEmail}
+                value={email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </Input>
 
-					<View className="flex-row mt-10 items-center justify-center gap-1">
-                        <Text className="text-white text-sm font-inter">
-                            Já possui uma conta?
-                        </Text>
+            {!isEmailValid && (
+              <Text className="text-[12px] text-danger font-inter mb-1">
+                Por favor, digite um email válido!
+              </Text>
+            )}
+          </View>
 
-                        <Pressable onPress={() => navigation.navigate("Login")}>
-                            {({ pressed }) => (
-                                <Text className={`text-sm font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}>
-                                    Entrar
-                                </Text>
-                            )}
-                        </Pressable>
-                    </View>
-				</View>
-            </AppLayout>
-        </SafeAreaView>
-	)
+          {/* Senha */}
+          <View className="w-full">
+            <Input>
+              <MaterialIcons name="lock" size={20} color={colors.border} />
+
+              <Input.Field
+                placeholder="Senha"
+                onChangeText={setSenha}
+                value={senha}
+                secureTextEntry={!isPasswordVisible}
+              />
+
+              <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+                <Ionicons
+                  name={isPasswordVisible ? "eye" : "eye-off"}
+                  size={20}
+                  color={colors.border}
+                />
+              </Pressable>
+            </Input>
+
+            {!isPasswordValid && (
+              <Text className="text-[12px] text-danger font-inter">
+                A senha deve conter no mínimo 6 caracteres
+              </Text>
+            )}
+          </View>
+
+          {/* Confirmar senha */}
+          <View className="w-full">
+            <Input>
+              <MaterialIcons name="lock" size={20} color={colors.border} />
+
+              <Input.Field
+                placeholder="Confirmar senha"
+                onChangeText={setConfirmPassword}
+                value={confirmPassword}
+                secureTextEntry={!isConfirmPasswordVisible}
+              />
+
+              <Pressable onPress={() => setIsConfirmPasswordVisible(!isConfirmPasswordVisible)}>
+                <Ionicons
+                  name={isConfirmPasswordVisible ? "eye" : "eye-off"}
+                  size={20}
+                  color={colors.border}
+                />
+              </Pressable>
+            </Input>
+
+            {!isConfirmPasswordValid && (
+              <Text className="text-[12px] text-danger font-inter">As senhas não coincidem!</Text>
+            )}
+
+            {isAlertOpen && (
+              <Text className={`text-sm mt-2 font-inter ${alertColor}`}>{alertText}</Text>
+            )}
+          </View>
+
+          {isLoading ? (
+            <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+          ) : (
+            <Button className="mt-8" title="Criar" onPress={handleRegister} />
+          )}
+
+          <View className="flex-row mt-10 items-center justify-center gap-1">
+            <Text className="text-white text-sm font-inter">Já possui uma conta?</Text>
+
+            <Pressable onPress={() => navigation.navigate("Login")}>
+              {({ pressed }) => (
+                <Text
+                  className={`text-sm font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}
+                >
+                  Entrar
+                </Text>
+              )}
+            </Pressable>
+          </View>
+        </View>
+      </AppLayout>
+    </SafeAreaView>
+  );
 }
-

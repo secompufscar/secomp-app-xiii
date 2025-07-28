@@ -1,21 +1,25 @@
-import 'react-native-reanimated';
-import { ActivityIndicator, View } from 'react-native';
-import Routes from './routes';
-import './styles/global.css';
-import '@expo/metro-runtime';
-import { AuthProvider, useAuth } from './hooks/AuthContext';
-import { useFonts } from 'expo-font';
-import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
-import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from '@expo-google-fonts/poppins';
-import { colors } from './styles/colors';
+import "react-native-reanimated";
+import { ActivityIndicator, View } from "react-native";
+import Routes from "./routes";
+import "./styles/global.css";
+import "@expo/metro-runtime";
+import { AuthProvider, useAuth } from "./hooks/AuthContext";
+import { useFonts } from "expo-font";
+import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+} from "@expo-google-fonts/poppins";
+import { colors } from "./styles/colors";
 import * as NavigationBar from "expo-navigation-bar";
-import * as SystemUI from 'expo-system-ui';
+import * as SystemUI from "expo-system-ui";
 
 
 NavigationBar.setPositionAsync("absolute");
 NavigationBar.setBackgroundColorAsync("#ffffff00");
 
-SystemUI.setBackgroundColorAsync('transparent');
+SystemUI.setBackgroundColorAsync("transparent");
 
 export default function App() {
   let [fontsLoaded] = useFonts({
