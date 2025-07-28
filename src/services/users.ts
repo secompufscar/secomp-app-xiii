@@ -1,5 +1,7 @@
-import api from "./api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from './api'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { registerForPushNotifications, setupNotificationListeners } from './notificationService';
+import { Platform } from 'react-native';
 
 type Login = {
   email: string;
@@ -28,7 +30,15 @@ export const login = async (data: Login): Promise<User> => {
   const { user, token } = response.data;
 
   // Armazenar o token em AsyncStorage
-  await AsyncStorage.setItem("userToken", token);
+  await AsyncStorage.setItem('userToken', token);
+
+  if (Platform.OS === 'android') {
+    // Registrar notificações e configurar listeners
+    await registerForPushNotifications();
+    setupNotificationListeners();
+    console.log('Notificações configuradas para Android');
+  }
+  console.log('Notificações configuradas');
 
   return user;
 };
