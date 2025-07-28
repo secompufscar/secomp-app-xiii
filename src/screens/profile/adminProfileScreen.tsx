@@ -72,7 +72,7 @@ export default function AdminProfile() {
           <ProfileButton
             icon={faStar}
             label="Patrocinadores"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("SponsorsAdmin") }}
           />
 
           <ProfileButton

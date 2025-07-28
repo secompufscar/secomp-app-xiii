@@ -11,7 +11,13 @@ import ParticipantsList from './participants/participantsListScreen';
 
 import Home from "./home/homeScreen";
 import EventGuide from "./event/eventGuideScreen";
+
 import Sponsors from "./sponsors/sponsorsScreen";
+import SponsorsAdmin from "./sponsors/sponsorsAdmin";
+import SponsorsAdminCreate from "./sponsors/sponsorsAdminCreate";
+import SponsorsAdminUpdate from "./sponsors/sponsorsAdminUpdate";
+import TagsAdmin from "./sponsors/TagsAdmin";
+
 import UserProfile from "./profile/userProfileScreen";
 
 import AdminProfile from "./profile/adminProfileScreen";
@@ -39,6 +45,10 @@ export {
   Home,
   EventGuide,
   Sponsors,
+  SponsorsAdmin,
+  SponsorsAdminCreate,
+  SponsorsAdminUpdate,
+  TagsAdmin,
   UserProfile,
   EditProfile,
   AdminProfile,

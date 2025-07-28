@@ -1,5 +1,8 @@
 import api from "./api";
 
+export type Tag = { id: string; name: string };
+export type CreateTagData = { name: string };
+
 // Busca e retorna a lista de todas as tags
 export const getTags = async (): Promise<Tag[]> => {
   const response = await api.get('/tags/');
@@ -7,7 +10,7 @@ export const getTags = async (): Promise<Tag[]> => {
 };
 
 // Cria uma nova tag
-export const createTag = async (tagData: Tag): Promise<Tag> => {
+export const createTag = async (tagData: CreateTagData): Promise<Tag> => {
   const response = await api.post('/tags/', tagData);
   return response.data;
 };
