@@ -60,7 +60,7 @@ export default function AdminProfile() {
           <ProfileButton
             icon={faBell}
             label="Notificações"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("AdminNotificationScreen")}}
           />
 
           <ProfileButton

@@ -20,6 +20,7 @@ import {
   ActivityAdmin,
   ActivityAdminCreate,
   EventAdminCreate,
+  AdminNotificationScreen,
 } from '../screens'
 
 import { ScheduleItemProps } from "../entities/schedule-item";
@@ -41,6 +42,7 @@ type StackNavigation = {
   ParticipantsList: { activityId: string; activityName: string; }
   EventAdmin: undefined;
   EventAdminCreate: undefined;
+  AdminNotificationScreen: undefined;
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -65,6 +67,7 @@ export default function StackRoutes() {
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
       <Stack.Screen name="ActivityAdmin" component={ActivityAdmin} />
       <Stack.Screen name="ActivityAdminCreate" component={ActivityAdminCreate} />
+      <Stack.Screen name="AdminNotificationScreen" component={AdminNotificationScreen} />
     </Stack.Navigator>
   );
 }
