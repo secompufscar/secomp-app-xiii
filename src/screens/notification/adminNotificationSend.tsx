@@ -7,44 +7,21 @@ import {
   Platform,
   ActivityIndicator,
   ScrollView,
-  Switch, 
-  Alert, 
+  Switch,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons"; // Added Ionicons for bell icon
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 
-// Placeholder for API calls for sending notifications
-// In a real application, these functions would live in:
-// `../../services/notifications.ts` or a similar services file.
-
-interface CreateNotificationDTO {
-  title: string;
-  message: string;
-  recipientIds: string[];
-  data?: Record<string, unknown>;
-  sound?: boolean;
-  badge?: number;
-  // createdBy will be handled by the backend from the token
-}
-
-const sendPushNotification = async (notificationData: CreateNotificationDTO) => {
-  console.log("Sending notification to specific users:", notificationData);
-  // Simulate API call
-  return new Promise((resolve) => setTimeout(resolve, 1500));
-};
-
-const sendNotificationToAll = async (notificationData: Omit<CreateNotificationDTO, 'recipientIds'>) => {
-  console.log("Sending notification to all users:", notificationData);
-  // Simulate API call
-  return new Promise((resolve) => setTimeout(resolve, 1500));
-};
+// Import the actual API calls for sending notifications
+import { sendPushNotification, sendNotificationToAll } from "../../services/notifications";
 
 type AdminNotificationSendNavigationProp = NativeStackNavigationProp<ParamListBase>;
 
@@ -65,7 +42,7 @@ export default function AdminNotificationSend() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendNotification = async () => {
-    setIsAlertOpen(false); 
+    setIsAlertOpen(false);
     if (!title.trim() || !message.trim()) {
       setAlertText("Título e Mensagem são obrigatórios.");
       setAlertColor("text-warning");
@@ -176,7 +153,7 @@ export default function AdminNotificationSend() {
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
             <View className="flex-col w-full gap-4 text-center justify-start pb-24">
-              
+
               <View className="w-full">
                 <Text className="text-blue-200 text-sm font-interMedium mb-2">Título da Notificação</Text>
                 <Input>
@@ -210,7 +187,7 @@ export default function AdminNotificationSend() {
                 <Text className="text-blue-200 text-sm font-interMedium">Enviar para todos os usuários</Text>
                 <Switch
                   trackColor={{ false: colors.border, true: colors.green }}
-                  thumbColor={sendToAll ? colors.white : colors.neutral[400]}
+                  thumbColor={sendToAll ? colors.white : colors.neutral[300]}
                   ios_backgroundColor={colors.border}
                   onValueChange={setSendToAll}
                   value={sendToAll}
@@ -252,12 +229,12 @@ export default function AdminNotificationSend() {
                 </Input>
               </View>
 
-              {/* Sound Enabled Toggle */}
+              {/* Toggle para som*/}
               <View className="w-full flex-row items-center justify-between">
                 <Text className="text-blue-200 text-sm font-interMedium">Reproduzir Som</Text>
                 <Switch
                   trackColor={{ false: colors.border, true: colors.green }}
-                  thumbColor={soundEnabled ? colors.white : colors.neutral[400]}
+                  thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
                   ios_backgroundColor={colors.border}
                   onValueChange={setSoundEnabled}
                   value={soundEnabled}

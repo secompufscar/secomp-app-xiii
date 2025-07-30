@@ -3,13 +3,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { format, parseISO, addHours } from "date-fns";
+import { format, parseISO } from "date-fns"; // Removed addHours as it might not be needed if dates are stored consistently
 import { ptBR } from "date-fns/locale";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import { colors } from "../../styles/colors";
+
+import { getNotificationHistory, deleteNotificationHistory } from "../../services/notifications";
 
 interface Notification {
   id: string;
@@ -18,23 +20,9 @@ interface Notification {
   data?: Record<string, unknown>;
   status: 'PENDING' | 'SENT' | 'FAILED';
   error?: string;
-  sentAt: Date;
+  sentAt: Date; 
   createdBy?: string;
 }
-
-// GET Placeholder para API
-const getNotifications = async (): Promise<Notification[]> => {
-
-  console.log("Puxando notificacoes...");
-  return [];
-};
-
-const deleteNotification = async (notificationId: string): Promise<void> => {
-  // DELETE request para a api (placeholder tambem)
-  console.log(`Attempting to delete notification with ID: ${notificationId}`);
-  return new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
-};
-
 
 export default function AdminNotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -50,11 +38,15 @@ export default function AdminNotificationScreen() {
         setError(null);
 
         try {
-          const data = await getNotifications(); 
-          setNotifications(data);
-        } catch (err) {
+          const data = await getNotificationHistory();
+          const formattedData = data.map(notif => ({
+            ...notif,
+            sentAt: typeof notif.sentAt === 'string' ? parseISO(notif.sentAt) : notif.sentAt
+          }));
+          setNotifications(formattedData);
+        } catch (err: any) {
           console.error("Erro ao carregar notificações:", err);
-          setError("Não foi possível carregar as notificações. Tente novamente.");
+          setError(err.message || "Não foi possível carregar as notificações. Tente novamente.");
         } finally {
           setLoading(false);
         }
@@ -77,11 +69,12 @@ export default function AdminNotificationScreen() {
           text: "Excluir",
           onPress: async () => {
             try {
-              await deleteNotification(id); 
+              // Use the actual API call from the service file
+              await deleteNotificationHistory(id);
               setNotifications((prev) => prev.filter((notif) => notif.id !== id));
-            } catch (err) {
+            } catch (err: any) {
               console.error("Erro ao deletar notificação:", err);
-              setError("Não foi possível deletar a notificação. Tente novamente.");
+              setError(err.message || "Não foi possível deletar a notificação. Tente novamente.");
             }
           },
         },
@@ -92,10 +85,9 @@ export default function AdminNotificationScreen() {
   const renderNotificationItem = ({ item }: { item: Notification }) => (
     <Pressable
       onPress={() => {
-        // Detalhes da notificacao (por enquanto eh so um modal)
         Alert.alert(
           item.title,
-          `Mensagem: ${item.message}\nStatus: ${item.status}\nEnviado em: ${format(parseISO(item.sentAt.toString()), "dd/MM/yyyy HH:mm", { locale: ptBR })}`
+          `Mensagem: ${item.message}\nStatus: ${item.status}\nEnviado em: ${format(item.sentAt, "dd/MM/yyyy HH:mm", { locale: ptBR })}`
         );
       }}
       className="rounded-lg shadow-md mb-4 border border-iconbg"
@@ -111,14 +103,13 @@ export default function AdminNotificationScreen() {
                 Status: {item.status} -
               </Text>
               <Text className="text-gray-600 font-inter ml-1">
-                {format(parseISO(item.sentAt.toString()), "dd/MM/yyyy HH:mm", { locale: ptBR })}
+                {format(item.sentAt, "dd/MM/yyyy HH:mm", { locale: ptBR })}
               </Text>
             </View>
           </View>
 
-          {/* Delete */}
           <Pressable onPress={(e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             handleDeleteNotification(item.id);
           }}>
             {({ pressed }) => (
@@ -144,7 +135,6 @@ export default function AdminNotificationScreen() {
         <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
           <BackButton />
 
-          {/* Header */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de Notificações</Text>
             <Text className="text-gray-400 font-inter">
@@ -152,28 +142,7 @@ export default function AdminNotificationScreen() {
             </Text>
           </View>
 
-          {/* Enviar notificacao */}
           <Button title="Enviar Notificação" onPress={() => { navigation.navigate("AdminNotificationSend"); }} />
-
-          <View className="flex-1 mt-8">
-            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16" />}
-
-            {error && <Text className="text-red-400 text-center mt-8">{error}</Text>}
-
-            <FlatList
-              data={notifications}
-              renderItem={renderNotificationItem}
-              keyExtractor={(item) => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 36 }}
-              ListEmptyComponent={() => (
-                <View className="flex-1 items-center justify-center mt-4">
-                  <Text className="text-default font-poppinsMedium text-base">Nenhuma notificação encontrada</Text>
-                  <Text className="text-gray-400 font-inter mt-1">Que tal enviar a primeira?</Text>
-                </View>
-              )}
-            />
-          </View>
         </View>
       </View>
     </SafeAreaView>
