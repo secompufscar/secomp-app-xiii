@@ -141,23 +141,27 @@ export default function ParticipantsList() {
 
         <BackButton />
 
-        <View className="w-full mb-6">
-          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Participantes</Text>
+        <View className="w-full mb-8">
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-1">Participantes</Text>
 
           <Text className="text-blue-200 font-inter text-base">
             {activityName}
           </Text>
         </View>
 
-        <View className="w-full mb-10 flex-row gap-5">
-          <View className="flex-1 p-4 flex-row items-center gap-4 bg-iconbg/20 rounded border border-border">
-            <FontAwesome6 name="person" size={24} color={colors.border} />
-            <Text className="text-border font-interSemiBold leading-none">{total}</Text>
-          </View>
+        <View className="w-full mb-10 flex-col gap-3">
+          <Text className="text-gray-400 text-sm font-interMedium w-full">Número de participantes</Text>
 
-          <View className="flex-1 p-4 flex-row items-center gap-4 bg-success/10 rounded border border-success/80">
-            <FontAwesome6 name="person-circle-check" size={24} color={colors.success} />
-            <Text className="text-success font-interSemiBold leading-none">{presentes}</Text>
+          <View className="flex-row gap-5">
+            <View className="flex-1 p-4 flex-row items-center gap-4 bg-iconbg/20 rounded border border-border">
+              <FontAwesome6 name="person" size={24} color={colors.border} />
+              <Text className="text-border font-interSemiBold leading-none">{total}</Text>
+            </View>
+
+            <View className="flex-1 p-4 flex-row items-center gap-4 bg-success/10 rounded border border-success/80">
+              <FontAwesome6 name="person-circle-check" size={24} color={colors.success} />
+              <Text className="text-success font-interSemiBold leading-none">{presentes}</Text>
+            </View>
           </View>
         </View>
 
