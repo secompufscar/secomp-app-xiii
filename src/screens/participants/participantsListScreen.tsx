@@ -70,6 +70,37 @@ export default function ParticipantsList() {
     }, [activityId])
   )
 
+  // Item da lista
+  const renderParticipant = ({ item }: { item: ParticipantDetails }) => (
+    <View className="flex-row justify-between items-center py-3">
+      <Text className="flex-1 mr-2 text-white font-inter flex-wrap">{item.userName}</Text>
+
+      <View className="w-[90px] flex items-start justify-start">
+        <View className={`w-full p-3 rounded-full flex items-center justify-center ${item.presente ? 'bg-success/10' : 'bg-gray-500/10'}`}>
+          <Text
+            className={`font-interMedium text-center leading-none ${item.presente ? 'text-success' : 'text-gray-500'}`}
+          >
+            {item.presente ? 'presente' : 'ausente'}
+          </Text>
+        </View>
+      </View>
+    </View>
+  )
+
+  // Separador da lista
+  const renderSeparator = () => (
+    <View className="h-[1px] bg-[#3B465E] opacity-50 my-1" />
+  )
+
+  // Lista vazia
+  const renderEmptyComponent = () => (
+    <View className="flex-1 items-center justify-center px-4 mt-8">
+      <Text className="text-gray-400 text-center font-inter text-sm">
+        Nenhum participante encontrado
+      </Text>
+    </View>
+  )
+
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-blue-900">
@@ -114,31 +145,23 @@ export default function ParticipantsList() {
           </Text>
         </View>
 
+        <View className="flex flex-row mb-2 items-center justify-between">
+          <Text className="flex-1 mr-2 text-gray-400 text-sm font-interMedium">Nome</Text>
+
+          <View className="w-[90px] flex items-start justify-start">
+            <Text className="text-gray-400 text-sm font-interMedium">Status</Text>
+          </View>
+        </View>
+
+        <View className="h-[1px] bg-[#3B465E] opacity-50 my-1" />
+
         <FlatList
           data={list}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 16 }}
-          ItemSeparatorComponent={() => (
-            <View className="h-[1px] bg-border opacity-50 my-2 mx-6" />
-          )}
-          renderItem={({ item }) => (
-            <View className="flex-row justify-between items-center py-3">
-              <Text className="text-default font-inter">{item.userName}</Text>
-              <Text
-                className={`font-interMedium ${item.presente ? 'text-green' : 'text-gray-500'
-                  }`}
-              >
-                {item.presente ? 'presente' : 'ausente'}
-              </Text>
-            </View>
-          )}
-          ListEmptyComponent={() => (
-            <View className="flex-1 items-center justify-center px-4 mt-8">
-              <Text className="text-gray-400 text-center font-inter text-sm">
-                Nenhum participante encontrado
-              </Text>
-            </View>
-          )}
+          renderItem={renderParticipant}
+          ItemSeparatorComponent={renderSeparator}
+          ListEmptyComponent={renderEmptyComponent}
         />
       </View>
     </SafeAreaView>
