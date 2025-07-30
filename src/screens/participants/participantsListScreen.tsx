@@ -6,6 +6,7 @@ import { getParticipantsByActivity } from '../../services/userAtActivities'
 import { getUserDetails } from '../../services/users'
 import { colors } from '../../styles/colors';
 import BackButton from '../../components/button/backButton'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 type ParticipantsListRouteParams = {
   ParticipantsList: {
@@ -32,6 +33,9 @@ export default function ParticipantsList() {
   const [list, setList] = useState<ParticipantDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const total = list.length;
+  const presentes = list.filter((p) => p.presente).length;
+
 
   useFocusEffect(
     useCallback(() => {
@@ -137,12 +141,24 @@ export default function ParticipantsList() {
 
         <BackButton />
 
-        <View className="mb-8">
+        <View className="w-full mb-6">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Participantes</Text>
 
           <Text className="text-blue-200 font-inter text-base">
             {activityName}
           </Text>
+        </View>
+
+        <View className="w-full mb-10 flex-row gap-5">
+          <View className="flex-1 p-4 flex-row items-center gap-4 bg-iconbg/20 rounded border border-border">
+            <FontAwesome6 name="person" size={24} color={colors.border} />
+            <Text className="text-border font-interSemiBold leading-none">{total}</Text>
+          </View>
+
+          <View className="flex-1 p-4 flex-row items-center gap-4 bg-success/10 rounded border border-success/80">
+            <FontAwesome6 name="person-circle-check" size={24} color={colors.success} />
+            <Text className="text-success font-interSemiBold leading-none">{presentes}</Text>
+          </View>
         </View>
 
         <View className="flex flex-row mb-2 items-center justify-between">
@@ -159,6 +175,7 @@ export default function ParticipantsList() {
           data={list}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 16 }}
+          initialNumToRender={15}
           renderItem={renderParticipant}
           ItemSeparatorComponent={renderSeparator}
           ListEmptyComponent={renderEmptyComponent}
