@@ -28,6 +28,7 @@ import Activities from "./activities/activitiesScreen";
 
 import QRCode from "./credential/qrCodeReaderScreen";
 import AdminNotificationScreen from "./notification/adminNotificationsScreen"
+import AdminNotificationSend from "./notification/adminNotificationSend"
 
 import EditProfile from "./profile/editProfileScreen";
 
@@ -56,5 +57,6 @@ export {
   ActivityDetails,
   ParticipantsList,
   ActivityAdminCreate,
-  AdminNotificationScreen
+  AdminNotificationScreen,
+  AdminNotificationSend,
 };

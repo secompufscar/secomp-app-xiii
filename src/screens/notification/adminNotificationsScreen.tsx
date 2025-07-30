@@ -153,7 +153,7 @@ export default function AdminNotificationScreen() {
           </View>
 
           {/* Enviar notificacao */}
-          <Button title="Enviar Notificação" onPress={() => { navigation.navigate("NotificationSend"); }} />
+          <Button title="Enviar Notificação" onPress={() => { navigation.navigate("AdminNotificationSend"); }} />
 
           <View className="flex-1 mt-8">
             {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16" />}
