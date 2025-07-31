@@ -98,24 +98,18 @@ export default function SponsorsAdminCreate() {
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent={Platform.OS === "android"}
-        />
-
         <BackButton />
 
         <View className="mb-8">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar novo patrocinador</Text>
-          <Text className="text-gray-400 font-inter">
+          <Text className="text-blue-200 font-inter">
             Adicione um novo patrocinador para a Secomp!
           </Text>
         </View>
 
         <View className="flex-col flex-1 w-full text-center justify-start gap-4">
           <View className="w-full">
-            <Text className="text-gray-300 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
             <Input>
               <Input.Field
                 placeholder="Nome do patrocinador"
@@ -126,7 +120,20 @@ export default function SponsorsAdminCreate() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-300 text-sm font-interMedium mb-2">URL do logo</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Descrição</Text>
+            <Input>
+              <Input.Field
+                placeholder="Descrição do patrocinador"
+                value={description}
+                onChangeText={setDescription}
+                multiline
+                numberOfLines={3}
+              />
+            </Input>
+          </View>
+
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">URL do logo</Text>
             <Input>
               <Input.Field
                 placeholder="URL"
@@ -138,21 +145,7 @@ export default function SponsorsAdminCreate() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-300 text-sm font-interMedium mb-2">Descrição</Text>
-            <Input>
-              <Input.Field
-                placeholder="Descrição"
-                value={description}
-                onChangeText={setDescription}
-                multiline
-                numberOfLines={3}
-                style={{ height: 60, textAlignVertical: "top" }}
-              />
-            </Input>
-          </View>
-
-          <View className="w-full">
-            <Text className="text-gray-300 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
             <Input>
               <Input.Field
                 placeholder="Cota de patrocínio"
@@ -164,7 +157,7 @@ export default function SponsorsAdminCreate() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-300 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
             <Input>
               <Input.Field
                 placeholder="Link para a empresa"
@@ -176,7 +169,7 @@ export default function SponsorsAdminCreate() {
           </View>
 
           <View className="w-full">
-          <Text className="text-gray-300 text-sm font-interMedium mb-3">Tags</Text>
+          <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
             {loadingTags
               ? <ActivityIndicator color={colors.blue[200]} />
               : (

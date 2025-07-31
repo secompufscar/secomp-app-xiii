@@ -1,16 +1,6 @@
-// screens/sponsors/SponsorsAdminUpdateScreen.tsx
 import React, { useEffect, useState } from "react"
-import {
-  View,
-  Text,
-  Alert,
-  ActivityIndicator,
-  Pressable,
-} from "react-native"
+import { View, Text, Alert, ActivityIndicator, Pressable } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import AppLayout from "../../components/app/appLayout"
-import BackButton from "../../components/button/backButton"
-import Button from "../../components/button/button"
 import { Input } from "../../components/input/input"
 import { useForm, Controller } from "react-hook-form"
 import { getSponsorById, updateSponsor, linkTagToSponsor, unlinkTagFromSponsor, Sponsor, UpdateSponsorData } from "../../services/sponsors";
@@ -18,6 +8,9 @@ import { getTags, Tag } from "../../services/tags";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { colors } from "../../styles/colors"
+import AppLayout from "../../components/app/appLayout"
+import BackButton from "../../components/button/backButton"
+import Button from "../../components/button/button"
 
 type RouteParams = { SponsorsAdminUpdate: { id: string } }
 type FormData = {
@@ -26,6 +19,19 @@ type FormData = {
   logoUrl: string
   link: string
   starColor: string
+}
+
+function parseStarColor(hexColor: string): string {
+  switch (hexColor) {
+    case "#4B8BF5":
+      return "Diamante"
+    case "#F3C83D":
+      return "Ouro"
+    case "#B8D1E0":
+      return "Prata"
+    default:
+      return "Default"
+  }
 }
 
 export default function SponsorsAdminUpdateScreen() {
@@ -53,7 +59,7 @@ export default function SponsorsAdminUpdateScreen() {
 
   // Carrega os dados do patrocinador e faz reset dos campos
   useEffect(() => {
-    ; (async () => {
+    (async () => {
       try {
         const data: Sponsor = await getSponsorById(id)
         reset({
@@ -61,12 +67,12 @@ export default function SponsorsAdminUpdateScreen() {
           description: data.description ?? "",
           logoUrl: data.logoUrl ?? "",
           link: data.link ?? "",
-          starColor: data.starColor ?? "",
+          starColor: parseStarColor(data.starColor ?? ""),
         })
         setOriginalTagIds(data.tags)
         setSelectedTagIds(data.tags)
 
-        // busca todas as tags
+        // Busca todas as tags
         const all = await getTags();
         setAllTags(all);
       } catch {
@@ -82,7 +88,7 @@ export default function SponsorsAdminUpdateScreen() {
     return (
       <Pressable
         key={tag.id}
-        className={`px-3 py-1 rounded-full ${isSelected ? 'bg-blue-500' : 'bg-background'}`}
+        className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500 border-blue-500" : "border-gray-600"}`}
         onPress={() => {
           setSelectedTagIds(old =>
             isSelected
@@ -91,7 +97,7 @@ export default function SponsorsAdminUpdateScreen() {
           )
         }}
       >
-        <Text className={isSelected ? 'text-white' : 'text-gray-400'}>{tag.name}</Text>
+        <Text className={isSelected ? "text-white font-interMedium" : "text-gray-400 font-interMedium"}>{tag.name}</Text>
       </Pressable>
     )
   }
@@ -113,10 +119,23 @@ export default function SponsorsAdminUpdateScreen() {
   }
 
   const onSubmit = async (formData: OnSubmitParams): Promise<void> => {
+    const mappedStarColor = (() => {
+      switch (formData.starColor.toLowerCase()) {
+        case "diamante":
+          return "#4B8BF5"
+        case "ouro":
+          return "#F3C83D"
+        case "prata":
+          return "#B8D1E0"
+        default:
+          return "#CECECE"
+      }
+    })()
+
     setSaving(true);
     try {
       // 1) atualiza dados básicos
-      await updateSponsor(id, formData as UpdateSponsorData);
+      await updateSponsor(id, {...formData, starColor: mappedStarColor});
 
       // 2) sincroniza tags
       const added: string[] = selectedTagIds.filter(t => !originalTagIds.includes(t));
@@ -148,127 +167,117 @@ export default function SponsorsAdminUpdateScreen() {
         <BackButton />
 
         <View className="mb-8">
-          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-            Editar Patrocinador
-          </Text>
-          <Text className="text-gray-400 font-inter">
-            Atualize as informações abaixo
+          <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Editar patrocinador</Text>
+          <Text className="text-blue-200 font-inter">
+            Atualize as informações de um patrocinador existente
           </Text>
         </View>
 
-        <View className="flex-col flex-1 w-full gap-3 text-center justify-start">
-          {/** Nome */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-1">
-            Nome
-          </Text>
-          <Controller
-            control={control}
-            name="name"
-            defaultValue=""
-            rules={{ required: true }}
-            render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
-              <Input>
-                <Input.Field
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  placeholder="Nome do patrocinador"
-                />
-              </Input>
-            )}
-          />
+        <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
+            <Controller
+              control={control}
+              name="name"
+              defaultValue=""
+              rules={{ required: true }}
+              render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
+                <Input>
+                  <Input.Field
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    placeholder="Nome do patrocinador"
+                  />
+                </Input>
+              )}
+            />
+          </View>
 
-          {/** Descrição */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-1 mt-4">
-            Descrição
-          </Text>
-          <Controller
-            control={control}
-            name="description"
-            defaultValue=""
-            render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
-              <Input>
-                <Input.Field
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  placeholder="Descrição"
-                  multiline
-                  numberOfLines={3}
-                  style={{ color: '#fff' }}
-                />
-              </Input>
-            )}
-          />
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Descrição</Text>
+            <Controller
+              control={control}
+              name="description"
+              defaultValue=""
+              rules={{ required: true }}
+              render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
+                <Input>
+                  <Input.Field
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    placeholder="Descrição"
+                    style={{ color: '#fff' }}
+                  />
+                </Input>
+              )}
+            />
+          </View>
 
-          {/** Logo URL */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-1 mt-4">
-            Logo URL
-          </Text>
-          <Controller
-            control={control}
-            name="logoUrl"
-            defaultValue=""
-            render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
-              <Input>
-                <Input.Field
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  placeholder="https://..."
-                  autoCapitalize="none"
-                />
-              </Input>
-            )}
-          />
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">URL do logo</Text>
+            <Controller
+              control={control}
+              name="logoUrl"
+              defaultValue=""
+              rules={{ required: true }}
+              render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
+                <Input>
+                  <Input.Field
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    placeholder="https://..."
+                    autoCapitalize="none"
+                  />
+                </Input>
+              )}
+            />
+          </View>
 
-          {/** Link */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-1 mt-4">
-            Link
-          </Text>
-          <Controller
-            control={control}
-            name="link"
-            defaultValue=""
-            render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
-              <Input>
-                <Input.Field
-                  value={field.value}
-                  onChangeText={field.onChange}
-                  placeholder="https://site.com"
-                  autoCapitalize="none"
-                />
-              </Input>
-            )}
-          />
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
+            <Controller
+              control={control}
+              name="starColor"
+              defaultValue=""
+              rules={{ required: true }}
+              render={({field: { value, onChange }}: {field: { value: string; onChange: (text: string) => void }}) => (
+                <Input>
+                  <Input.Field
+                    value={value}
+                    onChangeText={onChange}
+                    placeholder="#FFD700"
+                    autoCapitalize="none"
+                  />
+                </Input>
+              )}
+            />
+          </View>
 
-          {/** Cor da Estrela */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-1 mt-4">
-            Cor da estrela
-          </Text>
-          <Controller
-            control={control}
-            name="starColor"
-            defaultValue=""
-            render={({
-              field: { value, onChange },
-            }: {
-              field: { value: string; onChange: (text: string) => void }
-            }) => (
-              <Input>
-                <Input.Field
-                  value={value}
-                  onChangeText={onChange}
-                  placeholder="#FFD700"
-                  autoCapitalize="none"
-                />
-              </Input>
-            )}
-          />
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
+            <Controller
+              control={control}
+              name="link"
+              defaultValue=""
+              rules={{ required: true }}
+              render={({ field }: { field: { value: string; onChange: (text: string) => void } }) => (
+                <Input>
+                  <Input.Field
+                    value={field.value}
+                    onChangeText={field.onChange}
+                    placeholder="https://site.com"
+                    autoCapitalize="none"
+                  />
+                </Input>
+              )}
+            />
+          </View>
 
-          {/* === Seção de seleção de tags === */}
-          <Text className="text-blue-200 text-sm font-interMedium mb-2 mt-4">
-            Tags
-          </Text>
-          <View className="flex-row flex-wrap gap-2 mb-6">
-            {allTags.map(renderTagCheckbox)}
+          <View className="w-full">
+            <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
+            <View className="flex-row flex-wrap gap-3 mb-2">
+              {allTags.map(renderTagCheckbox)}
+            </View>
           </View>
 
           {saving ? (
