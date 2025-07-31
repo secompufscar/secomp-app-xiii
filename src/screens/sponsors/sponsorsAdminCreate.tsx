@@ -3,13 +3,13 @@ import { View, Text, StatusBar, Platform, ActivityIndicator, Alert, TouchableOpa
 import { SafeAreaView } from "react-native-safe-area-context"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { ParamListBase, useNavigation } from "@react-navigation/native"
-import AppLayout from "../../components/app/appLayout"
-import BackButton from "../../components/button/backButton"
-import Button from "../../components/button/button"
 import { Input } from "../../components/input/input"
 import { createSponsor } from "../../services/sponsors"
 import { getTags, Tag } from "../../services/tags";
 import { colors } from "../../styles/colors"
+import AppLayout from "../../components/app/appLayout"
+import BackButton from "../../components/button/backButton"
+import Button from "../../components/button/button"
 
 export default function SponsorsAdminCreate() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -28,6 +28,7 @@ export default function SponsorsAdminCreate() {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [tagError, setTagError] = useState<string | null>(null)
 
   // Ao montar o componente, busca todas as tags
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function SponsorsAdminCreate() {
         const tags = await getTags();
         setAllTags(tags);
       } catch {
-        Alert.alert("Erro", "Não foi possível carregar as tags.");
+        setTagError("Não foi possível carregar as tags")
       } finally {
         setLoadingTags(false);
       }
@@ -52,34 +53,47 @@ export default function SponsorsAdminCreate() {
     );
   };
 
+  const handleCreate = async () => {
+    setError(null)
 
-const handleCreate = async () => {
-  setError(null)
+    if (!name.trim() || !logoUrl.trim() || !description.trim() || !starColor.trim() || !link.trim()) {
+      setError("Preencha todos os campos")
+      return
+    }
 
-  if (!name.trim() || !logoUrl.trim() || !description.trim()) {
-    setError("Preencha pelo menos nome, logo e descrição.")
-    return
+    const mappedStarColor = (() => {
+      switch (starColor.toLowerCase()) {
+        case "diamante":
+          return "#4b8bf5"
+        case "ouro":
+          return "#F3C83D"
+        case "prata":
+          return "#B8D1E0"
+        default:
+          return "#CECECE"
+      }
+    })()
+
+    setIsLoading(true)
+    
+    try {
+      await createSponsor({
+        name,
+        logoUrl,
+        description,
+        starColor: mappedStarColor,
+        link,
+        tagIds: selectedTagIds,      
+      })
+      Alert.alert("Sucesso", "Patrocinador criado.")
+      navigation.goBack()
+    } catch (err) {
+      console.error(err)
+      setError("Não foi possível criar. Verifique os dados.")
+    } finally {
+      setIsLoading(false)
+    }
   }
-
-  setIsLoading(true)
-  try {
-    await createSponsor({
-      name,
-      logoUrl,
-      description,
-      starColor,
-      link,
-      tagIds: selectedTagIds,      
-    })
-    Alert.alert("Sucesso", "Patrocinador criado.")
-    navigation.goBack()
-  } catch (err) {
-    console.error(err)
-    setError("Não foi possível criar. Verifique os dados.")
-  } finally {
-    setIsLoading(false)
-  }
-}
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -89,93 +103,106 @@ const handleCreate = async () => {
           backgroundColor="transparent"
           translucent={Platform.OS === "android"}
         />
+
         <BackButton />
+
         <View className="mb-8">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar novo patrocinador</Text>
           <Text className="text-gray-400 font-inter">
-            Crie um novo patrocinador da Secomp!
+            Adicione um novo patrocinador para a Secomp!
           </Text>
         </View>
 
-        {error && (
-          <Text className="text-danger mb-4 text-sm font-inter">{error}</Text>
-        )}
+        <View className="flex-col flex-1 w-full text-center justify-start gap-4">
+          <View className="w-full">
+            <Text className="text-gray-300 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
+            <Input>
+              <Input.Field
+                placeholder="Nome do patrocinador"
+                value={name}
+                onChangeText={setName}
+              />
+            </Input>
+          </View>
 
-        <View className="flex-col flex-1 w-full gap-3 text-center justify-start">
-          <Text className="text-blue-200 text-sm font-interMedium">Nome do patrocinador</Text>
-          <Input>
-            <Input.Field
-              placeholder="Nome do patrocinador"
-              value={name}
-              onChangeText={setName}
-            />
-          </Input>
+          <View className="w-full">
+            <Text className="text-gray-300 text-sm font-interMedium mb-2">URL do logo</Text>
+            <Input>
+              <Input.Field
+                placeholder="URL"
+                value={logoUrl}
+                onChangeText={setLogoUrl}
+                autoCapitalize="none"
+              />
+            </Input>
+          </View>
 
-          <Text className="text-blue-200 text-sm font-interMedium">URL do logo</Text>
-          <Input>
-            <Input.Field
-              placeholder="URL do logo"
-              value={logoUrl}
-              onChangeText={setLogoUrl}
-              autoCapitalize="none"
-            />
-          </Input>
+          <View className="w-full">
+            <Text className="text-gray-300 text-sm font-interMedium mb-2">Descrição</Text>
+            <Input>
+              <Input.Field
+                placeholder="Descrição"
+                value={description}
+                onChangeText={setDescription}
+                multiline
+                numberOfLines={3}
+                style={{ height: 60, textAlignVertical: "top" }}
+              />
+            </Input>
+          </View>
 
-          <Text className="text-blue-200 text-sm font-interMedium">Descrição</Text>
-          <Input>
-            <Input.Field
-              placeholder="Descrição"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-              numberOfLines={3}
-              style={{ height: 80, textAlignVertical: "top" }}
-            />
-          </Input>
+          <View className="w-full">
+            <Text className="text-gray-300 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
+            <Input>
+              <Input.Field
+                placeholder="Cota de patrocínio"
+                value={starColor}
+                onChangeText={setStarColor}
+                autoCapitalize="none"
+              />
+            </Input>
+          </View>
 
-          <Text className="text-blue-200 text-sm font-interMedium">Cor da estrela</Text>
-          <Input>
-            <Input.Field
-              placeholder="Cor da estrela (ex: #FFD700)"
-              value={starColor}
-              onChangeText={setStarColor}
-              autoCapitalize="none"
-            />
-          </Input>
+          <View className="w-full">
+            <Text className="text-gray-300 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
+            <Input>
+              <Input.Field
+                placeholder="Link para a empresa"
+                value={link}
+                onChangeText={setLink}
+                autoCapitalize="none"
+              />
+            </Input>
+          </View>
 
-          <Text className="text-blue-200 text-sm font-interMedium">Link para a página do patrocinador</Text>
-          <Input>
-            <Input.Field
-              placeholder="Link (opcional)"
-              value={link}
-              onChangeText={setLink}
-              autoCapitalize="none"
-            />
-          </Input>
+          <View className="w-full">
+          <Text className="text-gray-300 text-sm font-interMedium mb-3">Tags</Text>
+            {loadingTags
+              ? <ActivityIndicator color={colors.blue[200]} />
+              : (
+                <View className="flex-row flex-wrap gap-3 mb-2">
+                  {allTags.map(tag => {
+                    const selected = selectedTagIds.includes(tag.id);
+                    return (
+                      <TouchableOpacity
+                        key={tag.id}
+                        onPress={() => toggleTag(tag.id)}
+                        className={`px-4 py-2 rounded-full border ${selected ? "bg-blue-500 border-blue-500" : "border-gray-600"}`}
+                      >
+                        <Text className={selected ? "text-white font-interMedium" : "text-gray-400 font-interMedium"}>
+                          {tag.name}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )
+            }
+          </View>
 
-          <Text className="text-blue-200 text-sm font-interMedium">Tags</Text>
-          {loadingTags
-            ? <ActivityIndicator color={colors.blue[200]} />
-            : (
-              <View className="flex-row flex-wrap gap-2 mb-6">
-                {allTags.map(tag => {
-                  const selected = selectedTagIds.includes(tag.id);
-                  return (
-                    <TouchableOpacity
-                      key={tag.id}
-                      onPress={() => toggleTag(tag.id)}
-                      className={`px-3 py-1 rounded-full border ${selected ? "bg-blue-500 border-blue-500" : "border-gray-600"
-                        }`}
-                    >
-                      <Text className={selected ? "text-white font-interMedium" : "text-gray-400 font-interMedium"}>
-                        {tag.name}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            )
-          }
+          {error && (
+            <Text className="text-danger mb-4 text-sm font-inter">{error}</Text>
+          )}
 
           {isLoading ? (
             <ActivityIndicator

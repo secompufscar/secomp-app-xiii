@@ -123,7 +123,7 @@ export default function SponsorsAdmin() {
             </Text>
           </View>
 
-          <Button title="Criar patrocinador" className="mb-4" onPress={() => navigation.navigate("SponsorsAdminCreate")}/>
+          <Button title="Criar patrocinador" onPress={() => navigation.navigate("SponsorsAdminCreate")}/>
 
           {/* Lista de patrocinadores */}
           <View className="flex-1 mt-8">

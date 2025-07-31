@@ -142,7 +142,7 @@ export default function EventAdminCreate() {
           <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
             {/* Ano da edição */}
             <View className="w-full">
-              <Text className="text-blue-200 text-sm font-interMedium mb-2">Ano da edição</Text>
+              <Text className="text-gray-300 text-sm font-interMedium mb-2">Ano da edição</Text>
               <Input>
                 <FontAwesome5 name="calendar-week" size={20} color={colors.border} />
 
@@ -158,7 +158,7 @@ export default function EventAdminCreate() {
             <View className="w-full z-10 mb-2">
               {Platform.OS === 'web' ? (
                 <View>
-                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de início</Text>
+                  <Text className="text-gray-300 text-sm font-interMedium mb-2">Data de início</Text>
                   <DatePicker
                     selected={startDate}
                     onChange={(date: Date | null) => {
@@ -185,7 +185,7 @@ export default function EventAdminCreate() {
                 </View>
               ) : (
                 <Pressable onPress={() => setShowStartDatePicker(true)}>
-                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de início</Text>
+                  <Text className="text-gray-300 text-sm font-interMedium mb-2">Data de início</Text>
                   <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
                     <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
                     <Text className="text-white font-inter text-base ml-4">
@@ -200,7 +200,7 @@ export default function EventAdminCreate() {
             <View className="w-full">
               {Platform.OS === 'web' ? (
                 <View>
-                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de fim</Text>
+                  <Text className="text-gray-300 text-sm font-interMedium mb-2">Data de fim</Text>
                   <DatePicker
                     selected={endDate}
                     onChange={(date: Date | null) => {
@@ -226,7 +226,7 @@ export default function EventAdminCreate() {
                 </View>
               ) : (
                 <Pressable onPress={() => setShowEndDatePicker(true)}>
-                  <Text className="text-blue-200 text-sm font-interMedium mb-2">Data de fim</Text>
+                  <Text className="text-gray-300 text-sm font-interMedium mb-2">Data de fim</Text>
                   <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center px-4" pointerEvents="none">
                     <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
                     <Text className="text-white font-inter text-base ml-4">
