@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, FlatList, Pressable, Modal, TouchableOpacity, ActivityIndicator, Alert, Image, StatusBar, Platform } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, Alert, Image, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../styles/colors";
 import { useAuth } from "../../hooks/AuthContext";
@@ -7,6 +7,7 @@ import { getSponsors, deleteSponsor, Sponsor } from "../../services/sponsors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import ConfirmationOverlay from "../../components/modal/confirmationOverlay";
 import Button from "../../components/button/button";
 import BackButton from "../../components/button/backButton";
 
@@ -52,9 +53,12 @@ export default function SponsorsAdmin() {
   // Deleta o patrocinador selecionado
   const handleDelete = async () => {
     if (!toDeleteId) return;
+
+    setModalVisible(false); 
+
     try {
       await deleteSponsor(toDeleteId);
-      await fetchSponsors();
+      setList(prevList => prevList.filter(item => item.id !== toDeleteId));
     } catch {
       Alert.alert("Erro", "Falha ao remover.");
     } finally {
@@ -84,6 +88,7 @@ export default function SponsorsAdmin() {
           {/* Botão de deletar evento */}
           <Pressable onPress={(e) => {
             e.stopPropagation(); 
+            confirmDelete(item.id);
           }}>
             {({ pressed }) => (
               <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
@@ -142,35 +147,14 @@ export default function SponsorsAdmin() {
           </View>
         </View>
 
-        {/* Modal de confirmação de exclusão */}
-        <Modal
-          transparent
-          animationType="fade"
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View className="flex-1 bg-black/40 justify-center items-center">
-            <View className="bg-blue-800 rounded-lg p-6 w-4/5">
-              <Text className="text-white text-lg font-poppinsSemiBold mb-4">
-                Confirmar exclusão
-              </Text>
-              <Text className="text-gray-300 mb-6">
-                Tem certeza que deseja remover este patrocinador?
-              </Text>
-              <View className="flex-row justify-end space-x-4">
-                <TouchableOpacity
-                  onPress={() => setModalVisible(false)}
-                  className="px-4 py-2 rounded bg-gray-600"
-                >
-                  <Text className="text-white">Cancelar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleDelete} className="px-4 py-2 rounded bg-red-600">
-                  <Text className="text-white">Excluir</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <ConfirmationOverlay
+            visible={modalVisible}
+            title="Confirmar exclusão"
+            message="Tem certeza que deseja remover este patrocinador?"
+            onCancel={() => {setModalVisible(false)}}
+            onConfirm={handleDelete}
+            confirmText="Excluir"
+        />
       </View>
     </SafeAreaView>
   );
