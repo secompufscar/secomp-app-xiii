@@ -62,7 +62,7 @@ export default function EventAdmin() {
             e.stopPropagation(); 
           }}>
             {({ pressed }) => (
-              <View className={`flex w-[44px] h-full items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
+              <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
                 <FontAwesome name="trash" size={20} color={colors.danger} />
               </View>
             )}
@@ -70,6 +70,13 @@ export default function EventAdmin() {
         </View>
       )}
     </Pressable>
+  );
+
+  // Lista vazia
+  const emptyList = () => (
+    <View className="flex-1 items-center justify-center mt-2">
+      <Text className="text-gray-400 font-inter">Nenhum evento encontrado</Text>
+    </View>
   );
 
   return (
@@ -102,15 +109,10 @@ export default function EventAdmin() {
             <FlatList
               data={events}
               renderItem={renderEventItem}
+              ListEmptyComponent={emptyList}
               keyExtractor={(item) => item.year.toString()}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 36 }}
-              ListEmptyComponent={() => (
-                <View className="flex-1 items-center justify-center mt-4">
-                  <Text className="text-default font-poppinsMedium text-base">Nenhum evento encontrado</Text>
-                  <Text className="text-gray-400 font-inter mt-1">Que tal criar o primeiro?</Text>
-                </View>
-              )}
             />
           </View>
         </View>

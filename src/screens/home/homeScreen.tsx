@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../styles/colors";
-
+import { getCurrentEvent } from "../../services/events";
 import AppLayout from "../../components/app/appLayout";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
@@ -18,6 +18,27 @@ export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user }: any = useAuth();
   const [isBtnPressed, setIsBtnPressed] = useState(false);
+  const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
+
+  useEffect(() => {
+    const fetchAndSetEventStatus = async () => {
+      try {
+        const currentEvent = await getCurrentEvent();
+        
+        if (currentEvent) {
+          const message = getEventStatusMessage(currentEvent);
+          setEventStatusMessage(message);
+        } else {
+          setEventStatusMessage("Nenhum evento ativo no momento");
+        }
+      } catch (error) {
+        console.error("Falha ao buscar dados do evento:", error);
+        setEventStatusMessage("Não foi possível carregar o evento");
+      }
+    };
+
+    fetchAndSetEventStatus();
+  }, []);
 
   // Mensagem baseada no horário do dia
   const getCurrentTime = () => {
@@ -32,27 +53,38 @@ export default function Home() {
   };
 
   // Mensagem baseada no dia do evento
-  const getCurrentDay = () => {
-    const day = new Date().toLocaleDateString();
+  const getEventStatusMessage = (event: Events): string => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    switch (day) {
-      case "29/09/2025":
-        return "Hoje é o 1° dia de evento";
-      case "30/09/2025":
-        return "Hoje é o 2° dia de evento";
-      case "01/10/2025":
-        return "Hoje é o 3° dia de evento";
-      case "02/10/2025":
-        return "Hoje é o 4° dia de evento";
-      case "03/10/2025":
-        return "Hoje é o último dia de evento";
-      default:
-        return `Hoje não é dia de evento`;
+    // Converte as strings de data da API (que estão em formato ISO 8601) para objetos Date.
+    const startDate = new Date(event.startDate);
+    const endDate = new Date(event.endDate);
+
+    // Também normaliza as datas do evento para o início do dia no fuso horário local.
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    
+    if (today < startDate) {
+      return "O evento ainda não começou";
     }
+
+    if (today > endDate) {
+      return "O evento já terminou. Até a próxima!";
+    }
+
+    const diffTime = today.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const currentEventDay = diffDays + 1;
+
+    if (today.getTime() === endDate.getTime()) {
+      return "Hoje é o último dia de evento";
+    }
+
+    return `Hoje é o ${currentEventDay}° dia de evento`;
   };
 
   const greeting = getCurrentTime();
-  const eventDay = getCurrentDay();
 
   // Nome do usuário
   const nomeCompleto = new BeautifulName(user.nome).beautifulName;
@@ -73,8 +105,8 @@ export default function Home() {
       <AppLayout>
         <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
           <View className="flex-col h-full flex-1 ">
-            <Text className="text-base text-blue-100 font-inter">{eventDay}</Text>
-            <View className="flex-row items-center justify-start mt-[7px]">
+            <Text className="text-base text-blue-100 font-inter">{eventStatusMessage}</Text>
+            <View className="flex-row items-center justify-start mt-[6px]">
               <Text className="text-[18px] text-white font-poppinsSemiBold">{greeting} </Text>
               <Text className="text-[18px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
             </View>

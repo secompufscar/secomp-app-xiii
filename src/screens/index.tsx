@@ -16,7 +16,7 @@ import Sponsors from "./sponsors/sponsorsScreen";
 import SponsorsAdmin from "./sponsors/sponsorsAdmin";
 import SponsorsAdminCreate from "./sponsors/sponsorsAdminCreate";
 import SponsorsAdminUpdate from "./sponsors/sponsorsAdminUpdate";
-import TagsAdmin from "./sponsors/TagsAdmin";
+import TagsAdmin from "./tags/tagsAdmin";
 
 import UserProfile from "./profile/userProfileScreen";
 
