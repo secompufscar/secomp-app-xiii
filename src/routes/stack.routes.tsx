@@ -21,7 +21,8 @@ import {
   SponsorsAdmin,
   SponsorsAdminCreate,
   SponsorsAdminUpdate,
-  TagsAdmin
+  TagsAdmin,
+  Notifications
 } from '../screens'
 
 import { ScheduleItemProps } from "../entities/schedule-item";
@@ -47,6 +48,7 @@ type StackNavigation = {
   SponsorsAdminCreate: undefined;
   SponsorsAdminUpdate: { id: string };
   TagsAdmin: undefined;
+  Notifications: undefined;
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -73,7 +75,7 @@ export default function StackRoutes() {
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
       <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
-
+      <Stack.Screen name="Notifications" component={Notifications} />
     </Stack.Navigator>
   );
 }

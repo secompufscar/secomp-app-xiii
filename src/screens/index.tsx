@@ -34,6 +34,8 @@ import QRCode from "./credential/qrCodeReaderScreen";
 
 import EditProfile from "./profile/editProfileScreen";
 
+import Notifications from "./notification/notificationsScreen";
+
 export {
   Login,
   SignUp,
@@ -43,6 +45,7 @@ export {
   VerifyEmail,
   SetNewPassword,
   Home,
+  Notifications,
   EventGuide,
   Sponsors,
   SponsorsAdmin,
