@@ -7,7 +7,7 @@ import { getSponsors, deleteSponsor, Sponsor } from "../../services/sponsors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import ConfirmationOverlay from "../../components/modal/confirmationOverlay";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import Button from "../../components/button/button";
 import BackButton from "../../components/button/backButton";
 

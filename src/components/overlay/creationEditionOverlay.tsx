@@ -1,13 +1,12 @@
-// src/components/overlay/ConfirmationOverlay.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, ReactNode } from 'react';
 import { View, Text, Platform, StatusBar, Pressable } from 'react-native';
-import { colors } from '../../styles/colors'; 
+import { colors } from '../../styles/colors';
 import * as NavigationBar from 'expo-navigation-bar';
 
-interface ConfirmationOverlayProps {
+interface CreationEditionOverlayProps {
   visible: boolean;
   title: string;
-  message: string;
+  children: ReactNode;
   onCancel: () => void;
   onConfirm: () => void;
   confirmText?: string;
@@ -17,23 +16,22 @@ interface ConfirmationOverlayProps {
 
 const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
 
-const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
+const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
   visible,
   title,
-  message,
+  children,
   onCancel,
   onConfirm,
-  confirmText = 'Excluir',
+  confirmText = 'Salvar',
   cancelText = 'Cancelar',
-  originalNavBarColor = colors.blue[900], 
+  originalNavBarColor = colors.blue[900],
 }) => {
-
   useEffect(() => {
     // Esta função só fará algo no Android
     const setAndroidNavColor = async (color: string) => {
       if (Platform.OS === 'android') {
         await NavigationBar.setBackgroundColorAsync(color);
-        await NavigationBar.setButtonStyleAsync('light'); 
+        await NavigationBar.setButtonStyleAsync('light');
       }
     };
 
@@ -42,7 +40,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
       StatusBar.setBackgroundColor(OVERLAY_COLOR, true);
       setAndroidNavColor(OVERLAY_COLOR);
     } else {
-      StatusBar.setBackgroundColor('transparent', true); 
+      StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);
     }
 
@@ -51,7 +49,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
       StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);
     };
-  }, [visible, originalNavBarColor]); // Re-executa o efeito quando `visible` muda
+  }, [visible, originalNavBarColor]); 
 
   if (!visible) {
     return null;
@@ -59,11 +57,14 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
 
   return (
     <View className="absolute inset-0 z-10 flex-1 justify-center items-center bg-black/60 px-10">
-      <View className="bg-blue-900 rounded-lg p-8 w-full max-w-md">
-        <Text className="text-white text-lg font-poppinsSemiBold mb-3">{title}</Text>
-        <Text className="text-gray-400 mb-6 font-inter leading-normal">{message}</Text>
+      <View className="bg-blue-900 rounded-lg p-6 w-full max-w-md">
+        <Text className="text-white text-lg font-poppinsSemiBold mb-4">{title}</Text>
+        
+        <View className="mb-6">
+            {children}
+        </View>
 
-        <View className="flex-row justify-end gap-4 mt-2">
+        <View className="flex-row justify-end gap-4">
           <Pressable
             onPress={onCancel}
             className="w-28 h-11 px-2 flex justify-center items-center rounded bg-gray-600 active:bg-gray-700"
@@ -73,7 +74,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
 
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-red-600 active:bg-red-700"
+            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-blue-500 active:bg-blue-600"
           >
             <Text className="text-white font-poppinsMedium">{confirmText}</Text>
           </Pressable>
@@ -83,4 +84,4 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
   );
 };
 
-export default ConfirmationOverlay;
+export default CreationEditionOverlay;
