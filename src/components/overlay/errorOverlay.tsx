@@ -2,28 +2,25 @@ import React, { useEffect } from 'react';
 import { View, Text, Platform, StatusBar, Pressable } from 'react-native';
 import { colors } from '../../styles/colors'; 
 import * as NavigationBar from 'expo-navigation-bar';
+import Feather from '@expo/vector-icons/Feather';
 
-interface ConfirmationOverlayProps {
+interface ErrorOverlayProps {
   visible: boolean;
   title: string;
   message: string;
-  onCancel: () => void;
   onConfirm: () => void;
   confirmText?: string;
-  cancelText?: string;
   originalNavBarColor?: string;
 }
 
 const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
 
-const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
+const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
   visible,
   title,
   message,
-  onCancel,
   onConfirm,
-  confirmText = 'Excluir',
-  cancelText = 'Cancelar',
+  confirmText = 'Erro',
   originalNavBarColor = colors.blue[900], 
 }) => {
 
@@ -57,24 +54,20 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
   }
 
   return (
-    <View className="absolute inset-0 z-10 flex-1 justify-center items-center bg-black/60 px-10">
+    <View className="absolute inset-0 z-10 flex-1 justify-center items-center bg-black/60 px-12">
       <View className="bg-blue-900 rounded-lg p-7 w-full max-w-md">
-        <Text className="text-white text-lg font-poppinsSemiBold mb-2">{title}</Text>
+        <View className="w-[36px] h-auto flex items-center rounded-lg bg-danger/30 p-2 mb-6">
+            <Feather name="x" size={20} color={colors.danger} />
+        </View>
+        <Text className="text-white text-lg font-poppinsSemiBold mb-1">{title}</Text>
         <Text className="text-gray-400 mb-6 font-inter leading-normal">{message}</Text>
 
-        <View className="flex-row justify-end gap-4 mt-2">
-          <Pressable
-            onPress={onCancel}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-gray-600 bg-gray-600/20 active:bg-gray-600/40"
-          >
-            <Text className="text-gray-400 font-poppinsMedium">{cancelText}</Text>
-          </Pressable>
-
+        <View className="flex-row justify-end">
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-red-600 active:bg-red-700"
+            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-danger bg-danger/10 active:bg-danger/20"
           >
-            <Text className="text-white font-poppinsMedium">{confirmText}</Text>
+            <Text className="text-danger font-poppinsMedium">{confirmText}</Text>
           </Pressable>
         </View>
       </View>
@@ -82,4 +75,4 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
   );
 };
 
-export default ConfirmationOverlay;
+export default ErrorOverlay;

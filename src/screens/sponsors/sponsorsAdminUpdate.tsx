@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, Alert, ActivityIndicator, Pressable } from "react-native"
+import { View, Text, ActivityIndicator, Pressable } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Input } from "../../components/input/input"
 import { useForm, Controller } from "react-hook-form"
@@ -11,6 +11,7 @@ import { colors } from "../../styles/colors"
 import AppLayout from "../../components/app/appLayout"
 import BackButton from "../../components/button/backButton"
 import Button from "../../components/button/button"
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 type RouteParams = { SponsorsAdminUpdate: { id: string } }
 type FormData = {
@@ -46,6 +47,9 @@ export default function SponsorsAdminUpdateScreen() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
   // react-hook-form setup
   const { control, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
@@ -59,6 +63,8 @@ export default function SponsorsAdminUpdateScreen() {
 
   // Carrega os dados do patrocinador e faz reset dos campos
   useEffect(() => {
+    setErrorModalVisible(false);
+
     (async () => {
       try {
         const data: Sponsor = await getSponsorById(id)
@@ -76,7 +82,9 @@ export default function SponsorsAdminUpdateScreen() {
         const all = await getTags();
         setAllTags(all);
       } catch {
-        Alert.alert("Erro", "Não foi possível carregar patrocinador.")
+        setErrorMessage("Não foi possível carregar os dados do patrocinador")
+        setErrorModalVisible(true);
+        navigation.goBack();
       } finally {
         setLoading(false)
       }
@@ -88,7 +96,7 @@ export default function SponsorsAdminUpdateScreen() {
     return (
       <Pressable
         key={tag.id}
-        className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500 border-blue-500" : "border-gray-600"}`}
+        className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"}`}
         onPress={() => {
           setSelectedTagIds(old =>
             isSelected
@@ -97,17 +105,9 @@ export default function SponsorsAdminUpdateScreen() {
           )
         }}
       >
-        <Text className={isSelected ? "text-white font-interMedium" : "text-gray-400 font-interMedium"}>{tag.name}</Text>
+        <Text className={isSelected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>{tag.name}</Text>
       </Pressable>
     )
-  }
-
-  interface SponsorUpdateData {
-    name: string;
-    description: string;
-    logoUrl: string;
-    link: string;
-    starColor: string;
   }
 
   interface OnSubmitParams {
@@ -133,7 +133,10 @@ export default function SponsorsAdminUpdateScreen() {
     })()
 
     setSaving(true);
+    
     try {
+      setErrorModalVisible(false);
+
       // 1) atualiza dados básicos
       await updateSponsor(id, {...formData, starColor: mappedStarColor});
 
@@ -144,10 +147,10 @@ export default function SponsorsAdminUpdateScreen() {
       await Promise.all(added.map((tagId: string) => linkTagToSponsor(id, tagId)));
       await Promise.all(removed.map((tagId: string) => unlinkTagFromSponsor(id, tagId)));
 
-      Alert.alert("Sucesso", "Dados e tags atualizados.");
       navigation.goBack();
     } catch {
-      Alert.alert("Erro", "Não foi possível salvar.");
+      setErrorMessage("Não foi possível salvar os dados do patrocinador")
+      setErrorModalVisible(true);
     } finally {
       setSaving(false);
     }
@@ -273,7 +276,7 @@ export default function SponsorsAdminUpdateScreen() {
             />
           </View>
 
-          <View className="w-full">
+          <View className="w-full mb-4">
             <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
             <View className="flex-row flex-wrap gap-3 mb-2">
               {allTags.map(renderTagCheckbox)}
@@ -289,12 +292,20 @@ export default function SponsorsAdminUpdateScreen() {
           ) : (
             <Button
               title="Salvar alterações"
-              className="mt-6 mb-12"
+              className="mt-auto mb-12"
               onPress={handleSubmit(onSubmit)}
             />
           )}
         </View>
       </AppLayout>
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro inesperado"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   )
 }

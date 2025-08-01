@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, StatusBar, Platform, ActivityIndicator, Alert, TouchableOpacity } from "react-native"
+import { View, Text, ActivityIndicator, Pressable } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { ParamListBase, useNavigation } from "@react-navigation/native"
@@ -10,6 +10,7 @@ import { colors } from "../../styles/colors"
 import AppLayout from "../../components/app/appLayout"
 import BackButton from "../../components/button/backButton"
 import Button from "../../components/button/button"
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 export default function SponsorsAdminCreate() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -29,6 +30,7 @@ export default function SponsorsAdminCreate() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [tagError, setTagError] = useState<string | null>(null)
+  const [errorModalVisible, setErrorModalVisible] = useState(false)
 
   // Ao montar o componente, busca todas as tags
   useEffect(() => {
@@ -54,10 +56,11 @@ export default function SponsorsAdminCreate() {
   };
 
   const handleCreate = async () => {
-    setError(null)
+    setError(null);
+    setErrorModalVisible(false);
 
     if (!name.trim() || !logoUrl.trim() || !description.trim() || !starColor.trim() || !link.trim()) {
-      setError("Preencha todos os campos")
+      setError("Preencha todos os campos!")
       return
     }
 
@@ -70,7 +73,7 @@ export default function SponsorsAdminCreate() {
         case "prata":
           return "#B8D1E0"
         default:
-          return "#CECECE"
+          return "#cfcfcf42"
       }
     })()
 
@@ -85,11 +88,11 @@ export default function SponsorsAdminCreate() {
         link,
         tagIds: selectedTagIds,      
       })
-      Alert.alert("Sucesso", "Patrocinador criado.")
+
       navigation.goBack()
     } catch (err) {
       console.error(err)
-      setError("Não foi possível criar. Verifique os dados.")
+      setErrorModalVisible(true);
     } finally {
       setIsLoading(false)
     }
@@ -126,8 +129,6 @@ export default function SponsorsAdminCreate() {
                 placeholder="Descrição do patrocinador"
                 value={description}
                 onChangeText={setDescription}
-                multiline
-                numberOfLines={3}
               />
             </Input>
           </View>
@@ -148,7 +149,7 @@ export default function SponsorsAdminCreate() {
             <Text className="text-gray-400 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
             <Input>
               <Input.Field
-                placeholder="Cota de patrocínio"
+                placeholder="Prata, Ouro ou Diamante"
                 value={starColor}
                 onChangeText={setStarColor}
                 autoCapitalize="none"
@@ -168,8 +169,8 @@ export default function SponsorsAdminCreate() {
             </Input>
           </View>
 
-          <View className="w-full">
-          <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
+          <View className="w-full mb-4">
+            <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
             {loadingTags
               ? <ActivityIndicator color={colors.blue[200]} />
               : (
@@ -177,15 +178,15 @@ export default function SponsorsAdminCreate() {
                   {allTags.map(tag => {
                     const selected = selectedTagIds.includes(tag.id);
                     return (
-                      <TouchableOpacity
+                      <Pressable
                         key={tag.id}
                         onPress={() => toggleTag(tag.id)}
-                        className={`px-4 py-2 rounded-full border ${selected ? "bg-blue-500 border-blue-500" : "border-gray-600"}`}
+                        className={`px-4 py-2 rounded-full border ${selected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"}`}
                       >
-                        <Text className={selected ? "text-white font-interMedium" : "text-gray-400 font-interMedium"}>
+                        <Text className={selected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>
                           {tag.name}
                         </Text>
-                      </TouchableOpacity>
+                      </Pressable>
                     );
                   })}
                 </View>
@@ -194,7 +195,7 @@ export default function SponsorsAdminCreate() {
           </View>
 
           {error && (
-            <Text className="text-danger mb-4 text-sm font-inter">{error}</Text>
+            <Text className="text-danger text-sm font-inter">{error}</Text>
           )}
 
           {isLoading ? (
@@ -204,12 +205,18 @@ export default function SponsorsAdminCreate() {
               className="mt-6"
             />
           ) : (
-            <View className="mt-6">
-              <Button title="Criar" className="mt-auto mb-12" onPress={handleCreate} />
-            </View>
+            <Button title="Criar" className="mt-auto mb-12" onPress={handleCreate} />
           )}
         </View>
       </AppLayout>
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro na criação"
+        message="Não foi possível criar este patrocinador"
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   )
 }

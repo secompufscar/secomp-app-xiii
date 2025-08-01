@@ -118,7 +118,7 @@ export default function TagsAdmin() {
               <FontAwesomeIcon icon={faTag} size={24} color="#a9c3f4ff" />
             </View>
 
-            <Text className="text-base text-white font-poppinsMedium">{item.name}</Text>
+            <Text className="text-base text-white font-poppins">{item.name}</Text>
           </View>
          
           {/* Botão de deletar evento */}
@@ -176,36 +176,36 @@ export default function TagsAdmin() {
               contentContainerStyle={{ paddingBottom: 36 }}
             />
           </View>
-          
-          {/* Modal de criação e edição */}
-          <CreationEditionOverlay
-            visible={modalVisible}
-            title={editingTag ? "Editar Tag" : "Nova Tag"}
-            confirmText={editingTag ? "Salvar" : "Criar"}
-            onCancel={() => setModalVisible(false)}
-            onConfirm={handleSave}
-          >
-            <Input>
-              <Input.Field
-                placeholder="Nome da tag"
-                value={newTagName}
-                onChangeText={setNewTagName}
-                autoFocus
-              />
-            </Input>
-          </CreationEditionOverlay>
-
-          {/* Modal de confirmação de exclusão */}
-          <ConfirmationOverlay
-              visible={deleteModalVisible}
-              title="Confirmar exclusão"
-              message="Tem certeza que deseja remover esta tag?"
-              onCancel={() => {setDeleteModalVisible(false)}}
-              onConfirm={handleConfirmDelete}
-              confirmText="Excluir"
-          />
         </View>
       </View>
+
+      {/* Modal de criação e edição */}
+      <CreationEditionOverlay
+        visible={modalVisible}
+        title={editingTag ? "Editar Tag" : "Nova Tag"}
+        confirmText={editingTag ? "Salvar" : "Criar"}
+        onCancel={() => setModalVisible(false)}
+        onConfirm={handleSave}
+      >
+        <Input>
+          <Input.Field
+            placeholder="Nome da tag"
+            value={newTagName}
+            onChangeText={setNewTagName}
+            autoFocus
+          />
+        </Input>
+      </CreationEditionOverlay>
+
+      {/* Modal de confirmação de exclusão */}
+      <ConfirmationOverlay
+          visible={deleteModalVisible}
+          title="Confirmar exclusão"
+          message="Tem certeza que deseja remover esta tag?"
+          onCancel={() => {setDeleteModalVisible(false)}}
+          onConfirm={handleConfirmDelete}
+          confirmText="Excluir"
+      />
     </SafeAreaView>
   );
 }

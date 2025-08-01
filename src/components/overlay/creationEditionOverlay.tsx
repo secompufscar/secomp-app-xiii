@@ -57,7 +57,7 @@ const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
 
   return (
     <View className="absolute inset-0 z-10 flex-1 justify-center items-center bg-black/60 px-10">
-      <View className="bg-blue-900 rounded-lg p-6 w-full max-w-md">
+      <View className="bg-blue-900 rounded-lg p-7 w-full max-w-md">
         <Text className="text-white text-lg font-poppinsSemiBold mb-4">{title}</Text>
         
         <View className="mb-6">
@@ -67,14 +67,14 @@ const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
         <View className="flex-row justify-end gap-4">
           <Pressable
             onPress={onCancel}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-gray-600 active:bg-gray-700"
+            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-gray-600 bg-gray-600/20 active:bg-gray-600/40"
           >
-            <Text className="text-white font-poppinsMedium">{cancelText}</Text>
+            <Text className="text-gray-400 font-poppinsMedium">{cancelText}</Text>
           </Pressable>
 
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-blue-500 active:bg-blue-600"
+            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-blue-500 active:opacity-80"
           >
             <Text className="text-white font-poppinsMedium">{confirmText}</Text>
           </Pressable>

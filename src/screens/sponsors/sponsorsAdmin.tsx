@@ -1,24 +1,24 @@
 import React, { useCallback, useState } from "react";
-import { View, Text, FlatList, Pressable, ActivityIndicator, Alert, Image, StatusBar, Platform } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, Image, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../styles/colors";
-import { useAuth } from "../../hooks/AuthContext";
 import { getSponsors, deleteSponsor, Sponsor } from "../../services/sponsors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 import Button from "../../components/button/button";
 import BackButton from "../../components/button/backButton";
 
 export default function SponsorsAdmin() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const { user } = useAuth();
 
   // Estado para armazenar a lista de patrocinadores
   const [list, setList] = useState<Sponsor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<string | null>(null);
 
@@ -55,12 +55,13 @@ export default function SponsorsAdmin() {
     if (!toDeleteId) return;
 
     setModalVisible(false); 
+    setErrorModalVisible(false);
 
     try {
       await deleteSponsor(toDeleteId);
       setList(prevList => prevList.filter(item => item.id !== toDeleteId));
     } catch {
-      Alert.alert("Erro", "Falha ao remover.");
+      setErrorModalVisible(true);
     } finally {
       setModalVisible(false);
       setToDeleteId(null);
@@ -73,16 +74,16 @@ export default function SponsorsAdmin() {
       onPress={() => {navigation.navigate("SponsorsAdminUpdate", { id: item.id })}}
     >
       {({ pressed }) => (
-        <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
+        <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-4 ${pressed ? "bg-background/80" : "bg-background"}`}>
           <View className="flex-1 flex-row items-center gap-5">
-            <View className="w-[36px] h-[36px] rounded">
+            <View className="w-[34px] h-[34px] rounded">
               <Image
                 source={{ uri: item.logoUrl }}
                 className="w-full h-full rounded"
               />
             </View>
 
-            <Text className="text-base text-white font-poppinsMedium">{item.name}</Text>
+            <Text className="text-base text-white font-poppins">{item.name}</Text>
           </View>
 
           {/* Botão de deletar evento */}
@@ -91,8 +92,8 @@ export default function SponsorsAdmin() {
             confirmDelete(item.id);
           }}>
             {({ pressed }) => (
-              <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
-                <FontAwesome name="trash" size={20} color={colors.danger} />
+              <View className={`flex w-[34px] h-[34px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
+                <FontAwesome name="trash" size={16} color={colors.danger} />
               </View>
             )}
           </Pressable>
@@ -146,16 +147,24 @@ export default function SponsorsAdmin() {
             />
           </View>
         </View>
-
-        <ConfirmationOverlay
-            visible={modalVisible}
-            title="Confirmar exclusão"
-            message="Tem certeza que deseja remover este patrocinador?"
-            onCancel={() => {setModalVisible(false)}}
-            onConfirm={handleDelete}
-            confirmText="Excluir"
-        />
       </View>
+
+      <ConfirmationOverlay
+        visible={modalVisible}
+        title="Confirmar exclusão"
+        message="Tem certeza que deseja remover este patrocinador?"
+        onCancel={() => {setModalVisible(false)}}
+        onConfirm={handleDelete}
+        confirmText="Excluir"
+      />
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro ao excluir"
+        message="Não foi possível excluir este patrocinador"
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
