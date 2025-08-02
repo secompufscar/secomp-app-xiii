@@ -68,7 +68,7 @@ export default function EventAdmin() {
   // Itens da lista
   const renderEventItem = ({ item }: { item: Events }) => (
     <Pressable
-      onPress={() => {navigation.navigate("")}}
+      onPress={() => {navigation.navigate("EventAdminUpdate", { id: item.id })}}
     >
       {({ pressed }) => (
         <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
