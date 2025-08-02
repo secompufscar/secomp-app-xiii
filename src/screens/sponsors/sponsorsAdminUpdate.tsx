@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react"
-import { View, Text, ActivityIndicator, Pressable } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { Input } from "../../components/input/input"
-import { useForm, Controller } from "react-hook-form"
+import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Input } from "../../components/input/input";
+import { useForm, Controller } from "react-hook-form";
 import { getSponsorById, updateSponsor, linkTagToSponsor, unlinkTagFromSponsor, Sponsor, UpdateSponsorData } from "../../services/sponsors";
-import { getTags, Tag } from "../../services/tags";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { colors } from "../../styles/colors"
-import AppLayout from "../../components/app/appLayout"
-import BackButton from "../../components/button/backButton"
-import Button from "../../components/button/button"
+import { getTags, Tag } from "../../services/tags";;
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { colors } from "../../styles/colors";
+import AppLayout from "../../components/app/appLayout";
+import BackButton from "../../components/button/backButton";
+import Button from "../../components/button/button";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 type RouteParams = { SponsorsAdminUpdate: { id: string } }
@@ -36,16 +36,16 @@ function parseStarColor(hexColor: string): string {
 }
 
 export default function SponsorsAdminUpdateScreen() {
-  const route = useRoute<RouteProp<RouteParams, "SponsorsAdminUpdate">>()
-  const navigation = useNavigation<NativeStackNavigationProp<any>>()
+  const route = useRoute<RouteProp<RouteParams, "SponsorsAdminUpdate">>();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   
-  const { id } = route.params
+  const { id } = route.params;
   const [originalTagIds, setOriginalTagIds] = useState<string[]>([]);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);

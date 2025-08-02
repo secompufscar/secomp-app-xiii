@@ -5,6 +5,8 @@ import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/
 import { useCallback, useState } from "react";
 import { getEvents, deleteEvent } from "../../services/events";
 import { colors } from "../../styles/colors";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -15,6 +17,9 @@ export default function EventAdmin() {
   const [events, setEvents] = useState<Events[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [toDeleteId, setToDeleteId] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -36,11 +41,34 @@ export default function EventAdmin() {
     }, []) 
   );
 
+  // Abre modal de confirmação e armazena ID a ser deletado
+  const confirmDelete = (id: string) => {
+    setToDeleteId(id);
+    setModalVisible(true);
+  };
+
+  // Deleta o evento selecionado
+  const handleDelete = async () => {
+    if (!toDeleteId) return;
+
+    setModalVisible(false); 
+    setErrorModalVisible(false);
+
+    try {
+      await deleteEvent(toDeleteId);
+      setEvents(prevList => prevList.filter(item => item.id !== toDeleteId));
+    } catch {
+      setErrorModalVisible(true);
+    } finally {
+      setModalVisible(false);
+      setToDeleteId(null);
+    }
+  };
+
   // Itens da lista
   const renderEventItem = ({ item }: { item: Events }) => (
     <Pressable
-      onPress={() => {}}
-      className=""
+      onPress={() => {navigation.navigate("EventAdminUpdate", { id: item.id })}}
     >
       {({ pressed }) => (
         <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
@@ -60,6 +88,9 @@ export default function EventAdmin() {
           {/* Botão de deletar evento */}
           <Pressable onPress={(e) => {
             e.stopPropagation(); 
+            if (item.id) {
+              confirmDelete(item.id);
+            }
           }}>
             {({ pressed }) => (
               <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
@@ -102,9 +133,9 @@ export default function EventAdmin() {
           <Button title="Criar evento" onPress={() => {navigation.navigate("EventAdminCreate")}}/>
 
           <View className="flex-1 mt-8">
-            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16"/>}
+            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="my-4"/>}
 
-            {error && <Text className="text-red-400 text-center mt-8">{error}</Text>}
+            {error && <Text className="text-red-400 text-center mt-2">{error}</Text>}
 
             <FlatList
               data={events}
@@ -117,6 +148,23 @@ export default function EventAdmin() {
           </View>
         </View>
       </View>
+
+      <ConfirmationOverlay
+        visible={modalVisible}
+        title="Confirmar exclusão"
+        message="Tem certeza que deseja deletar este evento?"
+        onCancel={() => {setModalVisible(false)}}
+        onConfirm={handleDelete}
+        confirmText="Excluir"
+      />
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro ao excluir"
+        message="Não foi possível excluir este evento"
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }

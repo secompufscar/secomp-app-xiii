@@ -60,8 +60,8 @@ export default function SponsorsAdminCreate() {
     setErrorModalVisible(false);
 
     if (!name.trim() || !logoUrl.trim() || !description.trim() || !starColor.trim() || !link.trim()) {
-      setError("Preencha todos os campos!")
-      return
+      setError("Preencha todos os campos!");
+      return;
     }
 
     const mappedStarColor = (() => {
