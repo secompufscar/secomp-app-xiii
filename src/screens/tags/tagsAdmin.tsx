@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, Pressable, Modal, ActivityIndicator, Alert, TouchableOpacity, StatusBar, Platform } from "react-native";
+import { View, Text, FlatList, Pressable, ActivityIndicator, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { FontAwesome } from "@expo/vector-icons";
 import { faTag } from "@fortawesome/free-solid-svg-icons";
@@ -11,11 +9,12 @@ import { getTags, createTag, updateTag, deleteTag, Tag } from "../../services/ta
 import { colors } from "../../styles/colors";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import CreationEditionOverlay from "../../components/overlay/creationEditionOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 
 export default function TagsAdmin() {
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,6 +22,16 @@ export default function TagsAdmin() {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
   const [newTagName, setNewTagName] = useState("");
+
+  // Estados para modal de erro
+  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
+  // Estados para modal de aviso
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
+
+  // Estados para modal de confirmação
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [toDeleteTag, setToDeleteTag] = useState<Tag | null>(null);
 
@@ -33,7 +42,7 @@ export default function TagsAdmin() {
       const data = await getTags();
       setTags(data);
     } catch {
-      Alert.alert("Erro", "Não foi possível carregar as tags.");
+      setError("Não foi possível carregar as tags. Tente novamente.");;
     } finally {
       setLoading(false);
     }
@@ -59,19 +68,26 @@ export default function TagsAdmin() {
 
   // Salvar (criar ou editar)
   const handleSave = async () => {
+    setErrorModalVisible(false);
+
     if (!newTagName.trim()) {
-      return Alert.alert("Aviso", "O nome da tag não pode ficar em branco.");
+      setWarningModalVisible(true);
+      return;
     }
+
     try {
       if (editingTag) {
         await updateTag(editingTag.id, { id: editingTag.id, name: newTagName.trim() });
       } else {
         await createTag({ name: newTagName.trim() });
       }
+
       await loadTags();
       setModalVisible(false);
     } catch {
-      Alert.alert("Erro", editingTag ? "Falha ao editar tag" : "Falha ao criar tag");
+      const msg = editingTag ? "Falha ao editar tag" : "Falha ao criar tag";
+      setErrorMessage(msg);
+      setErrorModalVisible(true);
     }
   };
 
@@ -91,20 +107,13 @@ export default function TagsAdmin() {
       await deleteTag(toDeleteTag.id);
       setTags(prevList => prevList.filter(item => item.id !== toDeleteTag.id));
     } catch {
-      Alert.alert("Erro", "Falha ao remover tag.");
+      setErrorMessage("Não foi possível excluir esta tag");
+      setErrorModalVisible(true);
     } finally {
       setDeleteModalVisible(false);
       setToDeleteTag(null);
     }
   };
-
-  if (loading) {
-    return (
-      <View className="flex-1 bg-blue-900 justify-center items-center">
-        <ActivityIndicator size="large" color={colors.blue[500]} />
-      </View>
-    );
-  }
 
   // Itens da lista
   const renderTagItem = ({ item }: { item: Tag }) => (
@@ -167,6 +176,10 @@ export default function TagsAdmin() {
           <Button title="Criar Tag" onPress={openCreateModal}/>
 
           <View className="flex-1 mt-8">
+            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16"/>}
+
+            {error && <Text className="text-red-400 text-center mt-8">{error}</Text>}
+
             <FlatList
               data={tags}
               renderItem={renderTagItem}
@@ -205,6 +218,24 @@ export default function TagsAdmin() {
           onCancel={() => {setDeleteModalVisible(false)}}
           onConfirm={handleConfirmDelete}
           confirmText="Excluir"
+      />
+
+      {/* Modal de erro */}
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
+
+      {/* Modal de aviso */}
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message="Não deixe o nome da Tag vazio!"
+        onConfirm={() => {setWarningModalVisible(false)}}
+        confirmText="OK"
       />
     </SafeAreaView>
   );

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { View, Text, Platform, StatusBar, Pressable } from 'react-native';
 import { colors } from '../../styles/colors'; 
 import * as NavigationBar from 'expo-navigation-bar';
-import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-interface ErrorOverlayProps {
+interface WarningOverlayProps {
   visible: boolean;
   title: string;
   message: string;
@@ -15,12 +15,12 @@ interface ErrorOverlayProps {
 
 const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
 
-const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
+const WarningOverlay: React.FC<WarningOverlayProps> = ({
   visible,
   title,
   message,
   onConfirm,
-  confirmText = 'Erro',
+  confirmText = 'Aviso',
   originalNavBarColor = colors.blue[900], 
 }) => {
 
@@ -56,8 +56,8 @@ const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
   return (
     <View className="absolute inset-0 z-10 flex-1 justify-center items-center bg-black/60 px-10">
       <View className="bg-blue-900 rounded-lg p-7 w-full max-w-md">
-        <View className="w-[36px] h-auto flex items-center rounded-lg bg-danger/30 p-2 mb-6">
-            <Feather name="x" size={20} color={colors.danger} />
+        <View className="w-[36px] h-auto flex items-center rounded-lg bg-warning/20 p-2 mb-6">
+            <Ionicons name="warning" size={20} color={colors.warning} />
         </View>
         <Text className="text-white text-lg font-poppinsSemiBold mb-1">{title}</Text>
         <Text className="text-gray-400 mb-6 font-inter leading-normal">{message}</Text>
@@ -65,9 +65,9 @@ const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
         <View className="flex-row justify-end">
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-danger bg-danger/10 active:bg-danger/20"
+            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-warning bg-warning/10 active:bg-warning/20"
           >
-            <Text className="text-danger font-poppinsMedium">{confirmText}</Text>
+            <Text className="text-warning font-poppinsMedium">{confirmText}</Text>
           </Pressable>
         </View>
       </View>
@@ -75,4 +75,4 @@ const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
   );
 };
 
-export default ErrorOverlay;
+export default WarningOverlay;
