@@ -176,9 +176,9 @@ export default function TagsAdmin() {
           <Button title="Criar Tag" onPress={openCreateModal}/>
 
           <View className="flex-1 mt-8">
-            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16"/>}
+            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="my-4"/>}
 
-            {error && <Text className="text-red-400 text-center mt-8">{error}</Text>}
+            {error && <Text className="text-red-400 text-center mt-2">{error}</Text>}
 
             <FlatList
               data={tags}
