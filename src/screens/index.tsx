@@ -16,6 +16,8 @@ import UserProfile from "./profile/userProfileScreen";
 import AdminProfile from "./profile/adminProfileScreen";
 
 import EventAdmin from "./event/eventAdmin";
+import ActivityAdmin from "./activities/ActivityAdmin";
+import ActivityAdminCreate from "./activities/activityAdminCreate";
 import EventAdminCreate from "./event/eventAdminCreate";
 import EventAdminUpdate from "./event/eventAdminUpdate";
 
@@ -33,6 +35,8 @@ import Credential from "./credential/credentialScreen";
 import Activities from "./activities/activitiesScreen";
 
 import QRCode from "./credential/qrCodeReaderScreen";
+import AdminNotificationScreen from "./notification/adminNotificationsScreen"
+import AdminNotificationSend from "./notification/adminNotificationSend"
 
 import EditProfile from "./profile/editProfileScreen";
 
@@ -62,6 +66,10 @@ export {
   Credential,
   Activities,
   QRCode,
+  ActivityAdmin,
   ActivityDetails,
-  ParticipantsList
+  ParticipantsList,
+  ActivityAdminCreate,
+  AdminNotificationScreen,
+  AdminNotificationSend,
 };

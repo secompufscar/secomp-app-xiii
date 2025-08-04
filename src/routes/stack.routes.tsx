@@ -16,13 +16,17 @@ import {
   EditProfile,
   ActivityDetails,
   ParticipantsList,
+  ActivityAdmin,
+  ActivityAdminCreate,
   EventAdmin,
   EventAdminCreate,
   EventAdminUpdate,
   SponsorsAdmin,
   SponsorsAdminCreate,
   SponsorsAdminUpdate,
-  TagsAdmin
+  TagsAdmin,
+  AdminNotificationScreen,
+  AdminNotificationSend,
 } from '../screens'
 
 const Stack = createNativeStackNavigator();
@@ -39,7 +43,9 @@ type StackNavigation = {
   QRCode: { id: string };
   EditProfile: undefined;
   ActivityDetails: { item: Activity };
-  ParticipantsList: { activityId: string; activityName: string; }
+  ParticipantsList: { activityId: string; activityName: string; };
+  ActivityAdmin;
+  ActivityAdminCreate;
   EventAdmin: undefined;
   EventAdminCreate: undefined;
   EventAdminUpdate: { id: string };
@@ -47,6 +53,8 @@ type StackNavigation = {
   SponsorsAdminCreate: undefined;
   SponsorsAdminUpdate: { id: string };
   TagsAdmin: undefined;
+  AdminNotificationScreen: undefined;
+  AdminNotificationSend: undefined;
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -67,6 +75,8 @@ export default function StackRoutes() {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="ActivityDetails" component={ActivityDetails} />
       <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
+      <Stack.Screen name="ActivityAdmin" component={ActivityAdmin} />
+      <Stack.Screen name="ActivityAdminCreate" component={ActivityAdminCreate} />
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
       <Stack.Screen name="EventAdminUpdate" component={EventAdminUpdate} />
@@ -74,6 +84,8 @@ export default function StackRoutes() {
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
       <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
+      <Stack.Screen name="AdminNotificationScreen" component={AdminNotificationScreen} />
+      <Stack.Screen name="AdminNotificationSend" component={AdminNotificationSend} />
     </Stack.Navigator>
   );
 }
