@@ -132,7 +132,7 @@ export default function ActivityDetails() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           className="flex-1 w-full"
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', paddingBottom: 32 }}
         >
           <View className="w-full px-6 max-w-[1000px] mx-auto mt-6">
             {/* Título da atividade */}
@@ -209,32 +209,32 @@ export default function ActivityDetails() {
                 </View>
               </View>
             </View>
+          </View>
 
-            {/* Botão final */}
-            <View className="mt-auto mb-10">
-              {user?.tipo === "ADMIN" ? (
-                <View className="flex flex-row gap-4">
-                  <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
-                  <Button
-                    title="Participantes"
-                    className="w-[40%]"
-                    onPress={() =>
-                      navigation.navigate("ParticipantsList", {
-                        activityId: activity.id,
-                        activityName: activity.nome,
-                      })
-                    }
-                  />
-                </View>
-              ) : subscriptionLoading || isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} />
-              ) : (
+          {/* Botão final */}
+          <View className="w-full px-6 max-w-[1000px] mx-auto">
+            {user?.tipo === "ADMIN" ? (
+              <View className="flex flex-row gap-4">
+                <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
                 <Button
-                  title={isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
-                  onPress={handleSubscription}
+                  title="Participantes"
+                  className="w-[40%]"
+                  onPress={() =>
+                    navigation.navigate("ParticipantsList", {
+                      activityId: activity.id,
+                      activityName: activity.nome,
+                    })
+                  }
                 />
-              )}
-            </View>
+              </View>
+            ) : subscriptionLoading || isLoading ? (
+              <ActivityIndicator size="large" color={colors.blue[500]} />
+            ) : (
+              <Button
+                title={isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+                onPress={handleSubscription}
+              />
+            )}
           </View>
         </ScrollView>
       </View>
