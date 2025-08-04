@@ -11,14 +11,22 @@ import ParticipantsList from './participants/participantsListScreen';
 
 import Home from "./home/homeScreen";
 import EventGuide from "./event/eventGuideScreen";
-import Sponsors from "./sponsors/sponsorsScreen";
-import UserProfile from "./profile/userProfileScreen";
 
+import UserProfile from "./profile/userProfileScreen";
 import AdminProfile from "./profile/adminProfileScreen";
+
 import EventAdmin from "./event/eventAdmin";
 import ActivityAdmin from "./activities/ActivityAdmin";
 import ActivityAdminCreate from "./activities/activityAdminCreate";
 import EventAdminCreate from "./event/eventAdminCreate";
+import EventAdminUpdate from "./event/eventAdminUpdate";
+
+import Sponsors from "./sponsors/sponsorsScreen";
+import SponsorsAdmin from "./sponsors/sponsorsAdmin";
+import SponsorsAdminCreate from "./sponsors/sponsorsAdminCreate";
+import SponsorsAdminUpdate from "./sponsors/sponsorsAdminUpdate";
+
+import TagsAdmin from "./tags/tagsAdmin";
 
 import Schedule from "./schedule/scheduleScreen";
 import MyEvents from "./activities/userActivitiesScreen";
@@ -42,12 +50,17 @@ export {
   SetNewPassword,
   Home,
   EventGuide,
-  Sponsors,
   UserProfile,
   EditProfile,
   AdminProfile,
   EventAdmin,
   EventAdminCreate,
+  EventAdminUpdate,
+  Sponsors,
+  SponsorsAdmin,
+  SponsorsAdminCreate,
+  SponsorsAdminUpdate,
+  TagsAdmin,
   Schedule,
   MyEvents,
   Credential,

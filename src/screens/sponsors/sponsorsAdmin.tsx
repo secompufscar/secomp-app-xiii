@@ -1,44 +1,47 @@
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, FlatList } from "react-native";
+import React, { useCallback, useState } from "react";
+import { View, Text, FlatList, Pressable, ActivityIndicator, Image, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../../styles/colors";
+import { getSponsors, deleteSponsor, Sponsor } from "../../services/sponsors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useCallback, useState } from "react";
-import { getEvents, deleteEvent } from "../../services/events";
-import { colors } from "../../styles/colors";
+import { FontAwesome } from "@expo/vector-icons";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
-import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import BackButton from "../../components/button/backButton";
 
-export default function EventAdmin() {
+export default function SponsorsAdmin() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const [events, setEvents] = useState<Events[]>([]);
+  // Estado para armazenar a lista de patrocinadores
+  const [list, setList] = useState<Sponsor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<string | null>(null);
 
+  // Carrega os patrocinadores
+  const fetchSponsors = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await getSponsors();
+      setList(data);
+    } catch {
+      setError("Não foi possível carregar os patrocinadores. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Recarrega a lista toda vez que a tela for focada
   useFocusEffect(
     useCallback(() => {
-      const fetchEvents = async () => {
-        setLoading(true); 
-        setError(null); 
-
-        try {
-          const data = await getEvents();
-          setEvents(data);
-        } catch (err) {
-          setError("Não foi possível carregar os eventos. Tente novamente.");
-        } finally {
-          setLoading(false); 
-        }
-      };
-
-      fetchEvents();
-    }, []) 
+      fetchSponsors();
+    }, []),
   );
 
   // Abre modal de confirmação e armazena ID a ser deletado
@@ -47,7 +50,7 @@ export default function EventAdmin() {
     setModalVisible(true);
   };
 
-  // Deleta o evento selecionado
+  // Deleta o patrocinador selecionado
   const handleDelete = async () => {
     if (!toDeleteId) return;
 
@@ -55,8 +58,8 @@ export default function EventAdmin() {
     setErrorModalVisible(false);
 
     try {
-      await deleteEvent(toDeleteId);
-      setEvents(prevList => prevList.filter(item => item.id !== toDeleteId));
+      await deleteSponsor(toDeleteId);
+      setList(prevList => prevList.filter(item => item.id !== toDeleteId));
     } catch {
       setErrorModalVisible(true);
     } finally {
@@ -64,37 +67,33 @@ export default function EventAdmin() {
       setToDeleteId(null);
     }
   };
-
+  
   // Itens da lista
-  const renderEventItem = ({ item }: { item: Events }) => (
+  const renderEventItem = ({ item }: { item: Sponsor }) => (
     <Pressable
-      onPress={() => {navigation.navigate("EventAdminUpdate", { id: item.id })}}
+      onPress={() => {navigation.navigate("SponsorsAdminUpdate", { id: item.id })}}
     >
       {({ pressed }) => (
-        <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
-          <View className="flex-1">
-            <Text className="text-lg text-white font-poppinsSemiBold">{item.year}</Text>
-
-            <View className="flex flex-row mt-1 flex-wrap">
-              <Text className="text-base text-gray-600 font-inter">
-                {new Date(item.startDate).toLocaleDateString('pt-BR')} -
-              </Text>
-              <Text className="text-base text-gray-600 font-inter ml-1">
-                {new Date(item.endDate).toLocaleDateString('pt-BR')}
-              </Text>
+        <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-4 ${pressed ? "bg-background/80" : "bg-background"}`}>
+          <View className="flex-1 flex-row items-center gap-5">
+            <View className="w-[34px] h-[34px] rounded">
+              <Image
+                source={{ uri: item.logoUrl }}
+                className="w-full h-full rounded"
+              />
             </View>
+
+            <Text className="text-base text-white font-poppins">{item.name}</Text>
           </View>
 
           {/* Botão de deletar evento */}
           <Pressable onPress={(e) => {
             e.stopPropagation(); 
-            if (item.id) {
-              confirmDelete(item.id);
-            }
+            confirmDelete(item.id);
           }}>
             {({ pressed }) => (
-              <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
-                <FontAwesome name="trash" size={20} color={colors.danger} />
+              <View className={`flex w-[34px] h-[34px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
+                <FontAwesome name="trash" size={16} color={colors.danger} />
               </View>
             )}
           </Pressable>
@@ -124,24 +123,25 @@ export default function EventAdmin() {
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de eventos</Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de patrocinadores</Text>
             <Text className="text-gray-400 font-inter">
-              Painel de administração dos eventos
+              Painel de administração dos patrocinadores
             </Text>
           </View>
 
-          <Button title="Criar evento" onPress={() => {navigation.navigate("EventAdminCreate")}}/>
+          <Button title="Criar patrocinador" onPress={() => navigation.navigate("SponsorsAdminCreate")}/>
 
+          {/* Lista de patrocinadores */}
           <View className="flex-1 mt-8">
             {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="my-4"/>}
 
             {error && <Text className="text-red-400 text-center mt-2">{error}</Text>}
 
             <FlatList
-              data={events}
+              data={list}
               renderItem={renderEventItem}
               ListEmptyComponent={emptyList}
-              keyExtractor={(item) => item.year.toString()}
+              keyExtractor={(item) => item.id}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 36 }}
             />
@@ -152,7 +152,7 @@ export default function EventAdmin() {
       <ConfirmationOverlay
         visible={modalVisible}
         title="Confirmar exclusão"
-        message="Tem certeza que deseja deletar este evento?"
+        message="Tem certeza que deseja remover este patrocinador?"
         onCancel={() => {setModalVisible(false)}}
         onConfirm={handleDelete}
         confirmText="Excluir"
@@ -161,7 +161,7 @@ export default function EventAdmin() {
       <ErrorOverlay
         visible={errorModalVisible}
         title="Erro ao excluir"
-        message="Não foi possível excluir este evento"
+        message="Não foi possível excluir este patrocinador"
         onConfirm={() => {setErrorModalVisible(false)}}
         confirmText="OK"
       />

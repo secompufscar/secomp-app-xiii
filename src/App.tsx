@@ -6,18 +6,14 @@ import "@expo/metro-runtime";
 import { AuthProvider, useAuth } from "./hooks/AuthContext";
 import { useFonts } from "expo-font";
 import { Inter_400Regular, Inter_500Medium } from "@expo-google-fonts/inter";
-import {
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-} from "@expo-google-fonts/poppins";
+import { Poppins_400Regular, Poppins_500Medium, Poppins_600SemiBold } from "@expo-google-fonts/poppins";
 import { colors } from "./styles/colors";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SystemUI from "expo-system-ui";
 
 NavigationBar.setPositionAsync("absolute");
 NavigationBar.setBackgroundColorAsync("#ffffff00");
-
+NavigationBar.setButtonStyleAsync('light'); 
 SystemUI.setBackgroundColorAsync("transparent");
 
 export default function App() {
