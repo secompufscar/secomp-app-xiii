@@ -1,37 +1,21 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  ActivityIndicator,
-  Alert,
-  Linking,
-  StatusBar,
-  Platform,
-  ScrollView,
-  Image,
-  ImageBackground,
-} from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Alert, Linking, StatusBar, Platform, ScrollView, Image, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, useNavigation, ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faLocationDot,
-  faCalendarDay,
-  faUsers,
-  faUserCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faCalendarDay, faUsers, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import { subscribeToActivity, unsubscribeToActivity } from "../../services/activities";
 import { userSubscription } from "../../services/userAtActivities";
+import { getImagesByActivityId } from "../../services/activityImage";
 import { colors } from "../../styles/colors";
 import { format, parseISO, addHours } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import InfoRow from "../../components/info/infoRow";
-import { getImagesByActivityId } from "../../services/activityImage";
 
 const categoryIdToName: { [key: string]: string } = {
   "1": "Minicurso",
@@ -67,9 +51,6 @@ export default function ActivityDetails() {
         await userSubscription(user.id, activity.id);
         setIsSubscribed(true);
       } catch (error: any) {
-        if (error.response?.status !== 404) {
-          console.error("Erro ao verificar inscrição:", error);
-        }
         setIsSubscribed(false);
       } finally {
         setSubscriptionLoading(false);
@@ -117,143 +98,146 @@ export default function ActivityDetails() {
     navigation.navigate("QRCode", { id: activity.id });
   };
 
-  const getDate = () =>
-    format(addHours(parseISO(activity.data), 3), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  const getDate = () => format(addHours(parseISO(activity.data), 3), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   const getTime = () => format(addHours(parseISO(activity.data), 3), "HH:mm'h'", { locale: ptBR });
   const categoryName = categoryIdToName[activity.categoriaId] || categoryIdToName["default"];
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900">
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent={Platform.OS === "android"}
-      />
+      <View className="flex-1 w-full">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
+        />
 
-      {/* Imagem de fundo no topo */}
-      <View className="w-full h-[240px] relative">
-        {activityImageUrl !== "" ? (
-          <ImageBackground
-            source={{ uri: activityImageUrl }}
-            className="w-full h-full"
-            resizeMode="cover"
-          />
-        ) : (
-          <View className="w-full h-full bg-blue-700" />
-        )}
-        <View className="absolute top-4 left-4">
-          <BackButton />
+        {/* Imagem da atividade */}
+        <View className="w-full h-[280px] relative -mt-10">
+          {activityImageUrl !== "" ? (
+            <ImageBackground
+              source={{ uri: activityImageUrl }}
+              className="w-full h-full"
+              resizeMode="cover"
+            />
+          ) : (
+            <View className="w-full h-full flex items-center justify-center bg-background pt-10">
+              <FontAwesome6 name="image" size={56} color={colors.border}/>
+            </View>
+          )}
+          <View className="absolute top-4 left-4">
+            <BackButton />
+          </View>
         </View>
-      </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="flex-1 w-full"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
-      >
-        <View className="px-6 max-w-[1000px] mx-auto mt-6">
-          {/* Título da atividade */}
-          <View className="mb-6">
-            <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
-            <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
-          </View>
-
-          {/* Informações */}
-          <View className="mb-6">
-            <InfoRow icon={faLocationDot} mainText="UFSCar" subText={activity.local}>
-              <Pressable
-                onPress={() =>
-                  Linking.openURL(
-                    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`
-                  )
-                }
-                onPressIn={() => setIsPressed(true)}
-                onPressOut={() => setIsPressed(false)}
-              >
-                <Text
-                  className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${
-                    isPressed ? "bg-blue-500/20" : "bg-blue-500/10"
-                  }`}
-                >
-                  Ver no mapa
-                </Text>
-              </Pressable>
-            </InfoRow>
-
-            <View className="flex flex-row w-full gap-4">
-              <InfoRow
-                icon={faCalendarDay}
-                mainText={getDate()}
-                subText={getTime()}
-                className="w-[60%]"
-              />
-
-              <InfoRow
-                icon={faUsers}
-                mainText="Vagas"
-                subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
-                className="w-[35%]"
-              />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          className="flex-1 w-full"
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 32 }}
+        >
+          <View className="w-full px-6 max-w-[1000px] mx-auto mt-6">
+            {/* Título da atividade */}
+            <View className="mb-6">
+              <Text className="text-gray-400 font-inter text-base">{categoryName}</Text>
+              <Text className="text-white text-xl font-poppinsSemiBold mt-1">{activity.nome}</Text>
             </View>
-          </View>
 
-          {/* Detalhes */}
-          <View className="mb-10">
-            <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
-            <Text className="text-gray-400 text-base font-inter leading-relaxed">
-              {activity.detalhes}
-            </Text>
-          </View>
-
-          {/* Palestrante */}
-          <View className="mb-10">
-            <View className="flex-row items-center">
-              {palestranteImageUrl !== "" ? (
-                <Image
-                  source={{ uri: palestranteImageUrl }}
-                  style={{ width: 72, height: 72, resizeMode: "cover" }}
-                  className="rounded-full"
-                />
-              ) : (
-                <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
-              )}
-
-              <View className="ml-4">
-                <Text className="text-white text-base font-poppinsSemiBold">
-                  {activity.palestranteNome}
-                </Text>
-                <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
-              </View>
-            </View>
-          </View>
-
-          {/* Botão final */}
-          <View className="mt-auto mb-10">
-            {user?.tipo === "ADMIN" ? (
-              <View className="flex flex-row gap-4">
-                <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
-                <Button
-                  title="Participantes"
-                  className="w-[40%]"
+            {/* Informações */}
+            <View className="mb-6">
+              <InfoRow icon={faLocationDot} mainText="UFSCar" subText={activity.local}>
+                <Pressable
                   onPress={() =>
-                    navigation.navigate("ParticipantsList", {
-                      activityId: activity.id,
-                      activityName: activity.nome,
-                    })
+                    Linking.openURL(
+                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent("UFSCar " + activity.local)}`
+                    )
                   }
+                  onPressIn={() => setIsPressed(true)}
+                  onPressOut={() => setIsPressed(false)}
+                >
+                  <Text
+                    className={`text-sm text-blue-500 font-interMedium p-2 border-[1px] border-blue-500 rounded-md ${
+                      isPressed ? "bg-blue-500/20" : "bg-blue-500/10"
+                    }`}
+                  >
+                    Ver no mapa
+                  </Text>
+                </Pressable>
+              </InfoRow>
+
+              <View className="flex flex-row w-full gap-4">
+                <InfoRow
+                  icon={faCalendarDay}
+                  mainText={getDate()}
+                  subText={getTime()}
+                  className="w-[60%]"
+                />
+
+                <InfoRow
+                  icon={faUsers}
+                  mainText="Vagas"
+                  subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
+                  className="w-[35%]"
                 />
               </View>
-            ) : subscriptionLoading || isLoading ? (
-              <ActivityIndicator size="large" color={colors.blue[500]} />
-            ) : (
-              <Button
-                title={isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
-                onPress={handleSubscription}
-              />
-            )}
+            </View>
+
+            {/* Detalhes */}
+            <View className="mb-10">
+              <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
+              <Text className="text-gray-400 text-base font-inter leading-relaxed">
+                {activity.detalhes}
+              </Text>
+            </View>
+
+            {/* Palestrante */}
+            <View className="mb-10">
+              <View className="flex-row items-center">
+                {palestranteImageUrl !== "" ? (
+                  <Image
+                    source={{ uri: palestranteImageUrl }}
+                    style={{ width: 72, height: 72, resizeMode: "cover" }}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
+                )}
+
+                <View className="ml-4">
+                  <Text className="text-white text-base font-poppinsSemiBold">
+                    {activity.palestranteNome}
+                  </Text>
+                  <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Botão final */}
+            <View className="mt-auto mb-10">
+              {user?.tipo === "ADMIN" ? (
+                <View className="flex flex-row gap-4">
+                  <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
+                  <Button
+                    title="Participantes"
+                    className="w-[40%]"
+                    onPress={() =>
+                      navigation.navigate("ParticipantsList", {
+                        activityId: activity.id,
+                        activityName: activity.nome,
+                      })
+                    }
+                  />
+                </View>
+              ) : subscriptionLoading || isLoading ? (
+                <ActivityIndicator size="large" color={colors.blue[500]} />
+              ) : (
+                <Button
+                  title={isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+                  onPress={handleSubscription}
+                />
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
