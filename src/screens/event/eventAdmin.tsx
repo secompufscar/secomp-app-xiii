@@ -71,15 +71,15 @@ export default function EventAdmin() {
       onPress={() => {navigation.navigate("EventAdminUpdate", { id: item.id })}}
     >
       {({ pressed }) => (
-        <View className={`flex flex-row justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
+        <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
           <View className="flex-1">
             <Text className="text-lg text-white font-poppinsSemiBold">{item.year}</Text>
 
             <View className="flex flex-row mt-1 flex-wrap">
-              <Text className="text-base text-gray-600 font-inter">
+              <Text className="text-gray-600 font-inter">
                 {new Date(item.startDate).toLocaleDateString('pt-BR')} -
               </Text>
-              <Text className="text-base text-gray-600 font-inter ml-1">
+              <Text className="text-gray-600 font-inter ml-1">
                 {new Date(item.endDate).toLocaleDateString('pt-BR')}
               </Text>
             </View>

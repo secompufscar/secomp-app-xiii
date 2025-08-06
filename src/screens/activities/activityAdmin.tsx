@@ -8,12 +8,9 @@ import { colors } from "../../styles/colors";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { format, parseISO, addHours } from "date-fns"; 
-import { ptBR } from "date-fns/locale"; 
 
 export default function ActivityAdmin() { 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
   const [activities, setActivities] = useState<Activity[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +25,6 @@ export default function ActivityAdmin() {
           const data = await getActivities(); 
           setActivities(data); 
         } catch (err) {
-          console.error("Erro ao carregar atividades:", err); 
           setError("Não foi possível carregar as atividades. Tente novamente."); 
         } finally {
           setLoading(false);
@@ -45,30 +41,19 @@ export default function ActivityAdmin() {
       onPress={() => {
         navigation.navigate("ActivityDetails", { item });
       }}
-      className=""
     >
       {({ pressed }) => (
-        <View className={`flex flex-row justify-between p-4 rounded-lg shadow-md mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
-          <View className="flex-1">
-            <Text className="text-lg text-white font-poppinsSemiBold">{item.nome}</Text> {/* Changed to item.nome */}
-
-            <View className="flex flex-row mt-1 flex-wrap">
-              <Text className="text-base text-gray-600 font-inter">
-                {format(addHours(parseISO(item.data), 3), "dd/MM/yyyy", { locale: ptBR })} -
-              </Text>
-              <Text className="text-gray-600 font-inter ml-1">
-                {format(addHours(parseISO(item.data), 3), "HH:mm", { locale: ptBR })}
-              </Text>
-            </View>
+        <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
+          <View className="flex-1 flex-col gap-1">
+            <Text className="text-base text-white font-poppinsMedium line-clamp-1">{item.nome}</Text>
+            <Text className="text-sm text-gray-600 font-interMedium line-clamp-1">{item.palestranteNome}</Text>
           </View>
 
-          {/* Botão de deletar atividade */}
           <Pressable onPress={(e) => {
             e.stopPropagation();
-            // IAdicionar confirmacao de exclusao aqui
           }}>
             {({ pressed }) => (
-              <View className={`flex w-[44px] h-full items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
+              <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
                 <FontAwesome name="trash" size={20} color={colors.danger} />
               </View>
             )}
@@ -76,6 +61,12 @@ export default function ActivityAdmin() {
         </View>
       )}
     </Pressable>
+  );
+
+  const emptyList = () => (
+    <View className="flex-1 items-center justify-center mt-2">
+      <Text className="text-gray-400 font-inter">Nenhuma atividade encontrada</Text>
+    </View>
   );
 
   return (
@@ -108,15 +99,10 @@ export default function ActivityAdmin() {
             <FlatList
               data={activities} 
               renderItem={renderActivityItem} 
+              ListEmptyComponent={emptyList}
               keyExtractor={(item) => item.id.toString()} 
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 36 }}
-              ListEmptyComponent={() => (
-                <View className="flex-1 items-center justify-center mt-4">
-                  <Text className="text-default font-poppinsMedium text-base">Nenhuma atividade encontrada</Text> {/* Updated text */}
-                  <Text className="text-gray-400 font-inter mt-1">Que tal criar a primeira?</Text> {/* Updated text */}
-                </View>
-              )}
             />
           </View>
         </View>
