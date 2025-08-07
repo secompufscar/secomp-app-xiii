@@ -5,7 +5,9 @@ import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories"; 
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Entypo} from "@expo/vector-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faLocationDot, faCalendarDay, faUsers } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -162,7 +164,7 @@ export default function ActivityAdminCreate() {
           {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar nova atividade</Text>
-            <Text className="text-gray-400 font-inter">
+            <Text className="text-blue-200 font-inter">
               Adicione uma nova atividade ao evento!
             </Text>
           </View>
@@ -173,9 +175,9 @@ export default function ActivityAdminCreate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
                 <Input>
-                  <FontAwesome5 name="font" size={20} color={colors.border} />
+                  <FontAwesome5 name="exclamation-circle" size={20} color={colors.border} />
                   <Input.Field
-                    placeholder="Nome da Atividade (Ex.: Palestra de IA)"
+                    placeholder="Ex.: Palestra de IA"
                     onChangeText={setName}
                     value={name}
                   />
@@ -186,9 +188,9 @@ export default function ActivityAdminCreate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
                 <Input>
-                  <FontAwesome5 name="user" size={20} color={colors.border} />
+                  <FontAwesome5 name="user-alt" size={18} color={colors.border} />
                   <Input.Field
-                    placeholder="Nome do Palestrante (Ex.: João Silva)"
+                    placeholder="Ex.: João Silva"
                     onChangeText={setSpeakerName}
                     value={speakerName}
                   />
@@ -274,9 +276,9 @@ export default function ActivityAdminCreate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
                 <Input>
-                  <FontAwesome5 name="map-marker-alt" size={20} color={colors.border} />
+                  <FontAwesomeIcon icon={faLocationDot} size={20} color={colors.border} />
                   <Input.Field
-                    placeholder="Local (Ex.: Auditório)"
+                    placeholder="Ex.: Auditório"
                     onChangeText={setLocation}
                     value={location}
                   />
@@ -287,9 +289,9 @@ export default function ActivityAdminCreate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
                 <Input>
-                  <FontAwesome5 name="users" size={20} color={colors.border} />
+                  <FontAwesomeIcon icon={faUsers} size={20} color={colors.border} />
                   <Input.Field
-                    placeholder="Vagas (Ex.: 50 ou 0 para ilimitadas)"
+                    placeholder="Ex.: 50"
                     onChangeText={setVacancies}
                     value={vacancies}
                     keyboardType="numeric"
@@ -301,57 +303,46 @@ export default function ActivityAdminCreate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
                 <Input>
-                  <FontAwesome5 name="align-left" size={20} color={colors.border} />
+                  <Entypo name="text" size={20} color={colors.border} />
                   <Input.Field
                     placeholder="Detalhes da atividade"
                     onChangeText={setDetails}
                     value={details}
-                    multiline={true}
-                    numberOfLines={4}
-                    style={{ minHeight: 80, textAlignVertical: 'top' }}
                   />
                 </Input>
               </View>
 
               {/* Categoria */}
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Categoria</Text>
+              <View className="w-full mb-4">
+                <Text className="text-gray-400 text-sm font-interMedium mb-3">Categoria</Text>
                 {categoriesLoading ? (
                   <ActivityIndicator size="small" color={colors.blue[500]} />
                 ) : categoriesError ? (
                   <Text className="text-danger text-sm">{categoriesError}</Text>
                 ) : (
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxHeight: 50 }}>
-                    <View className="flex-row flex-wrap gap-2">
-                      {categories.map((category) => {
-                        const isSelected = selectedCategoryId === category.id;
-                        return (
-                          <Pressable
-                            key={category.id}
-                            onPress={() => setSelectedCategoryId(category.id)}
-                            className={`px-5 py-2.5 rounded-full ${
-                              isSelected ? "bg-green" : "border border-neutral-200"
-                            } justify-center items-center`}
-                          >
-                            <Text
-                              className={`text-xs font-poppinsMedium ${
-                                isSelected ? "text-blue-900" : "text-neutral-200"
-                              }`}
-                            >
-                              {category.nome}
-                            </Text>
-                          </Pressable>
-                        );
-                      })}
-                    </View>
-                  </ScrollView>
+                  <View className="flex-row flex-wrap gap-3 mb-2">
+                    {categories.map((category) => {
+                      const isSelected = selectedCategoryId === category.id;
+                      return (
+                        <Pressable
+                          key={category.id}
+                          onPress={() => setSelectedCategoryId(category.id)}
+                          className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"}`}
+                        >
+                          <Text className={isSelected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>
+                            {category.nome}
+                          </Text>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
                 )}
               </View>
 
               {isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-6" />
               ) : (
-                <Button title="Criar Atividade" className="mt-8" onPress={handleCreateActivity} />
+                <Button title="Criar Atividade" className="mt-auto" onPress={handleCreateActivity} />
               )}
             </View>
           </ScrollView>

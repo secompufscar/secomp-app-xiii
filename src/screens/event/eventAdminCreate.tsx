@@ -128,7 +128,7 @@ export default function EventAdminCreate() {
           {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar novo evento</Text>
-            <Text className="text-gray-400 font-inter">
+            <Text className="text-blue-200 font-inter">
               Inicie uma nova edição da Secomp!
             </Text>
           </View>
