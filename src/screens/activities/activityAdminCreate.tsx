@@ -4,13 +4,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
-import { getCategories } from "../../services/categories"; // Import getCategories
+import { getCategories } from "../../services/categories"; 
 import { FontAwesome5 } from "@expo/vector-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { format, addHours } from "date-fns";
+import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 
@@ -32,13 +34,15 @@ export default function ActivityAdminCreate() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [alertText, setAlertText] = useState("");
-  const [alertColor, setAlertColor] = useState("text-gray-400");
-
   const [isLoading, setIsLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
+
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
+  const [warningMessage, setWarningMessage] = useState("Aviso");
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
 
   // Busca as categorias
   useFocusEffect(
@@ -90,7 +94,6 @@ export default function ActivityAdminCreate() {
   };
 
   const handleCreateActivity = async () => {
-    setIsAlertOpen(false);
 
     if (
       !name.trim() ||
@@ -100,17 +103,15 @@ export default function ActivityAdminCreate() {
       !location.trim() ||
       !selectedCategoryId
     ) {
-      setAlertText("Por favor, preencha todos os campos e selecione uma categoria.");
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);
+      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
+      setWarningModalVisible(true);      
       return;
     }
 
     const parsedVacancies = parseInt(vacancies, 10);
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
-      setAlertText("O número de vagas deve ser um valor numérico positivo.");
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);
+      setWarningMessage("O número de vagas deve ser um valor numérico positivo")
+      setWarningModalVisible(true);  
       return;
     }
 
@@ -136,25 +137,11 @@ export default function ActivityAdminCreate() {
       };
 
       await createActivity(activityData);
-
-      setAlertText(`Sucesso! A atividade "${name}" foi criada.`);
-      setAlertColor("text-success");
-      setIsAlertOpen(true);
-
-      // Limpa os campos depois de criar
-      setName("");
-      setSpeakerName("");
-      setDate(new Date());
-      setTime(new Date());
-      setVacancies("");
-      setDetails("");
-      setLocation("");
-      setSelectedCategoryId(categories.length > 0 ? categories[0].id : null);
+      navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao criar a atividade.";
-      setAlertText(errorMessage);
-      setAlertColor("text-danger");
-      setIsAlertOpen(true);
+      setErrorMessage(errorMessage);
+      setErrorModalVisible(true);
     } finally {
       setIsLoading(false);
     }
@@ -181,10 +168,10 @@ export default function ActivityAdminCreate() {
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-            <View className="flex-col w-full gap-4 text-center justify-start pb-24">
+            <View className="flex-col flex-1 w-full gap-4 text-center justify-start pb-8">
               {/* Nome da atividade */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Nome da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
                 <Input>
                   <FontAwesome5 name="font" size={20} color={colors.border} />
                   <Input.Field
@@ -197,7 +184,7 @@ export default function ActivityAdminCreate() {
 
               {/* Nome do Palestrante */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
                 <Input>
                   <FontAwesome5 name="user" size={20} color={colors.border} />
                   <Input.Field
@@ -212,7 +199,7 @@ export default function ActivityAdminCreate() {
               <View className="w-full z-10">
                 {Platform.OS === 'web' ? (
                   <View>
-                    <Text className="text-blue-200 text-sm font-interMedium mb-2">Data</Text>
+                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <input
                       type="date"
                       value={format(date, "yyyy-MM-dd")}
@@ -232,7 +219,7 @@ export default function ActivityAdminCreate() {
                   </View>
                 ) : (
                   <Pressable onPress={() => setShowDatePicker(true)}>
-                    <Text className="text-blue-200 text-sm font-interMedium mb-2">Data</Text>
+                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
                       <FontAwesome5 name="calendar-alt" size={20} color={colors.border} />
                       <Text className="text-white font-inter text-base ml-4">
@@ -247,7 +234,7 @@ export default function ActivityAdminCreate() {
               <View className="w-full z-10">
                 {Platform.OS === 'web' ? (
                   <View>
-                    <Text className="text-blue-200 text-sm font-interMedium mb-2">Horário</Text>
+                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <input
                       type="time"
                       value={format(time, "HH:mm")}
@@ -272,7 +259,7 @@ export default function ActivityAdminCreate() {
                   </View>
                 ) : (
                   <Pressable onPress={() => setShowTimePicker(true)}>
-                    <Text className="text-blue-200 text-sm font-interMedium mb-2">Horário</Text>
+                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
                       <FontAwesome5 name="clock" size={20} color={colors.border} />
                       <Text className="text-white font-inter text-base ml-4">
@@ -285,7 +272,7 @@ export default function ActivityAdminCreate() {
 
               {/* Local */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Local</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
                 <Input>
                   <FontAwesome5 name="map-marker-alt" size={20} color={colors.border} />
                   <Input.Field
@@ -298,7 +285,7 @@ export default function ActivityAdminCreate() {
 
               {/* Vagas */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Número de Vagas</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
                 <Input>
                   <FontAwesome5 name="users" size={20} color={colors.border} />
                   <Input.Field
@@ -312,7 +299,7 @@ export default function ActivityAdminCreate() {
 
               {/* Detalhes */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Detalhes</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
                 <Input>
                   <FontAwesome5 name="align-left" size={20} color={colors.border} />
                   <Input.Field
@@ -328,7 +315,7 @@ export default function ActivityAdminCreate() {
 
               {/* Categoria */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Categoria</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Categoria</Text>
                 {categoriesLoading ? (
                   <ActivityIndicator size="small" color={colors.blue[500]} />
                 ) : categoriesError ? (
@@ -361,8 +348,6 @@ export default function ActivityAdminCreate() {
                 )}
               </View>
 
-              {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
-
               {isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
               ) : (
@@ -391,6 +376,22 @@ export default function ActivityAdminCreate() {
           )}
         </>
       )}
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
+
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message={warningMessage}
+        onConfirm={() => {setWarningModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
