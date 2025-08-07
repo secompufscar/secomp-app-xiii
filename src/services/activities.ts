@@ -30,14 +30,17 @@ export const unsubscribeToActivity = async (userId: string, eventId: string) => 
   return response;
 };
 
-// Criar atividade
 export const createActivity = async (activityData: Omit<Activity, 'id'>): Promise<Activity> => {
   const response = await api.post("/activities/", activityData);
   return response.data;
 };
 
-// Update
 export const updateActivity = async (id: string, activityData: UpdateActivityData): Promise<Activity> => {
   const response = await api.patch(`/activities/${id}`, activityData);
   return response.data;
+};
+
+export const deleteActivity = async (id: string) => {
+  const response = await api.delete(`/activities/${id}`);
+  return response;
 };

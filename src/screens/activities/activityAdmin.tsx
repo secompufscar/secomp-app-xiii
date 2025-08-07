@@ -5,15 +5,21 @@ import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/
 import { useCallback, useState } from "react";
 import { getActivities, deleteActivity } from "../../services/activities"; 
 import { colors } from "../../styles/colors";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function ActivityAdmin() { 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const [activities, setActivities] = useState<Activity[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [toDeleteId, setToDeleteId] = useState<string | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -35,7 +41,12 @@ export default function ActivityAdmin() {
     }, [])
   );
 
-  
+  // Abre modal de confirmação e armazena ID a ser deletado
+  const confirmDelete = (id: string) => {
+    setToDeleteId(id);
+    setModalVisible(true);
+  };
+
   const renderActivityItem = ({ item }: { item: Activity }) => ( 
     <Pressable
       onPress={() => {
@@ -102,6 +113,7 @@ export default function ActivityAdmin() {
               ListEmptyComponent={emptyList}
               keyExtractor={(item) => item.id.toString()} 
               showsVerticalScrollIndicator={false}
+              initialNumToRender={15}
               contentContainerStyle={{ paddingBottom: 36 }}
             />
           </View>
