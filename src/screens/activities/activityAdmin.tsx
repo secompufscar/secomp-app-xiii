@@ -47,6 +47,23 @@ export default function ActivityAdmin() {
     setModalVisible(true);
   };
 
+  const handleDelete = async () => {
+    if (!toDeleteId) return;
+
+    setModalVisible(false); 
+    setErrorModalVisible(false);
+
+    try {
+      await deleteActivity(toDeleteId);
+      setActivities(prevList => prevList.filter(item => item.id !== toDeleteId));
+    } catch {
+      setErrorModalVisible(true);
+    } finally {
+      setModalVisible(false);
+      setToDeleteId(null);
+    }
+  };
+
   const renderActivityItem = ({ item }: { item: Activity }) => ( 
     <Pressable
       onPress={() => {
@@ -62,6 +79,9 @@ export default function ActivityAdmin() {
 
           <Pressable onPress={(e) => {
             e.stopPropagation();
+            if (item.id) {
+              confirmDelete(item.id);
+            }
           }}>
             {({ pressed }) => (
               <View className={`flex w-[44px] h-[44px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
@@ -119,6 +139,23 @@ export default function ActivityAdmin() {
           </View>
         </View>
       </View>
+
+      <ConfirmationOverlay
+        visible={modalVisible}
+        title="Confirmar exclusão"
+        message="Tem certeza que deseja deletar esta atividade?"
+        onCancel={() => {setModalVisible(false)}}
+        onConfirm={handleDelete}
+        confirmText="Excluir"
+      />
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro ao excluir"
+        message="Não foi possível excluir esta atividade"
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
