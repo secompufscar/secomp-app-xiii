@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator } from "react-native";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createEvent, getCurrentEvent, updateEvent } from "../../services/events";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -11,9 +13,13 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import DatePicker from "react-datepicker";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function EventAdminCreate() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  
   const [year, setYear] = useState<string>("");
   const [startDate, setStartDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => {
@@ -26,9 +32,11 @@ export default function EventAdminCreate() {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [alertText, setAlertText] = useState("");
-  const [alertColor, setAlertColor] = useState("text-gray-400");
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
+  const [warningMessage, setWarningMessage] = useState("Aviso");
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,13 +62,10 @@ export default function EventAdminCreate() {
 
   // Função para criação de evento
   const handleCreateEvent = async () => {
-    setIsAlertOpen(false);
-    
     // Verifica se o ano foi preenchido
     if (!year.trim()) {
-      setAlertText("Por favor, preencha o ano da edição");
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);      
+      setWarningMessage("Por favor, preencha o ano da edição")
+      setWarningModalVisible(true);       
       return;
     }
 
@@ -69,19 +74,18 @@ export default function EventAdminCreate() {
     const parsedYear = parseInt(year, 10);
 
     if (isNaN(parsedYear) || parsedYear < currentYear || parsedYear >= 2100) {
-      setAlertText(`O ano deve ser um número válido, entre ${currentYear} e 2100.`);
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);
+      setWarningMessage(`O ano deve ser um número válido, entre ${currentYear} e 2100.`)
+      setWarningModalVisible(true); 
       return;
     }
 
     setIsLoading(true);
 
     try { 
-      // 1 - Encontrar o evento atualmente ativo
+      // Encontrar o evento atualmente ativo
       const activeEvent = await getCurrentEvent();
 
-      // 2 - Se um evento ativo for encontrado, desativá-lo
+      // Se um evento ativo for encontrado, desativá-lo
       if (activeEvent && activeEvent.id) {
         const updatePayload: UpdateEvent = {
           ...activeEvent, 
@@ -91,7 +95,7 @@ export default function EventAdminCreate() {
         await updateEvent(activeEvent.id, updatePayload);
       }
       
-      // 3 - Preparar e criar o novo evento
+      // Preparar e criar o novo evento
       const eventData: Events = {
         year: parsedYear,
         startDate: startDate.toISOString(), 
@@ -100,14 +104,10 @@ export default function EventAdminCreate() {
       };
 
       await createEvent(eventData);
-
-      setAlertText(`Sucesso! O evento ${year} foi criado.`);
-      setAlertColor("text-success");
-      setIsAlertOpen(true); 
+      navigation.goBack();
     } catch (error) {
-      setAlertText(`Erro ao criar evento, tente novamente`);
-      setAlertColor("text-danger");
-      setIsAlertOpen(true); 
+      setErrorMessage("Não foi possível criar este evento")
+      setErrorModalVisible(true);
     } finally {
       setIsLoading(false);  
     }
@@ -236,8 +236,6 @@ export default function EventAdminCreate() {
                 </Pressable>
               )}
             </View>
-
-            {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
               
             {isLoading ? (
               <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
@@ -268,6 +266,22 @@ export default function EventAdminCreate() {
           )}
         </>
       )}
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
+
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message={warningMessage}
+        onConfirm={() => {setWarningModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }

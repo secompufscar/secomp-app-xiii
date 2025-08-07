@@ -1,13 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StatusBar,
-  Platform,
-  ActivityIndicator,
-  ScrollView,
-} from "react-native";
+import React, { useState, useCallback } from "react";
+import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -34,8 +26,8 @@ export default function ActivityAdminCreate() {
   const [vacancies, setVacancies] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); // State for selected category ID
-  const [categories, setCategories] = useState<Category[]>([]); // State for fetched categories
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); 
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -59,7 +51,7 @@ export default function ActivityAdminCreate() {
           if (isActive) {
             setCategories(fetchedCategories);
             if (fetchedCategories.length > 0) {
-              setSelectedCategoryId(fetchedCategories[0].id); // Select first category by default
+              setSelectedCategoryId(fetchedCategories[0].id);
             }
             setCategoriesError(null);
           }
