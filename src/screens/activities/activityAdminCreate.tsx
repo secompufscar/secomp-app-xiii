@@ -31,6 +31,7 @@ export default function ActivityAdminCreate() {
   const [vacancies, setVacancies] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [points, setPoints] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); 
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -103,6 +104,7 @@ export default function ActivityAdminCreate() {
       !speakerName.trim() ||
       !vacancies.trim() ||
       !details.trim() ||
+      !points.trim() ||
       !location.trim() ||
       !selectedCategoryId
     ) {
@@ -114,6 +116,13 @@ export default function ActivityAdminCreate() {
     const parsedVacancies = parseInt(vacancies, 10);
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
       setWarningMessage("O número de vagas deve ser um valor numérico positivo")
+      setWarningModalVisible(true);  
+      return;
+    }
+
+    const parsedPoints = parseInt(points, 10);
+    if (isNaN(parsedPoints) || parsedPoints < 0) {
+      setWarningMessage("A pontuação deve ser um valor numérico positivo")
       setWarningModalVisible(true);  
       return;
     }
@@ -137,6 +146,7 @@ export default function ActivityAdminCreate() {
         data: adjustedDateTime.toISOString(), 
         vagas: parsedVacancies,
         detalhes: details,
+        points: parsedPoints,
         categoriaId: selectedCategoryId,
         local: location,
       };
@@ -320,6 +330,19 @@ export default function ActivityAdminCreate() {
                     placeholder="Detalhes da atividade"
                     onChangeText={setDetails}
                     value={details}
+                  />
+                </Input>
+              </View>
+
+              {/* Pontos */}
+              <View className="w-full">
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Pontos</Text>
+                <Input>
+                  <Entypo name="game-controller" size={20} color={colors.border} />
+                  <Input.Field
+                    placeholder="Pontuação da atividade"
+                    onChangeText={setPoints}
+                    value={points}
                   />
                 </Input>
               </View>
