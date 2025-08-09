@@ -18,6 +18,7 @@ import {
   ParticipantsList,
   ActivityAdmin,
   ActivityAdminCreate,
+  ActivityAdminUpdate,
   EventAdmin,
   EventAdminCreate,
   EventAdminUpdate,
@@ -44,8 +45,9 @@ type StackNavigation = {
   EditProfile: undefined;
   ActivityDetails: { item: Activity };
   ParticipantsList: { activityId: string; activityName: string; };
-  ActivityAdmin;
-  ActivityAdminCreate;
+  ActivityAdmin: undefined;
+  ActivityAdminCreate: undefined;
+  ActivityAdminUpdate: { id: string };
   EventAdmin: undefined;
   EventAdminCreate: undefined;
   EventAdminUpdate: { id: string };
@@ -77,6 +79,7 @@ export default function StackRoutes() {
       <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
       <Stack.Screen name="ActivityAdmin" component={ActivityAdmin} />
       <Stack.Screen name="ActivityAdminCreate" component={ActivityAdminCreate} />
+      <Stack.Screen name="ActivityAdminUpdate" component={ActivityAdminUpdate} />
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
       <Stack.Screen name="EventAdminUpdate" component={EventAdminUpdate} />

@@ -1,11 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, ParamListBase, useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { createActivity } from "../../services/activities";
-import { getCategories } from "../../services/categories"; 
-import { FontAwesome5, Entypo, AntDesign} from "@expo/vector-icons";
+import { updateActivity } from "../../services/activities";
+import { getCategories } from "../../services/categories";
+import { getActivityId } from "../../services/activities";
+import { FontAwesome5, Entypo, AntDesign } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faLocationDot, faUsers } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
@@ -21,8 +22,16 @@ import DatePicker from "react-datepicker";
 
 type ActivityAdminCreateNavigationProp = NativeStackNavigationProp<ParamListBase>;
 
-export default function ActivityAdminCreate() {
+type RouteParams = {
+  ActivityAdminCreate: {
+    id?: string;
+  };
+};
+
+export default function ActivityAdminUpdate() {
   const navigation = useNavigation<ActivityAdminCreateNavigationProp>();
+  const route = useRoute<RouteProp<RouteParams, "ActivityAdminCreate">>();
+  const activityId = route.params?.id;
 
   const [name, setName] = useState<string>("");
   const [speakerName, setSpeakerName] = useState<string>("");
@@ -31,7 +40,7 @@ export default function ActivityAdminCreate() {
   const [vacancies, setVacancies] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); 
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -57,7 +66,8 @@ export default function ActivityAdminCreate() {
           const fetchedCategories = await getCategories();
           if (isActive) {
             setCategories(fetchedCategories);
-            if (fetchedCategories.length > 0) {
+            // Se ainda não tiver categoria selecionada, seleciona a primeira
+            if (fetchedCategories.length > 0 && !selectedCategoryId) {
               setSelectedCategoryId(fetchedCategories[0].id);
             }
             setCategoriesError(null);
@@ -79,8 +89,49 @@ export default function ActivityAdminCreate() {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, [selectedCategoryId])
   );
+
+  // Busca a atividade
+  useEffect(() => {
+    if (!activityId) return;
+
+    let isActive = true;
+
+    const fetchActivity = async () => {
+      setIsLoading(true);
+      try {
+        const activity = await getActivityId(activityId);
+        if (isActive) {
+          setName(activity.nome);
+          setSpeakerName(activity.palestranteNome);
+          const activityDate = new Date(activity.data);
+          setDate(activityDate);
+          setTime(activityDate);
+          setVacancies(String(activity.vagas));
+          setDetails(activity.detalhes);
+          setLocation(activity.local);
+          setSelectedCategoryId(activity.categoriaId);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar atividade:", err);
+        if (isActive) {
+          setErrorMessage("Não foi possível carregar os dados da atividade");
+          setErrorModalVisible(true);
+        }
+      } finally {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchActivity();
+
+    return () => {
+      isActive = false;
+    };
+  }, [activityId]);
 
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(false);
@@ -96,7 +147,9 @@ export default function ActivityAdminCreate() {
     }
   };
 
-  const handleCreateActivity = async () => {
+  const handleUpdateActivity = async () => {
+    if (!activityId)
+      return;
 
     if (
       !name.trim() ||
@@ -106,15 +159,15 @@ export default function ActivityAdminCreate() {
       !location.trim() ||
       !selectedCategoryId
     ) {
-      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
-      setWarningModalVisible(true);      
+      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria");
+      setWarningModalVisible(true);
       return;
     }
 
     const parsedVacancies = parseInt(vacancies, 10);
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
-      setWarningMessage("O número de vagas deve ser um valor numérico positivo")
-      setWarningModalVisible(true);  
+      setWarningMessage("O número de vagas deve ser um valor numérico positivo");
+      setWarningModalVisible(true);
       return;
     }
 
@@ -126,7 +179,7 @@ export default function ActivityAdminCreate() {
         date.getMonth(),
         date.getDate(),
         time.getHours(),
-        time.getMinutes(),
+        time.getMinutes()
       );
 
       const adjustedDateTime = new Date(dateTime.getTime() - dateTime.getTimezoneOffset() * 60000);
@@ -134,17 +187,17 @@ export default function ActivityAdminCreate() {
       const activityData = {
         nome: name,
         palestranteNome: speakerName,
-        data: adjustedDateTime.toISOString(), 
+        data: adjustedDateTime.toISOString(),
         vagas: parsedVacancies,
         detalhes: details,
         categoriaId: selectedCategoryId,
         local: location,
       };
 
-      await createActivity(activityData);
+      await updateActivity(activityId, activityData);
       navigation.goBack();
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Falha ao criar a atividade.";
+      const errorMessage = error.response?.data?.message || "Falha ao atualizar a atividade.";
       setErrorMessage(errorMessage);
       setErrorModalVisible(true);
     } finally {
@@ -166,9 +219,13 @@ export default function ActivityAdminCreate() {
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar nova atividade</Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
+              {activityId ? "Editar atividade" : "Criar nova atividade"}
+            </Text>
             <Text className="text-blue-200 font-inter">
-              Adicione uma nova atividade ao evento!
+              {activityId
+                ? "Atualize os dados da atividade."
+                : "Adicione uma nova atividade ao evento!"}
             </Text>
           </View>
 
@@ -179,11 +236,7 @@ export default function ActivityAdminCreate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
                 <Input>
                   <FontAwesome5 name="exclamation-circle" size={20} color={colors.border} />
-                  <Input.Field
-                    placeholder="Ex.: Palestra de IA"
-                    onChangeText={setName}
-                    value={name}
-                  />
+                  <Input.Field placeholder="Ex.: Palestra de IA" onChangeText={setName} value={name} />
                 </Input>
               </View>
 
@@ -192,17 +245,13 @@ export default function ActivityAdminCreate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
                 <Input>
                   <FontAwesome5 name="user-alt" size={18} color={colors.border} />
-                  <Input.Field
-                    placeholder="Ex.: João Silva"
-                    onChangeText={setSpeakerName}
-                    value={speakerName}
-                  />
+                  <Input.Field placeholder="Ex.: João Silva" onChangeText={setSpeakerName} value={speakerName} />
                 </Input>
               </View>
 
               {/* Data da atividade */}
               <View className="w-full">
-                {Platform.OS === 'web' ? (
+                {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <DatePicker
@@ -210,22 +259,20 @@ export default function ActivityAdminCreate() {
                       onChange={(date: Date | null) => {
                         if (date) {
                           setDate(date);
-                          console.log(date)
-                          if (date > date) {
-                              setDate(date);
-                          }
                         }
                       }}
-                      locale={ptBR} 
+                      locale={ptBR}
                       dateFormat="dd/MM/yyyy"
                       popperClassName="z-50"
                       portalId="root"
                       customInput={
-                        <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
+                        <View
+                          className={`w-full ${
+                            Platform.OS === "web" ? "p-4" : "py-2 px-4"
+                          } bg-background rounded-lg border border-border flex-row items-center`}
+                        >
                           <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                          <Text className="text-white font-inter text-base ml-4">
-                            {date.toLocaleDateString('pt-BR')}
-                          </Text>
+                          <Text className="text-white font-inter text-base ml-4">{date.toLocaleDateString("pt-BR")}</Text>
                         </View>
                       }
                     />
@@ -233,11 +280,12 @@ export default function ActivityAdminCreate() {
                 ) : (
                   <Pressable onPress={() => setShowDatePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
-                    <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                    <View
+                      className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center"
+                      pointerEvents="none"
+                    >
                       <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                      <Text className="text-white font-inter text-base ml-4">
-                        {`${date.toLocaleDateString('pt-BR')}`}
-                      </Text>
+                      <Text className="text-white font-inter text-base ml-4">{`${date.toLocaleDateString("pt-BR")}`}</Text>
                     </View>
                   </Pressable>
                 )}
@@ -245,7 +293,7 @@ export default function ActivityAdminCreate() {
 
               {/* Horário da atividade */}
               <View className="w-full">
-                {Platform.OS === 'web' ? (
+                {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <DatePicker
@@ -264,9 +312,7 @@ export default function ActivityAdminCreate() {
                       customInput={
                         <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center">
                           <AntDesign name="clockcircle" size={20} color={colors.border} />
-                          <Text className="text-white font-inter text-base ml-4">
-                            {format(time, "HH:mm")}
-                          </Text>
+                          <Text className="text-white font-inter text-base ml-4">{format(time, "HH:mm")}</Text>
                         </View>
                       }
                     />
@@ -274,11 +320,12 @@ export default function ActivityAdminCreate() {
                 ) : (
                   <Pressable onPress={() => setShowTimePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
-                    <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                    <View
+                      className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center"
+                      pointerEvents="none"
+                    >
                       <FontAwesome5 name="clock" size={20} color={colors.border} />
-                      <Text className="text-white font-inter text-base ml-4">
-                        {format(time, "HH:mm", { locale: ptBR })}
-                      </Text>
+                      <Text className="text-white font-inter text-base ml-4">{format(time, "HH:mm", { locale: ptBR })}</Text>
                     </View>
                   </Pressable>
                 )}
@@ -289,11 +336,7 @@ export default function ActivityAdminCreate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
                 <Input>
                   <FontAwesomeIcon icon={faLocationDot} size={20} color={colors.border} />
-                  <Input.Field
-                    placeholder="Ex.: Auditório"
-                    onChangeText={setLocation}
-                    value={location}
-                  />
+                  <Input.Field placeholder="Ex.: Auditório" onChangeText={setLocation} value={location} />
                 </Input>
               </View>
 
@@ -302,12 +345,7 @@ export default function ActivityAdminCreate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
                 <Input>
                   <FontAwesomeIcon icon={faUsers} size={20} color={colors.border} />
-                  <Input.Field
-                    placeholder="Ex.: 50"
-                    onChangeText={setVacancies}
-                    value={vacancies}
-                    keyboardType="numeric"
-                  />
+                  <Input.Field placeholder="Ex.: 50" onChangeText={setVacancies} value={vacancies} keyboardType="numeric" />
                 </Input>
               </View>
 
@@ -316,11 +354,7 @@ export default function ActivityAdminCreate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
                 <Input>
                   <Entypo name="text" size={20} color={colors.border} />
-                  <Input.Field
-                    placeholder="Detalhes da atividade"
-                    onChangeText={setDetails}
-                    value={details}
-                  />
+                  <Input.Field placeholder="Detalhes da atividade" onChangeText={setDetails} value={details} />
                 </Input>
               </View>
 
@@ -339,7 +373,9 @@ export default function ActivityAdminCreate() {
                         <Pressable
                           key={category.id}
                           onPress={() => setSelectedCategoryId(category.id)}
-                          className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"}`}
+                          className={`px-4 py-2 rounded-full border ${
+                            isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"
+                          }`}
                         >
                           <Text className={isSelected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>
                             {category.nome}
@@ -354,47 +390,23 @@ export default function ActivityAdminCreate() {
               {isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} className="mt-6" />
               ) : (
-                <Button title="Criar" className="mt-auto" onPress={handleCreateActivity} />
+                <Button title="Atualizar" className="mt-auto" onPress={handleUpdateActivity} />
               )}
             </View>
           </ScrollView>
         </View>
       </View>
 
-      {Platform.OS !== 'web' && (
+      {Platform.OS !== "web" && (
         <>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              onChange={onChangeDate}
-            />
-          )}
-          {showTimePicker && (
-            <DateTimePicker
-              value={time}
-              mode="time"
-              onChange={onChangeTime}
-            />
-          )}
+          {showDatePicker && <DateTimePicker value={date} mode="date" onChange={onChangeDate} />}
+          {showTimePicker && <DateTimePicker value={time} mode="time" onChange={onChangeTime} />}
         </>
       )}
 
-      <ErrorOverlay
-        visible={errorModalVisible}
-        title="Erro"
-        message={errorMessage}
-        onConfirm={() => {setErrorModalVisible(false)}}
-        confirmText="OK"
-      />
+      <ErrorOverlay visible={errorModalVisible} title="Erro" message={errorMessage} onConfirm={() => setErrorModalVisible(false)} confirmText="OK" />
 
-      <WarningOverlay
-        visible={warningModalVisible}
-        title="Aviso"
-        message={warningMessage}
-        onConfirm={() => {setWarningModalVisible(false)}}
-        confirmText="OK"
-      />
+      <WarningOverlay visible={warningModalVisible} title="Aviso" message={warningMessage} onConfirm={() => setWarningModalVisible(false)} confirmText="OK" />
     </SafeAreaView>
   );
 }

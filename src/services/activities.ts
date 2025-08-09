@@ -36,7 +36,7 @@ export const createActivity = async (activityData: Omit<Activity, 'id'>): Promis
 };
 
 export const updateActivity = async (id: string, activityData: UpdateActivityData): Promise<Activity> => {
-  const response = await api.patch(`/activities/${id}`, activityData);
+  const response = await api.put(`/activities/${id}`, activityData);
   return response.data;
 };
 

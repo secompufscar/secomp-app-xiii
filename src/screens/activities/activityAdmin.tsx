@@ -67,7 +67,7 @@ export default function ActivityAdmin() {
   const renderActivityItem = ({ item }: { item: Activity }) => ( 
     <Pressable
       onPress={() => {
-        navigation.navigate("ActivityDetails", { item });
+        navigation.navigate("ActivityAdminUpdate", { id: item.id });
       }}
     >
       {({ pressed }) => (

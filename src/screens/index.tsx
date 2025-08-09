@@ -15,9 +15,11 @@ import EventGuide from "./event/eventGuideScreen";
 import UserProfile from "./profile/userProfileScreen";
 import AdminProfile from "./profile/adminProfileScreen";
 
-import EventAdmin from "./event/eventAdmin";
 import ActivityAdmin from "./activities/activityAdmin";
 import ActivityAdminCreate from "./activities/activityAdminCreate";
+import ActivityAdminUpdate from "./activities/activityAdminUpdate";
+
+import EventAdmin from "./event/eventAdmin";
 import EventAdminCreate from "./event/eventAdminCreate";
 import EventAdminUpdate from "./event/eventAdminUpdate";
 
@@ -67,9 +69,10 @@ export {
   Activities,
   QRCode,
   ActivityAdmin,
+  ActivityAdminCreate,
+  ActivityAdminUpdate,
   ActivityDetails,
   ParticipantsList,
-  ActivityAdminCreate,
   AdminNotificationScreen,
   AdminNotificationSend,
 };

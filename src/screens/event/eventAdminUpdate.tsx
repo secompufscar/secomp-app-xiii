@@ -140,7 +140,7 @@ export default function EventAdminUpdate() {
           {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Editar evento</Text>
-            <Text className="text-gray-400 font-inter">
+            <Text className="text-blue-200 font-inter">
               Altere os dados de uma edição da Secomp!
             </Text>
           </View>
@@ -252,7 +252,7 @@ export default function EventAdminUpdate() {
             {isLoading ? (
               <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
             ) : (
-              <Button title="Criar" className="mt-auto mb-12" onPress={handleUpdateEvent}/>
+              <Button title="Atualizar" className="mt-auto mb-12" onPress={handleUpdateEvent}/>
             )}
           </View>
         </View>
