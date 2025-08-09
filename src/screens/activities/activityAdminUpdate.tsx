@@ -40,6 +40,7 @@ export default function ActivityAdminUpdate() {
   const [vacancies, setVacancies] = useState<string>("");
   const [details, setDetails] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [points, setPoints] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -110,6 +111,7 @@ export default function ActivityAdminUpdate() {
           setTime(activityDate);
           setVacancies(String(activity.vagas));
           setDetails(activity.detalhes);
+          setPoints(String(activity.points));
           setLocation(activity.local);
           setSelectedCategoryId(activity.categoriaId);
         }
@@ -156,6 +158,7 @@ export default function ActivityAdminUpdate() {
       !speakerName.trim() ||
       !vacancies.trim() ||
       !details.trim() ||
+      !points.trim() ||
       !location.trim() ||
       !selectedCategoryId
     ) {
@@ -170,6 +173,14 @@ export default function ActivityAdminUpdate() {
       setWarningModalVisible(true);
       return;
     }
+
+    const parsedPoints = parseInt(points, 10);
+    if (isNaN(parsedPoints) || parsedPoints < 0) {
+      setWarningMessage("A pontuação deve ser um valor numérico positivo")
+      setWarningModalVisible(true);  
+      return;
+    }
+
 
     setIsLoading(true);
 
@@ -190,6 +201,7 @@ export default function ActivityAdminUpdate() {
         data: adjustedDateTime.toISOString(),
         vagas: parsedVacancies,
         detalhes: details,
+        points: parsedPoints,
         categoriaId: selectedCategoryId,
         local: location,
       };
@@ -355,6 +367,20 @@ export default function ActivityAdminUpdate() {
                 <Input>
                   <Entypo name="text" size={20} color={colors.border} />
                   <Input.Field placeholder="Detalhes da atividade" onChangeText={setDetails} value={details} />
+                </Input>
+              </View>
+
+
+              {/* Pontos */}
+              <View className="w-full">
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Pontos</Text>
+                <Input>
+                  <Entypo name="game-controller" size={20} color={colors.border} />
+                  <Input.Field
+                    placeholder="Pontuação da atividade"
+                    onChangeText={setPoints}
+                    value={points}
+                  />
                 </Input>
               </View>
 
