@@ -5,9 +5,9 @@ import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories"; 
-import { FontAwesome5, Entypo} from "@expo/vector-icons";
+import { FontAwesome5, Entypo, AntDesign} from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faLocationDot, faCalendarDay, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faUsers } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -17,6 +17,7 @@ import ErrorOverlay from "../../components/overlay/errorOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
+import DatePicker from "react-datepicker";
 
 type ActivityAdminCreateNavigationProp = NativeStackNavigationProp<ParamListBase>;
 
@@ -128,10 +129,12 @@ export default function ActivityAdminCreate() {
         time.getMinutes(),
       );
 
+      const adjustedDateTime = new Date(dateTime.getTime() - dateTime.getTimezoneOffset() * 60000);
+
       const activityData = {
         nome: name,
         palestranteNome: speakerName,
-        data: dateTime.toISOString(), 
+        data: adjustedDateTime.toISOString(), 
         vagas: parsedVacancies,
         detalhes: details,
         categoriaId: selectedCategoryId,
@@ -198,34 +201,42 @@ export default function ActivityAdminCreate() {
               </View>
 
               {/* Data da atividade */}
-              <View className="w-full z-10">
+              <View className="w-full">
                 {Platform.OS === 'web' ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
-                    <input
-                      type="date"
-                      value={format(date, "yyyy-MM-dd")}
-                      onChange={(e) => setDate(new Date(e.target.value))}
-                      style={{
-                        width: "100%",
-                        padding: 16,
-                        backgroundColor: colors.background,
-                        color: colors.white,
-                        borderRadius: 8,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                        fontSize: 14,
-                        fontFamily: "Inter_400Regular",
+                    <DatePicker
+                      selected={date}
+                      onChange={(date: Date | null) => {
+                        if (date) {
+                          setDate(date);
+                          console.log(date)
+                          if (date > date) {
+                              setDate(date);
+                          }
+                        }
                       }}
+                      locale={ptBR} 
+                      dateFormat="dd/MM/yyyy"
+                      popperClassName="z-50"
+                      portalId="root"
+                      customInput={
+                        <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
+                          <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
+                          <Text className="text-white font-inter text-base ml-4">
+                            {date.toLocaleDateString('pt-BR')}
+                          </Text>
+                        </View>
+                      }
                     />
                   </View>
                 ) : (
                   <Pressable onPress={() => setShowDatePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
-                      <FontAwesome5 name="calendar-alt" size={20} color={colors.border} />
+                      <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
                       <Text className="text-white font-inter text-base ml-4">
-                        {format(date, "dd/MM/yyyy", { locale: ptBR })}
+                        {`${date.toLocaleDateString('pt-BR')}`}
                       </Text>
                     </View>
                   </Pressable>
@@ -233,30 +244,31 @@ export default function ActivityAdminCreate() {
               </View>
 
               {/* Horário da atividade */}
-              <View className="w-full z-10">
+              <View className="w-full">
                 {Platform.OS === 'web' ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
-                    <input
-                      type="time"
-                      value={format(time, "HH:mm")}
-                      onChange={(e) => {
-                        const [hours, minutes] = e.target.value.split(':').map(Number);
-                        const newTime = new Date();
-                        newTime.setHours(hours, minutes, 0, 0);
-                        setTime(newTime);
+                    <DatePicker
+                      selected={time}
+                      onChange={(time: Date | null) => {
+                        if (time) setTime(time);
                       }}
-                      style={{
-                        width: "100%",
-                        padding: 16,
-                        backgroundColor: colors.background,
-                        color: colors.white,
-                        borderRadius: 8,
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                        fontSize: 14,
-                        fontFamily: "Inter_400Regular",
-                      }}
+                      showTimeSelect
+                      showTimeSelectOnly
+                      timeIntervals={5}
+                      timeCaption="Hora"
+                      dateFormat="HH:mm"
+                      locale={ptBR}
+                      popperClassName="z-50"
+                      portalId="root"
+                      customInput={
+                        <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center">
+                          <AntDesign name="clockcircle" size={20} color={colors.border} />
+                          <Text className="text-white font-inter text-base ml-4">
+                            {format(time, "HH:mm")}
+                          </Text>
+                        </View>
+                      }
                     />
                   </View>
                 ) : (
