@@ -16,6 +16,12 @@ export const getRegistrationsByUserId = async (userId: string): Promise<UserEven
   return response.data;
 };
 
+// Busca inscrição de um usuário em um evento específico
+export const getRegistrationByUserIdAndEventId = async (userId: string, eventId: string): Promise<UserEvent> => {
+  const response = await api.get(`/userEvent/user/${userId}/event/${eventId}`);
+  return response.data;
+};
+
 // Inscreve o usuário autenticado em um evento
 export const createRegistration = async (registrationData: CreateRegistrationDTO): Promise<UserEvent> => {
   const response = await api.post('/userEvent', registrationData);

@@ -7,17 +7,16 @@ import { BeautifulName } from "beautiful-name";
 import { useAuth } from "../../hooks/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../styles/colors";
 import { getCurrentEvent } from "../../services/events";
 import AppLayout from "../../components/app/appLayout";
+import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
 
 export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user }: any = useAuth();
-  const [isBtnPressed, setIsBtnPressed] = useState(false);
   const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
 
   useEffect(() => {
@@ -125,27 +124,7 @@ export default function Home() {
         </View>
 
         {/* Inscrição no evento */}
-        <LinearGradient
-          colors={["#29303F", "#2A3B5E"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 overflow-hidden"
-        >
-          <Text className="text-white text-lg font-poppinsSemiBold mb-2">
-            Inscreva-se na Secomp
-          </Text>
-          <Text className="text-default text-[13px] font-inter leading-[1.5] mb-4">
-            Para participar do evento e de suas atividades, você deve se inscrever por aqui
-          </Text>
-          <Pressable
-            onPress={subscribe}
-            onPressIn={() => setIsBtnPressed(true)}
-            onPressOut={() => setIsBtnPressed(false)}
-            className={`w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
-          >
-            <Text className="text-white text-[13px] font-poppinsMedium">Inscrever-se</Text>
-          </Pressable>
-        </LinearGradient>
+        <HomeEventSubscription/>
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
