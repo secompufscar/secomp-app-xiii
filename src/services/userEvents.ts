@@ -28,7 +28,7 @@ export const createRegistration = async (registrationData: CreateRegistrationDTO
   return response.data;
 };
 
-// Remove/cancela a inscrição de um usuário em um evento
+// Remove a inscrição de um usuário em um evento
 export const deleteRegistration = async (registrationId: string): Promise<void> => {
   await api.delete(`/userEvent/${registrationId}`);
 };
