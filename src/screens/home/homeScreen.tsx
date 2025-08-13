@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useFocusEffect } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { useAuth } from "../../hooks/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../styles/colors";
 import { getCurrentEvent } from "../../services/events";
+import { createRegistration, deleteRegistration, getRegistrationByUserIdAndEventId } from "../../services/userEvents";
 import AppLayout from "../../components/app/appLayout";
 import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 export default function Home() {
@@ -21,26 +24,82 @@ export default function Home() {
   const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [isUserSubscribed, setIsUserSubscribed] = useState(false);
+  const [isEventActive, setIsEventActive] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState<Events | null>(null);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [confirmAction, setConfirmAction] = useState<null | "subscribe" | "unsubscribe">(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setConfirmAction(null);
+      };
+    }, [])
+  );
 
   useEffect(() => {
-    const fetchAndSetEventStatus = async () => {
+    const fetchEventData = async () => {
       try {
-        const currentEvent = await getCurrentEvent();
-        
-        if (currentEvent) {
-          const message = getEventStatusMessage(currentEvent);
+        const event = await getCurrentEvent();
+        setCurrentEvent(event);
+
+        // Status do evento
+        if (event) {
+          const today = new Date();
+          const start = new Date(event.startDate);
+          const end = new Date(event.endDate);
+          setIsEventActive(today >= start && today <= end);
+
+          const message = getEventStatusMessage(event);
           setEventStatusMessage(message);
         } else {
+          setIsEventActive(false);
           setEventStatusMessage("Nenhum evento ativo no momento");
         }
+
+        // Inscrição do usuário
+        if (event?.id && user?.id) {
+          const registration = await getRegistrationByUserIdAndEventId(user.id, event.id);
+          setIsUserSubscribed(!!registration);
+          setRegistrationId(registration?.id || null);
+        } else {
+          setIsUserSubscribed(false);
+          setRegistrationId(null);
+        }
       } catch (error) {
-        console.error("Falha ao buscar dados do evento:", error);
+        console.error("Erro ao buscar dados do evento:", error);
+        setIsUserSubscribed(false);
+        setIsEventActive(false);
+        setRegistrationId(null);
         setEventStatusMessage("Não foi possível carregar o evento");
       }
     };
 
-    fetchAndSetEventStatus();
-  }, []);
+    fetchEventData();
+  }, [user]);
+
+  const subscribe = async () => {
+    try {
+      if (!user?.id || !currentEvent?.id) throw new Error("Usuário ou evento inválido");
+      const registration = await createRegistration({ eventId: currentEvent.id });
+      setIsUserSubscribed(true);
+      setRegistrationId(registration.id ?? null);
+    } catch {
+      handleError("Não foi possível realizar a inscrição");
+    }
+  };
+
+  const unsubscribe = async () => {
+    try {
+      if (!registrationId) return;
+      await deleteRegistration(registrationId);
+      setIsUserSubscribed(false);
+      setRegistrationId(null);
+    } catch {
+      handleError("Não foi possível cancelar a inscrição.");
+    }
+  };
 
   const handleError = (message: string) => {
     setErrorMessage(message);
@@ -102,11 +161,6 @@ export default function Home() {
   const nomeParaMostrar =
     ultimoNome && ultimoNome !== primeiroNome ? `${primeiroNome} ${ultimoNome}` : primeiroNome;
 
-  // Inscrever-se no evento
-  const subscribe = () => {
-    console.log("Usuário inscrito nesta edição com suceso!");
-  };
-
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
@@ -132,7 +186,12 @@ export default function Home() {
         </View>
 
         {/* Inscrição no evento */}
-        <HomeEventSubscription onError={handleError}/>
+        <HomeEventSubscription
+          isEventActive={isEventActive}
+          isUserSubscribed={isUserSubscribed}
+          onSubscribeRequest={() => setConfirmAction("subscribe")}
+          onUnsubscribeRequest={() => setConfirmAction("unsubscribe")}
+        />
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
@@ -198,6 +257,19 @@ export default function Home() {
           <HomeSocials />
         </View>
       </AppLayout>
+
+      <ConfirmationOverlay
+        visible={!!confirmAction}
+        title={confirmAction === "subscribe" ? "Confirmar inscrição" : "Cancelar inscrição"}
+        message={confirmAction === "subscribe" ? "Você deseja se inscrever neste evento?" : "Tem certeza que deseja cancelar sua inscrição?"}
+        onCancel={() => setConfirmAction(null)}
+        onConfirm={async () => {
+          if (confirmAction === "subscribe") await subscribe();
+          if (confirmAction === "unsubscribe") await unsubscribe();
+          setConfirmAction(null);
+        }}
+        confirmText="Continuar"
+      />
 
       <ErrorOverlay
         visible={errorModalVisible}
