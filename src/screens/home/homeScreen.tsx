@@ -13,11 +13,14 @@ import AppLayout from "../../components/app/appLayout";
 import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user }: any = useAuth();
   const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchAndSetEventStatus = async () => {
@@ -38,6 +41,11 @@ export default function Home() {
 
     fetchAndSetEventStatus();
   }, []);
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    setErrorModalVisible(true);
+  };
 
   // Mensagem baseada no horário do dia
   const getCurrentTime = () => {
@@ -124,7 +132,7 @@ export default function Home() {
         </View>
 
         {/* Inscrição no evento */}
-        <HomeEventSubscription/>
+        <HomeEventSubscription onError={handleError}/>
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
@@ -190,6 +198,14 @@ export default function Home() {
           <HomeSocials />
         </View>
       </AppLayout>
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }

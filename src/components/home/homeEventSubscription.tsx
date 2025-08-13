@@ -5,7 +5,7 @@ import { useAuth } from "../../hooks/AuthContext";
 import { getCurrentEvent } from "../../services/events";
 import { getRegistrationByUserIdAndEventId, createRegistration, deleteRegistration } from "../../services/userEvents";
 
-export default function HomeEventSubscription() {
+export default function HomeEventSubscription({ onError }: { onError?: (msg: string) => void }) {
   const [isBtnPressed, setIsBtnPressed] = useState(false);
   const [isUserSubscribed, setIsUserSubscribed] = useState(false);
   const [isEventActive, setIsEventActive] = useState(false);
@@ -15,7 +15,7 @@ export default function HomeEventSubscription() {
 
   const subscribe = async () => {
     if (!user?.id || !currentEvent?.id) {
-      Alert.alert("Erro", "Usuário ou evento inválido.");
+      onError?.("Erro ao se inscrever no evento: usuário ou evento inválido");
       return;
     }
 
@@ -23,9 +23,9 @@ export default function HomeEventSubscription() {
       const registration = await createRegistration({ eventId: currentEvent.id });
       setIsUserSubscribed(true);
       setRegistrationId(registration.id ?? null);
-      Alert.alert("Sucesso", "Você se inscreveu na Secomp com sucesso.");
+      onError?.("Sucessoooo");
     } catch (error: any) {
-      Alert.alert("Erro", error.response?.data?.message || "Não foi possível realizar a inscrição.");
+      onError?.("Não foi possível realizar a inscrição");
     }
   };
 
@@ -37,7 +37,7 @@ export default function HomeEventSubscription() {
       setRegistrationId(null);
       Alert.alert("Sucesso", "Sua inscrição foi removida.");
     } catch (error) {
-      Alert.alert("Erro", "Não foi possível cancelar a inscrição.");
+      onError?.("Não foi possível cancelar a inscrição.");
     }
   };
 
