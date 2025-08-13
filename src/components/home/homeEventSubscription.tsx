@@ -1,5 +1,4 @@
-import { Text, Pressable } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { Text, Pressable, View } from "react-native";
 import { useState } from "react";
 
 export default function HomeEventSubscription({
@@ -21,31 +20,36 @@ export default function HomeEventSubscription({
   let buttonDisabled = false;
   let onPressHandler: () => void = () => {};
 
+  // Estilo
+  let borderColor = "";
+  let buttonColor = "";
+
   if (!isEventActive) {
     titleText = "Preparando a próxima edição ...";
-    subtitleText = "O evento ainda não está ativo. Aguarde o período para inscrição.";
+    subtitleText = "O evento ainda não está ativo. Aguarde o período para inscrição";
     buttonText = "Inscrições fechadas";
     buttonDisabled = true;
+    borderColor = "border-gray-700";
+    buttonColor = "bg-gray-700";
   } else if (isUserSubscribed) {
     titleText = "Inscrição confirmada!";
-    subtitleText = "Você já está inscrito no evento!";
+    subtitleText = "Você já pode participar de nossas atividades";
     buttonText = "Cancelar Inscrição";
     onPressHandler = onUnsubscribeRequest;
+    borderColor = "border-border";
+    buttonColor = "bg-border";
   } else {
     titleText = "Inscreva-se na Secomp!";
-    subtitleText = "Para participar do evento, inscreva-se por aqui.";
+    subtitleText = "Para participar do evento, inscreva-se por aqui";
     buttonText = "Inscrever-se";
     onPressHandler = onSubscribeRequest;
+    borderColor = "border-blue-500/50";
+    buttonColor = "bg-blue-500";
   }
 
   return (
-    <LinearGradient
-      colors={["#29303F", "#2A3B5E"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 overflow-hidden"
-    >
-      <Text className="text-white text-base font-poppinsSemiBold mb-2">{titleText}</Text>
+    <View className={`flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 bg-background border ${borderColor}`}>
+      <Text className="text-white text-base font-poppinsSemiBold mb-1">{titleText}</Text>
       <Text className="text-default font-inter leading-[1.5] mb-4">
         {subtitleText}
       </Text>
@@ -54,12 +58,12 @@ export default function HomeEventSubscription({
         onPressIn={() => setIsBtnPressed(true)}
         onPressOut={() => setIsBtnPressed(false)}
         disabled={buttonDisabled}
-        className={`w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${
+        className={`w-44 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${buttonColor} ${
           isBtnPressed ? "opacity-80" : "opacity-100"
         }`}
       >
-        <Text className="text-white text-[13px] font-poppinsMedium">{buttonText}</Text>
+        <Text className="text-white font-poppinsMedium">{buttonText}</Text>
       </Pressable>
-    </LinearGradient>
+    </View>
   );
 }

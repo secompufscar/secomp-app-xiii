@@ -269,6 +269,7 @@ export default function Home() {
           setConfirmAction(null);
         }}
         confirmText="Continuar"
+        confirmButtonColor={colors.blue[500]}
       />
 
       <ErrorOverlay
