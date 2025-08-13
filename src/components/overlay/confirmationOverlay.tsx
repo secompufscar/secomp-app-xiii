@@ -12,6 +12,7 @@ interface ConfirmationOverlayProps {
   confirmText?: string;
   cancelText?: string;
   originalNavBarColor?: string;
+  confirmButtonColor?: string;
 }
 
 const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
@@ -25,6 +26,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
   confirmText = 'Excluir',
   cancelText = 'Cancelar',
   originalNavBarColor = colors.blue[900], 
+  confirmButtonColor = '#dc2626',
 }) => {
 
   useEffect(() => {
@@ -72,7 +74,8 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
 
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded bg-red-600 active:bg-red-700"
+            style={{ backgroundColor: confirmButtonColor }}
+            className="w-28 h-11 px-2 flex justify-center items-center rounded active:opacity-80"
           >
             <Text className="text-white font-poppinsMedium">{confirmText}</Text>
           </Pressable>
