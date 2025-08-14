@@ -16,6 +16,8 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import InfoRow from "../../components/info/infoRow";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 const categoryIdToName: { [key: string]: string } = {
   "1": "Minicurso",
@@ -35,9 +37,14 @@ export default function ActivityDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
-  const [isPressed, setIsPressed] = useState(false);
   const [palestranteImageUrl, setPalestranteImageUrl] = useState("");
   const [activityImageUrl, setActivityImageUrl] = useState("");
+
+  const [isPressed, setIsPressed] = useState(false);
+  const [isBtnPressed, setIsBtnPressed] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   useEffect(() => {
     const checkSubscription = async () => {
@@ -83,16 +90,15 @@ export default function ActivityDetails() {
     try {
       if (isSubscribed) {
         await unsubscribeToActivity(user.id, activity.id);
-        Alert.alert("Sucesso", "Você cancelou sua inscrição nesta atividade.");
         setIsSubscribed(false);
       } else {
         await subscribeToActivity(user.id, activity.id);
-        Alert.alert("Sucesso", "Você se inscreveu nesta atividade!");
         setIsSubscribed(true);
       }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Ocorreu um erro.";
-      Alert.alert("Erro", errorMessage);
+      const errorMessage = error.response?.data?.message || "Erro ao alterar status de inscrição";
+      setErrorMessage(errorMessage);
+      setErrorModalVisible(true);
     } finally {
       setIsLoading(false);
     }
@@ -231,19 +237,19 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : activity.categoriaId === "1" ? ( // <---- aqui filtramos minicurso
+            ) : activity.categoriaId === "1" ? ( 
               subscriptionLoading || isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} />
               ) : (
                 <Pressable
                   onPress={handleSubscription}
-                  onPressIn={() => setIsPressed(true)}
-                  onPressOut={() => setIsPressed(false)}
+                  onPressIn={() => setIsBtnPressed(true)}
+                  onPressOut={() => setIsBtnPressed(false)}
                 >
                   <View
                     className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform 
                       ${isSubscribed ? "bg-border" : "bg-blue-500 "} 
-                      ${isPressed ? "opacity-80" : "opacity-100"}`}
+                      ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
                   >
                     <Text className="text-white text-base font-interMedium">
                       {isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
@@ -255,6 +261,14 @@ export default function ActivityDetails() {
           </View>
         </ScrollView>
       </View>
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
