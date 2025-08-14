@@ -48,8 +48,12 @@ export default function ActivityDetails() {
 
       setSubscriptionLoading(true);
       try {
-        await userSubscription(user.id, activity.id);
-        setIsSubscribed(true);
+        const response = await userSubscription(user.id, activity.id);
+        if (response?.inscricaoPrevia === true || response?.listaEspera === true) {
+          setIsSubscribed(true);
+        } else {
+          setIsSubscribed(false);
+        }
       } catch (error: any) {
         setIsSubscribed(false);
       } finally {
@@ -230,10 +234,19 @@ export default function ActivityDetails() {
             ) : subscriptionLoading || isLoading ? (
               <ActivityIndicator size="large" color={colors.blue[500]} />
             ) : (
-              <Button
-                title={isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+              <Pressable
                 onPress={handleSubscription}
-              />
+                onPressIn={() => setIsPressed(true)}
+                onPressOut={() => setIsPressed(false)}
+              >
+                <View
+                  className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform 
+                    ${isSubscribed ? "bg-border" : "bg-blue-500 "} 
+                    ${isPressed ? "opacity-80" : "opacity-100"}`}
+                >
+                  <Text className="text-white text-base font-interMedium">{isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}</Text>
+                </View>
+              </Pressable>
             )}
           </View>
         </ScrollView>
