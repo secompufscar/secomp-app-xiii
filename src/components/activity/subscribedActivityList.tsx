@@ -3,7 +3,8 @@ import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native
 import { parseISO, addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "../../hooks/AuthContext";
-import { getActivities, getUserSubscribedActivities } from "../../services/activities";
+import { getActivities } from "../../services/activities";
+import { getUserSubscribedActivities } from "../../services/userAtActivities";
 import { colors } from "../../styles/colors";
 
 export type Activity = {

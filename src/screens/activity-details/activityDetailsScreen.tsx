@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Pressable, ActivityIndicator, Alert, Linking, StatusBar, Platform, ScrollView, Image, ImageBackground } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Linking, StatusBar, Platform, ScrollView, Image, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, useNavigation, ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faLocationDot, faCalendarDay, faUsers, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faCalendarDay, faUser, faUserClock, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
-import { subscribeToActivity, unsubscribeToActivity } from "../../services/activities";
-import { userSubscription } from "../../services/userAtActivities";
+import { userSubscription , subscribeToActivity, unsubscribeToActivity, getParticipantsByActivity } from "../../services/userAtActivities";
 import { getImagesByActivityId } from "../../services/activityImage";
 import { colors } from "../../styles/colors";
 import { format, parseISO, addHours } from "date-fns";
@@ -16,7 +15,6 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import InfoRow from "../../components/info/infoRow";
-import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 const categoryIdToName: { [key: string]: string } = {
@@ -37,15 +35,39 @@ export default function ActivityDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+
+  // Vagas da atividade
+  const [subscribedCount, setSubscribedCount] = useState(0);
+  const [waitingListCount, setWaitingListCount] = useState(0);
+
+  // Imagens da atividade
   const [palestranteImageUrl, setPalestranteImageUrl] = useState("");
   const [activityImageUrl, setActivityImageUrl] = useState("");
 
+  // Controle dos botões
   const [isPressed, setIsPressed] = useState(false);
   const [isBtnPressed, setIsBtnPressed] = useState(false);
 
+  // Overlay de erro
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
 
+  // Verifica a relação de inscritos e lista de espera
+  const fetchParticipantsCounts = async () => {
+    try {
+      const participants = await getParticipantsByActivity(activity.id);
+
+      const inscritos = participants.filter(p => p.inscricaoPrevia === true).length;
+      const listaEspera = participants.filter(p => p.listaEspera === true).length;
+
+      setSubscribedCount(inscritos);
+      setWaitingListCount(listaEspera);
+    } catch (error) {
+      console.error("Erro ao buscar participantes:", error);
+    }
+  };
+
+  // Verifica a inscrição do usuário na atividade
   useEffect(() => {
     const checkSubscription = async () => {
       if (!user || user.tipo === "ADMIN") {
@@ -68,6 +90,12 @@ export default function ActivityDetails() {
       }
     };
 
+    checkSubscription();
+    fetchParticipantsCounts();
+  }, [user, activity.id]);
+
+  // Carrega as imagens da atividade
+  useEffect(() => {
     const fetchImagesByActivityId = async () => {
       const apiResponse = await getImagesByActivityId(activity.id);
 
@@ -80,9 +108,8 @@ export default function ActivityDetails() {
       });
     };
 
-    checkSubscription();
     fetchImagesByActivityId();
-  }, [user, activity.id]);
+  }, [activity.id]);
 
   const handleSubscription = async () => {
     if (!user) return;
@@ -95,6 +122,8 @@ export default function ActivityDetails() {
         await subscribeToActivity(user.id, activity.id);
         setIsSubscribed(true);
       }
+
+      await fetchParticipantsCounts();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Erro ao alterar status de inscrição";
       setErrorMessage(errorMessage);
@@ -173,19 +202,25 @@ export default function ActivityDetails() {
                 </Pressable>
               </InfoRow>
 
+              <InfoRow
+                icon={faCalendarDay}
+                mainText={getDate()}
+                subText={getTime()}
+              />
+
               <View className="flex flex-row w-full gap-4">
                 <InfoRow
-                  icon={faCalendarDay}
-                  mainText={getDate()}
-                  subText={getTime()}
-                  className="w-[60%]"
+                  icon={faUser}
+                  mainText="Vagas"
+                  subText={activity.vagas > 0 ? `${subscribedCount} / ${activity.vagas}` : "Ilimitadas"}
+                  className="flex-1"
                 />
 
                 <InfoRow
-                  icon={faUsers}
-                  mainText="Vagas"
-                  subText={activity.vagas > 0 ? activity.vagas : "Ilimitadas"}
-                  className="w-[35%]"
+                  icon={faUserClock}
+                  mainText="Lista de Espera"
+                  subText={`${waitingListCount}`}
+                  className="flex-1"
                 />
               </View>
             </View>
