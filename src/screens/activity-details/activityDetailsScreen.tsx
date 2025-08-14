@@ -231,23 +231,27 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : subscriptionLoading || isLoading ? (
-              <ActivityIndicator size="large" color={colors.blue[500]} />
-            ) : (
-              <Pressable
-                onPress={handleSubscription}
-                onPressIn={() => setIsPressed(true)}
-                onPressOut={() => setIsPressed(false)}
-              >
-                <View
-                  className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform 
-                    ${isSubscribed ? "bg-border" : "bg-blue-500 "} 
-                    ${isPressed ? "opacity-80" : "opacity-100"}`}
+            ) : activity.categoriaId === "1" ? ( // <---- aqui filtramos minicurso
+              subscriptionLoading || isLoading ? (
+                <ActivityIndicator size="large" color={colors.blue[500]} />
+              ) : (
+                <Pressable
+                  onPress={handleSubscription}
+                  onPressIn={() => setIsPressed(true)}
+                  onPressOut={() => setIsPressed(false)}
                 >
-                  <Text className="text-white text-base font-interMedium">{isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}</Text>
-                </View>
-              </Pressable>
-            )}
+                  <View
+                    className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform 
+                      ${isSubscribed ? "bg-border" : "bg-blue-500 "} 
+                      ${isPressed ? "opacity-80" : "opacity-100"}`}
+                  >
+                    <Text className="text-white text-base font-interMedium">
+                      {isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+                    </Text>
+                  </View>
+                </Pressable>
+              )
+            ) : null}
           </View>
         </ScrollView>
       </View>
