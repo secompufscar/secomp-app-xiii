@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import { getEvents, deleteEvent } from "../../services/events";
+import { getActivities, deleteActivity } from "../../services/activities"; 
 import { colors } from "../../styles/colors";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
@@ -11,10 +11,10 @@ import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-export default function EventAdmin() {
+export default function ActivityAdmin() { 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const [events, setEvents] = useState<Events[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -23,22 +23,22 @@ export default function EventAdmin() {
 
   useFocusEffect(
     useCallback(() => {
-      const fetchEvents = async () => {
-        setLoading(true); 
-        setError(null); 
+      const fetchActivities = async () => { 
+        setLoading(true);
+        setError(null);
 
         try {
-          const data = await getEvents();
-          setEvents(data);
+          const data = await getActivities(); 
+          setActivities(data); 
         } catch (err) {
-          setError("Não foi possível carregar os eventos. Tente novamente.");
+          setError("Não foi possível carregar as atividades. Tente novamente."); 
         } finally {
-          setLoading(false); 
+          setLoading(false);
         }
       };
 
-      fetchEvents();
-    }, []) 
+      fetchActivities();
+    }, [])
   );
 
   // Abre modal de confirmação e armazena ID a ser deletado
@@ -47,7 +47,6 @@ export default function EventAdmin() {
     setModalVisible(true);
   };
 
-  // Deleta o evento selecionado
   const handleDelete = async () => {
     if (!toDeleteId) return;
 
@@ -55,8 +54,8 @@ export default function EventAdmin() {
     setErrorModalVisible(false);
 
     try {
-      await deleteEvent(toDeleteId);
-      setEvents(prevList => prevList.filter(item => item.id !== toDeleteId));
+      await deleteActivity(toDeleteId);
+      setActivities(prevList => prevList.filter(item => item.id !== toDeleteId));
     } catch {
       setErrorModalVisible(true);
     } finally {
@@ -65,29 +64,21 @@ export default function EventAdmin() {
     }
   };
 
-  // Itens da lista
-  const renderEventItem = ({ item }: { item: Events }) => (
+  const renderActivityItem = ({ item }: { item: Activity }) => ( 
     <Pressable
-      onPress={() => {navigation.navigate("EventAdminUpdate", { id: item.id })}}
+      onPress={() => {
+        navigation.navigate("ActivityAdminUpdate", { id: item.id });
+      }}
     >
       {({ pressed }) => (
         <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
-          <View className="flex-1">
-            <Text className="text-lg text-white font-poppinsSemiBold">{item.year}</Text>
-
-            <View className="flex flex-row mt-1 flex-wrap">
-              <Text className="text-gray-600 font-inter">
-                {new Date(item.startDate).toLocaleDateString('pt-BR')} -
-              </Text>
-              <Text className="text-gray-600 font-inter ml-1">
-                {new Date(item.endDate).toLocaleDateString('pt-BR')}
-              </Text>
-            </View>
+          <View className="flex-1 flex-col gap-1">
+            <Text className="text-base text-white font-poppinsMedium line-clamp-1">{item.nome}</Text>
+            <Text className="text-sm text-gray-600 font-interMedium line-clamp-1">{item.palestranteNome}</Text>
           </View>
 
-          {/* Botão de deletar evento */}
           <Pressable onPress={(e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             if (item.id) {
               confirmDelete(item.id);
             }
@@ -103,10 +94,9 @@ export default function EventAdmin() {
     </Pressable>
   );
 
-  // Lista vazia
   const emptyList = () => (
     <View className="flex-1 items-center justify-center mt-2">
-      <Text className="text-gray-400 font-inter">Nenhum evento encontrado</Text>
+      <Text className="text-gray-400 font-inter">Nenhuma atividade encontrada</Text>
     </View>
   );
 
@@ -124,25 +114,26 @@ export default function EventAdmin() {
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de eventos</Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de Atividades</Text> 
             <Text className="text-gray-400 font-inter">
-              Painel de administração dos eventos
-            </Text>
+              Painel de administração das atividades
+            </Text> 
           </View>
 
-          <Button title="Criar evento" onPress={() => {navigation.navigate("EventAdminCreate")}}/>
+          <Button title="Criar atividade" onPress={() => {navigation.navigate("ActivityAdminCreate")}}/> 
 
           <View className="flex-1 mt-8">
-            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="my-4"/>}
+            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="mt-16"/>}
 
-            {error && <Text className="text-red-400 text-center mt-2">{error}</Text>}
+            {error && <Text className="text-red-400 text-center mt-8">{error}</Text>}
 
             <FlatList
-              data={events}
-              renderItem={renderEventItem}
+              data={activities} 
+              renderItem={renderActivityItem} 
               ListEmptyComponent={emptyList}
-              keyExtractor={(item) => item.year.toString()}
+              keyExtractor={(item) => item.id.toString()} 
               showsVerticalScrollIndicator={false}
+              initialNumToRender={15}
               contentContainerStyle={{ paddingBottom: 36 }}
             />
           </View>
@@ -152,7 +143,7 @@ export default function EventAdmin() {
       <ConfirmationOverlay
         visible={modalVisible}
         title="Confirmar exclusão"
-        message="Tem certeza que deseja deletar este evento?"
+        message="Tem certeza que deseja deletar esta atividade?"
         onCancel={() => {setModalVisible(false)}}
         onConfirm={handleDelete}
         confirmText="Excluir"
@@ -161,7 +152,7 @@ export default function EventAdmin() {
       <ErrorOverlay
         visible={errorModalVisible}
         title="Erro ao excluir"
-        message="Não foi possível excluir este evento"
+        message="Não foi possível excluir esta atividade"
         onConfirm={() => {setErrorModalVisible(false)}}
         confirmText="OK"
       />

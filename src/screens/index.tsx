@@ -12,17 +12,23 @@ import ParticipantsList from './participants/participantsListScreen';
 import Home from "./home/homeScreen";
 import EventGuide from "./event/eventGuideScreen";
 
+import UserProfile from "./profile/userProfileScreen";
+import AdminProfile from "./profile/adminProfileScreen";
+
+import ActivityAdmin from "./activities/activityAdmin";
+import ActivityAdminCreate from "./activities/activityAdminCreate";
+import ActivityAdminUpdate from "./activities/activityAdminUpdate";
+
+import EventAdmin from "./event/eventAdmin";
+import EventAdminCreate from "./event/eventAdminCreate";
+import EventAdminUpdate from "./event/eventAdminUpdate";
+
 import Sponsors from "./sponsors/sponsorsScreen";
 import SponsorsAdmin from "./sponsors/sponsorsAdmin";
 import SponsorsAdminCreate from "./sponsors/sponsorsAdminCreate";
 import SponsorsAdminUpdate from "./sponsors/sponsorsAdminUpdate";
-import TagsAdmin from "./sponsors/TagsAdmin";
 
-import UserProfile from "./profile/userProfileScreen";
-
-import AdminProfile from "./profile/adminProfileScreen";
-import EventAdmin from "./event/eventAdmin";
-import EventAdminCreate from "./event/eventAdminCreate";
+import TagsAdmin from "./tags/tagsAdmin";
 
 import Schedule from "./schedule/scheduleScreen";
 import MyEvents from "./activities/userActivitiesScreen";
@@ -31,6 +37,8 @@ import Credential from "./credential/credentialScreen";
 import Activities from "./activities/activitiesScreen";
 
 import QRCode from "./credential/qrCodeReaderScreen";
+import AdminNotificationScreen from "./notification/adminNotificationsScreen"
+import AdminNotificationSend from "./notification/adminNotificationSend"
 
 import EditProfile from "./profile/editProfileScreen";
 
@@ -47,21 +55,27 @@ export {
   Home,
   Notifications,
   EventGuide,
-  Sponsors,
-  SponsorsAdmin,
-  SponsorsAdminCreate,
-  SponsorsAdminUpdate,
-  TagsAdmin,
   UserProfile,
   EditProfile,
   AdminProfile,
   EventAdmin,
   EventAdminCreate,
+  EventAdminUpdate,
+  Sponsors,
+  SponsorsAdmin,
+  SponsorsAdminCreate,
+  SponsorsAdminUpdate,
+  TagsAdmin,
   Schedule,
   MyEvents,
   Credential,
   Activities,
   QRCode,
+  ActivityAdmin,
+  ActivityAdminCreate,
+  ActivityAdminUpdate,
   ActivityDetails,
-  ParticipantsList
+  ParticipantsList,
+  AdminNotificationScreen,
+  AdminNotificationSend,
 };

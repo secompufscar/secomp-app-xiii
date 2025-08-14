@@ -16,16 +16,20 @@ import {
   EditProfile,
   ActivityDetails,
   ParticipantsList,
+  ActivityAdmin,
+  ActivityAdminCreate,
+  ActivityAdminUpdate,
   EventAdmin,
   EventAdminCreate,
+  EventAdminUpdate,
   SponsorsAdmin,
   SponsorsAdminCreate,
   SponsorsAdminUpdate,
   TagsAdmin,
-  Notifications
+  Notifications,
+  AdminNotificationScreen,
+  AdminNotificationSend,
 } from '../screens'
-
-import { ScheduleItemProps } from "../entities/schedule-item";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,14 +45,20 @@ type StackNavigation = {
   QRCode: { id: string };
   EditProfile: undefined;
   ActivityDetails: { item: Activity };
-  ParticipantsList: { activityId: string; activityName: string; }
+  ParticipantsList: { activityId: string; activityName: string; };
+  ActivityAdmin: undefined;
+  ActivityAdminCreate: undefined;
+  ActivityAdminUpdate: { id: string };
   EventAdmin: undefined;
   EventAdminCreate: undefined;
+  EventAdminUpdate: { id: string };
   SponsorsAdmin: undefined;
   SponsorsAdminCreate: undefined;
   SponsorsAdminUpdate: { id: string };
   TagsAdmin: undefined;
   Notifications: undefined;
+  AdminNotificationScreen: undefined;
+  AdminNotificationSend: undefined;
 };
 
 export type StackTypes = NativeStackNavigationProp<StackNavigation>;
@@ -69,13 +79,19 @@ export default function StackRoutes() {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="ActivityDetails" component={ActivityDetails} />
       <Stack.Screen name="ParticipantsList" component={ParticipantsList} />
+      <Stack.Screen name="ActivityAdmin" component={ActivityAdmin} />
+      <Stack.Screen name="ActivityAdminCreate" component={ActivityAdminCreate} />
+      <Stack.Screen name="ActivityAdminUpdate" component={ActivityAdminUpdate} />
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
+      <Stack.Screen name="EventAdminUpdate" component={EventAdminUpdate} />
       <Stack.Screen name="SponsorsAdmin" component={SponsorsAdmin} />
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
       <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
       <Stack.Screen name="Notifications" component={Notifications} />
+      <Stack.Screen name="AdminNotificationScreen" component={AdminNotificationScreen} />
+      <Stack.Screen name="AdminNotificationSend" component={AdminNotificationSend} />
     </Stack.Navigator>
   );
 }

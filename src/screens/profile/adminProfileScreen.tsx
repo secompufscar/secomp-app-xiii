@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser, faStar, faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser, faStar, faTags, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
@@ -60,19 +60,25 @@ export default function AdminProfile() {
           <ProfileButton
             icon={faBell}
             label="Notificações"
-            onPress={() => { navigation.navigate("Notifications") }}
+            onPress={() => { navigation.navigate("AdminNotificationScreen")}}
           />
 
           <ProfileButton
             icon={faFlag}
             label="Atividades"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("ActivityAdmin" )}}
           />
 
           <ProfileButton
             icon={faStar}
             label="Patrocinadores"
             onPress={() => { navigation.navigate("SponsorsAdmin") }}
+          />
+
+          <ProfileButton
+            icon={faTags}
+            label="Tags"
+            onPress={() => { navigation.navigate("TagsAdmin") }}
           />
 
           <ProfileButton

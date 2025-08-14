@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator } from "react-native";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createEvent, getCurrentEvent, updateEvent } from "../../services/events";
+import { updateEvent, getEventById } from "../../services/events";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { addDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
@@ -17,28 +16,54 @@ import ErrorOverlay from "../../components/overlay/errorOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function EventAdminCreate() {
+type RouteParams = { EventAdminUpdate: { id: string } }
+
+export default function EventAdminUpdate() {
+  const route = useRoute<RouteProp<RouteParams, "EventAdminUpdate">>();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  
+  const { id } = route.params;
+
   const [year, setYear] = useState<string>("");
   const [startDate, setStartDate] = useState(() => new Date());
-  const [endDate, setEndDate] = useState(() => {
-    const initialDate = new Date();
-    return addDays(initialDate, 4);
-  });
-  const [isCurrent, setIsCurrent] = useState<boolean>(true);
+  const [endDate, setEndDate] = useState(() => new Date());
 
   // Estados para controlar a visibilidade dos seletores de data no mobile
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  // Estados para modal de erro
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
 
+  // Estados para modal de aviso
   const [warningMessage, setWarningMessage] = useState("Aviso");
   const [warningModalVisible, setWarningModalVisible] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+        setErrorMessage("Não foi possível carregar os dados do evento. Erro ao obter ID")
+        setErrorModalVisible(true);
+        return;
+    };
+
+    const fetchEventData = async () => {
+      try {
+        const eventData = await getEventById(id);
+
+        setYear(eventData.year.toString());
+        setStartDate(new Date(eventData.startDate));
+        setEndDate(new Date(eventData.endDate));
+      } catch (error) {
+        console.error("Erro ao buscar dados do evento:", error);
+        setErrorMessage("Não foi possível carregar os dados do evento")
+        setErrorModalVisible(true);
+      }
+    };
+
+    fetchEventData();
+  }, [id]); 
 
   // Função para lidar com a mudança da data de início
   const onChangeStartDateMobile = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -60,12 +85,14 @@ export default function EventAdminCreate() {
     }
   };
 
-  // Função para criação de evento
-  const handleCreateEvent = async () => {
+  // Função para atualização de evento
+  const handleUpdateEvent = async () => {
+    setWarningModalVisible(false);
+    
     // Verifica se o ano foi preenchido
     if (!year.trim()) {
       setWarningMessage("Por favor, preencha o ano da edição")
-      setWarningModalVisible(true);       
+      setWarningModalVisible(true);     
       return;
     }
 
@@ -82,32 +109,17 @@ export default function EventAdminCreate() {
     setIsLoading(true);
 
     try { 
-      // Encontrar o evento atualmente ativo
-      const activeEvent = await getCurrentEvent();
-
-      // Se um evento ativo for encontrado, desativá-lo
-      if (activeEvent && activeEvent.id) {
-        const updatePayload: UpdateEvent = {
-          ...activeEvent, 
-          isCurrent: false,
-        };
-
-        await updateEvent(activeEvent.id, updatePayload);
-      }
-      
-      // Preparar e criar o novo evento
-      const eventData: Events = {
+      const eventData: Omit<Events, 'id' | 'isCurrent'> = {
         year: parsedYear,
         startDate: startDate.toISOString(), 
         endDate: endDate.toISOString(),
-        isCurrent: isCurrent,
       };
 
-      await createEvent(eventData);
+      await updateEvent(id, eventData);
       navigation.goBack();
     } catch (error) {
-      setErrorMessage("Não foi possível criar este evento")
-      setErrorModalVisible(true);
+        setErrorMessage("Não foi possível editar este evento")
+        setErrorModalVisible(true);
     } finally {
       setIsLoading(false);  
     }
@@ -127,15 +139,15 @@ export default function EventAdminCreate() {
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar novo evento</Text>
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Editar evento</Text>
             <Text className="text-blue-200 font-inter">
-              Inicie uma nova edição da Secomp!
+              Altere os dados de uma edição da Secomp!
             </Text>
           </View>
 
           <View className="w-full rounded-lg border-[1.5px] border-warning bg-warning/10 p-6 mb-8">
             <Text className="text-sm text-warning font-inter leading-relaxed">
-              Ao criar um novo evento, este se torna o ativo, desativando automaticamente o anterior.
+              Tenha extrema cautela ao modificar informações de um evento, pois isso pode impactar outras interações dentro do aplicativo
             </Text>
           </View>
 
@@ -173,7 +185,6 @@ export default function EventAdminCreate() {
                     locale={ptBR} 
                     dateFormat="dd/MM/yyyy"
                     popperClassName="z-50"
-                    portalId="root"
                     customInput={
                       <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
                         <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
@@ -215,7 +226,6 @@ export default function EventAdminCreate() {
                     locale={ptBR} 
                     dateFormat="dd/MM/yyyy"
                     popperClassName="z-50"
-                    portalId="root"
                     customInput={
                       <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
                         <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
@@ -242,7 +252,7 @@ export default function EventAdminCreate() {
             {isLoading ? (
               <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
             ) : (
-              <Button title="Criar" className="mt-auto mb-12" onPress={handleCreateEvent}/>
+              <Button title="Atualizar" className="mt-auto mb-12" onPress={handleUpdateEvent}/>
             )}
           </View>
         </View>

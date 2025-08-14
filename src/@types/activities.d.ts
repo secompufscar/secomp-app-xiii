@@ -7,4 +7,5 @@ interface Activity {
   detalhes: string;
   categoriaId: string;
   local: string;
+  points: number;
 }

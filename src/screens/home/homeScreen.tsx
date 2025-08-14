@@ -1,23 +1,110 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Text, View, Pressable, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useFocusEffect } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { useAuth } from "../../hooks/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../styles/colors";
-
+import { getCurrentEvent } from "../../services/events";
+import { createRegistration, deleteRegistration, getRegistrationByUserIdAndEventId } from "../../services/userEvents";
 import AppLayout from "../../components/app/appLayout";
+import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
 
 export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user }: any = useAuth();
-  const [isBtnPressed, setIsBtnPressed] = useState(false);
+  const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [isUserSubscribed, setIsUserSubscribed] = useState(false);
+  const [isEventActive, setIsEventActive] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState<Events | null>(null);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [confirmAction, setConfirmAction] = useState<null | "subscribe" | "unsubscribe">(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setConfirmAction(null);
+      };
+    }, [])
+  );
+
+  useEffect(() => {
+    const fetchEventData = async () => {
+      try {
+        const event = await getCurrentEvent();
+        setCurrentEvent(event);
+
+        // Status do evento
+        if (event) {
+          const today = new Date();
+          const start = new Date(event.startDate);
+          const end = new Date(event.endDate);
+          setIsEventActive(today >= start && today <= end);
+
+          const message = getEventStatusMessage(event);
+          setEventStatusMessage(message);
+        } else {
+          setIsEventActive(false);
+          setEventStatusMessage("Nenhum evento ativo no momento");
+        }
+
+        // Inscrição do usuário
+        if (event?.id && user?.id) {
+          const registration = await getRegistrationByUserIdAndEventId(user.id, event.id);
+          setIsUserSubscribed(!!registration);
+          setRegistrationId(registration?.id || null);
+        } else {
+          setIsUserSubscribed(false);
+          setRegistrationId(null);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar dados do evento:", error);
+        setIsUserSubscribed(false);
+        setIsEventActive(false);
+        setRegistrationId(null);
+        setEventStatusMessage("Não foi possível carregar o evento");
+      }
+    };
+
+    fetchEventData();
+  }, [user]);
+
+  const subscribe = async () => {
+    try {
+      if (!user?.id || !currentEvent?.id) throw new Error("Usuário ou evento inválido");
+      const registration = await createRegistration({ eventId: currentEvent.id });
+      setIsUserSubscribed(true);
+      setRegistrationId(registration.id ?? null);
+    } catch {
+      handleError("Não foi possível realizar a inscrição");
+    }
+  };
+
+  const unsubscribe = async () => {
+    try {
+      if (!registrationId) return;
+      await deleteRegistration(registrationId);
+      setIsUserSubscribed(false);
+      setRegistrationId(null);
+    } catch {
+      handleError("Não foi possível cancelar a inscrição.");
+    }
+  };
+
+  const handleError = (message: string) => {
+    setErrorMessage(message);
+    setErrorModalVisible(true);
+  };
 
   // Mensagem baseada no horário do dia
   const getCurrentTime = () => {
@@ -32,27 +119,38 @@ export default function Home() {
   };
 
   // Mensagem baseada no dia do evento
-  const getCurrentDay = () => {
-    const day = new Date().toLocaleDateString();
+  const getEventStatusMessage = (event: Events): string => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    switch (day) {
-      case "29/09/2025":
-        return "Hoje é o 1° dia de evento";
-      case "30/09/2025":
-        return "Hoje é o 2° dia de evento";
-      case "01/10/2025":
-        return "Hoje é o 3° dia de evento";
-      case "02/10/2025":
-        return "Hoje é o 4° dia de evento";
-      case "03/10/2025":
-        return "Hoje é o último dia de evento";
-      default:
-        return `Hoje não é dia de evento`;
+    // Converte as strings de data da API (que estão em formato ISO 8601) para objetos Date.
+    const startDate = new Date(event.startDate);
+    const endDate = new Date(event.endDate);
+
+    // Também normaliza as datas do evento para o início do dia no fuso horário local.
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+    
+    if (today < startDate) {
+      return "O evento ainda não começou";
     }
+
+    if (today > endDate) {
+      return "O evento já terminou. Até a próxima!";
+    }
+
+    const diffTime = today.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const currentEventDay = diffDays + 1;
+
+    if (today.getTime() === endDate.getTime()) {
+      return "Hoje é o último dia de evento";
+    }
+
+    return `Hoje é o ${currentEventDay}° dia de evento`;
   };
 
   const greeting = getCurrentTime();
-  const eventDay = getCurrentDay();
 
   // Nome do usuário
   const nomeCompleto = new BeautifulName(user.nome).beautifulName;
@@ -63,18 +161,13 @@ export default function Home() {
   const nomeParaMostrar =
     ultimoNome && ultimoNome !== primeiroNome ? `${primeiroNome} ${ultimoNome}` : primeiroNome;
 
-  // Inscrever-se no evento
-  const subscribe = () => {
-    console.log("Usuário inscrito nesta edição com suceso!");
-  };
-
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
         <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
           <View className="flex-col h-full flex-1 ">
-            <Text className="text-base text-blue-100 font-inter">{eventDay}</Text>
-            <View className="flex-row items-center justify-start mt-[7px]">
+            <Text className="text-base text-blue-100 font-inter">{eventStatusMessage}</Text>
+            <View className="flex-row items-center justify-start mt-[6px]">
               <Text className="text-[18px] text-white font-poppinsSemiBold">{greeting} </Text>
               <Text className="text-[18px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
             </View>
@@ -93,27 +186,12 @@ export default function Home() {
         </View>
 
         {/* Inscrição no evento */}
-        <LinearGradient
-          colors={["#29303F", "#2A3B5E"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          className="flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 overflow-hidden"
-        >
-          <Text className="text-white text-lg font-poppinsSemiBold mb-2">
-            Inscreva-se na Secomp
-          </Text>
-          <Text className="text-default text-[13px] font-inter leading-[1.5] mb-4">
-            Para participar do evento e de suas atividades, você deve se inscrever por aqui
-          </Text>
-          <Pressable
-            onPress={subscribe}
-            onPressIn={() => setIsBtnPressed(true)}
-            onPressOut={() => setIsBtnPressed(false)}
-            className={`w-44 bg-blue-500 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
-          >
-            <Text className="text-white text-[13px] font-poppinsMedium">Inscrever-se</Text>
-          </Pressable>
-        </LinearGradient>
+        <HomeEventSubscription
+          isEventActive={isEventActive}
+          isUserSubscribed={isUserSubscribed}
+          onSubscribeRequest={() => setConfirmAction("subscribe")}
+          onUnsubscribeRequest={() => setConfirmAction("unsubscribe")}
+        />
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
@@ -179,6 +257,28 @@ export default function Home() {
           <HomeSocials />
         </View>
       </AppLayout>
+
+      <ConfirmationOverlay
+        visible={!!confirmAction}
+        title={confirmAction === "subscribe" ? "Confirmar inscrição" : "Cancelar inscrição"}
+        message={confirmAction === "subscribe" ? "Você deseja se inscrever neste evento?" : "Tem certeza que deseja cancelar sua inscrição?"}
+        onCancel={() => setConfirmAction(null)}
+        onConfirm={async () => {
+          if (confirmAction === "subscribe") await subscribe();
+          if (confirmAction === "unsubscribe") await unsubscribe();
+          setConfirmAction(null);
+        }}
+        confirmText="Continuar"
+        confirmButtonColor={colors.blue[500]}
+      />
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
