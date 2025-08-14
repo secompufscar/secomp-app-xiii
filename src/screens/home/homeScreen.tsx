@@ -176,7 +176,7 @@ export default function Home() {
           {/* Notificações */}
           <Pressable
             onPress={() => {
-              navigation.navigate("");
+              navigation.navigate("Notifications");
             }}
           >
             <View className="w-11 h-11 flex items-center justify-center rounded-[8px] p-2 bg-iconbg">
