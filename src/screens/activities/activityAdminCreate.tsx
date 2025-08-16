@@ -5,8 +5,6 @@ import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories"; 
-import { FontAwesome5, Entypo, AntDesign, FontAwesome6} from "@expo/vector-icons";
-import { faLocationDot, faUsers } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -102,6 +100,12 @@ export default function ActivityAdminCreate() {
     }
   };
 
+  const uriToBlob = async (uri: string) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob;
+  }
+
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -122,7 +126,6 @@ export default function ActivityAdminCreate() {
   };
 
   const handleCreateActivity = async () => {
-
     if (
       !name.trim() ||
       !speakerName.trim() ||
@@ -138,13 +141,14 @@ export default function ActivityAdminCreate() {
     }
 
     const parsedVacancies = parseInt(vacancies, 10);
+    const parsedPoints = parseInt(points, 10);
+
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
       setWarningMessage("O número de vagas deve ser um valor numérico positivo")
       setWarningModalVisible(true);  
       return;
     }
 
-    const parsedPoints = parseInt(points, 10);
     if (isNaN(parsedPoints) || parsedPoints < 0) {
       setWarningMessage("A pontuação deve ser um valor numérico positivo")
       setWarningModalVisible(true);  
@@ -175,7 +179,30 @@ export default function ActivityAdminCreate() {
         local: location,
       };
 
-      await createActivity(activityData);
+      const createdActivity = await createActivity(activityData);
+
+      if (activityImage){
+        const formDataActivity = new FormData();
+        formDataActivity.append("activityId", createdActivity.id);
+        formDataActivity.append("typeOfImage", "atividade");
+
+        const activityBlob = await uriToBlob(activityImage);
+        formDataActivity.append("image", activityBlob, "activity.jpg");
+
+        await createActivityImage(formDataActivity);
+      }
+
+      if (speakerImage){
+        const formDataSpeaker = new FormData();
+        formDataSpeaker.append("activityId", createdActivity.id);
+        formDataSpeaker.append("typeOfImage", "palestrante");
+
+        const speakerBlob = await uriToBlob(speakerImage);
+        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
+
+        await createActivityImage(formDataSpeaker);
+      }
+
       navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao criar a atividade.";
@@ -235,7 +262,7 @@ export default function ActivityAdminCreate() {
                 {activityImage && (
                   <Image
                     source={{ uri: activityImage }}
-                    style={{ width: "100%", height: 200, marginTop: 10, borderRadius: 8 }}
+                    className="w-full h-[260px] mt-3 rounded-lg"
                     resizeMode="cover"
                   />
                 )}
@@ -268,7 +295,7 @@ export default function ActivityAdminCreate() {
                 {speakerImage && (
                   <Image
                     source={{ uri: speakerImage }}
-                    style={{ width: "100%", height: 200, marginTop: 10, borderRadius: 8 }}
+                    className="w-full h-[260px] mt-3 rounded-lg"
                     resizeMode="cover"
                   />
                 )}
@@ -282,13 +309,7 @@ export default function ActivityAdminCreate() {
                     <DatePicker
                       selected={date}
                       onChange={(date: Date | null) => {
-                        if (date) {
-                          setDate(date);
-                          console.log(date)
-                          if (date > date) {
-                              setDate(date);
-                          }
-                        }
+                        if (date) setDate(date);
                       }}
                       locale={ptBR} 
                       dateFormat="dd/MM/yyyy"

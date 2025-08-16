@@ -265,9 +265,7 @@ export default function ActivityAdminUpdate() {
                     <DatePicker
                       selected={date}
                       onChange={(date: Date | null) => {
-                        if (date) {
-                          setDate(date);
-                        }
+                        if (date) setDate(date);
                       }}
                       locale={ptBR}
                       dateFormat="dd/MM/yyyy"
