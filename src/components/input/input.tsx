@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 function Input({ children }: { children: ReactNode }) {
   return (
     <View
-      className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} flex-row items-center gap-3 border border-border bg-background rounded-lg mb-2 outline-none`}
+      className={`w-full max-h-32 p-[16px] flex-row items-center gap-3 border border-border bg-background rounded-lg mb-2 outline-none`}
     >
       {children}
     </View>

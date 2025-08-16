@@ -6,8 +6,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { updateActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories";
 import { getActivityId } from "../../services/activities";
-import { FontAwesome5, Entypo, AntDesign } from "@expo/vector-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faLocationDot, faUsers } from "@fortawesome/free-solid-svg-icons";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -247,7 +245,6 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
                 <Input>
-                  <FontAwesome5 name="exclamation-circle" size={20} color={colors.border} />
                   <Input.Field placeholder="Ex.: Palestra de IA" onChangeText={setName} value={name} />
                 </Input>
               </View>
@@ -256,13 +253,12 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
                 <Input>
-                  <FontAwesome5 name="user-alt" size={18} color={colors.border} />
                   <Input.Field placeholder="Ex.: João Silva" onChangeText={setSpeakerName} value={speakerName} />
                 </Input>
               </View>
 
               {/* Data da atividade */}
-              <View className="w-full">
+              <View className="w-full mb-2">
                 {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
@@ -279,12 +275,8 @@ export default function ActivityAdminUpdate() {
                       portalId="root"
                       customInput={
                         <View
-                          className={`w-full ${
-                            Platform.OS === "web" ? "p-4" : "py-2 px-4"
-                          } bg-background rounded-lg border border-border flex-row items-center`}
-                        >
-                          <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                          <Text className="text-white font-inter text-base ml-4">{date.toLocaleDateString("pt-BR")}</Text>
+                          className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}>
+                          <Text className="text-white font-inter text-sm">{date.toLocaleDateString("pt-BR")}</Text>
                         </View>
                       }
                     />
@@ -293,18 +285,17 @@ export default function ActivityAdminUpdate() {
                   <Pressable onPress={() => setShowDatePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <View
-                      className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center"
+                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
                       pointerEvents="none"
                     >
-                      <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                      <Text className="text-white font-inter text-base ml-4">{`${date.toLocaleDateString("pt-BR")}`}</Text>
+                      <Text className="text-white font-inter text-sm">{`${date.toLocaleDateString("pt-BR")}`}</Text>
                     </View>
                   </Pressable>
                 )}
               </View>
 
               {/* Horário da atividade */}
-              <View className="w-full">
+              <View className="w-full mb-2">
                 {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
@@ -322,9 +313,8 @@ export default function ActivityAdminUpdate() {
                       popperClassName="z-50"
                       portalId="root"
                       customInput={
-                        <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center">
-                          <AntDesign name="clockcircle" size={20} color={colors.border} />
-                          <Text className="text-white font-inter text-base ml-4">{format(time, "HH:mm")}</Text>
+                        <View className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center">
+                          <Text className="text-white font-inter text-sm">{format(time, "HH:mm")}</Text>
                         </View>
                       }
                     />
@@ -333,11 +323,10 @@ export default function ActivityAdminUpdate() {
                   <Pressable onPress={() => setShowTimePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <View
-                      className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center"
+                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
                       pointerEvents="none"
                     >
-                      <FontAwesome5 name="clock" size={20} color={colors.border} />
-                      <Text className="text-white font-inter text-base ml-4">{format(time, "HH:mm", { locale: ptBR })}</Text>
+                      <Text className="text-white font-inter text-sm">{format(time, "HH:mm", { locale: ptBR })}</Text>
                     </View>
                   </Pressable>
                 )}
@@ -347,7 +336,6 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
                 <Input>
-                  <FontAwesomeIcon icon={faLocationDot} size={20} color={colors.border} />
                   <Input.Field placeholder="Ex.: Auditório" onChangeText={setLocation} value={location} />
                 </Input>
               </View>
@@ -356,7 +344,6 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
                 <Input>
-                  <FontAwesomeIcon icon={faUsers} size={20} color={colors.border} />
                   <Input.Field placeholder="Ex.: 50" onChangeText={setVacancies} value={vacancies} keyboardType="numeric" />
                 </Input>
               </View>
@@ -365,7 +352,6 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
                 <Input>
-                  <Entypo name="text" size={20} color={colors.border} />
                   <Input.Field placeholder="Detalhes da atividade" onChangeText={setDetails} value={details} />
                 </Input>
               </View>
@@ -375,7 +361,6 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Pontos</Text>
                 <Input>
-                  <Entypo name="game-controller" size={20} color={colors.border} />
                   <Input.Field
                     placeholder="Pontuação da atividade"
                     onChangeText={setPoints}
