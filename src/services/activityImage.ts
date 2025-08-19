@@ -1,12 +1,5 @@
 import api from "./api"
 
-type ActivityImage = {
-    id: string,
-    activityId: string,
-    typeOfImage: string,
-    imageUrl: string
-}
-
 // Listar todas as imagens
 export const listActivityImages = async (): Promise<ActivityImage[]> => {
     const response = await api.get("/activityImages/list");

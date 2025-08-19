@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { getActivities, deleteActivity } from "../../services/activities"; 
+import { getImagesByActivityId, deleteActivityImageById } from "../../services/activityImage";
 import { colors } from "../../styles/colors";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
@@ -20,6 +21,7 @@ export default function ActivityAdmin() {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [toDeleteId, setToDeleteId] = useState<string | null>(null);
+  const [imagesToDelete, setImagesToDelete] = useState<ActivityImage[]>([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -42,8 +44,17 @@ export default function ActivityAdmin() {
   );
 
   // Abre modal de confirmação e armazena ID a ser deletado
-  const confirmDelete = (id: string) => {
+  const confirmDelete = async (id: string) => {
     setToDeleteId(id);
+
+    try {
+      const images = await getImagesByActivityId(id);
+      setImagesToDelete(images);
+    } catch {
+      setImagesToDelete([]);
+    }
+
+
     setModalVisible(true);
   };
 
