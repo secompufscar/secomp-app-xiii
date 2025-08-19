@@ -54,7 +54,6 @@ export default function ActivityAdmin() {
       setImagesToDelete([]);
     }
 
-
     setModalVisible(true);
   };
 
@@ -65,6 +64,10 @@ export default function ActivityAdmin() {
     setErrorModalVisible(false);
 
     try {
+      if (imagesToDelete.length > 0) {
+        await Promise.all(imagesToDelete.map(img => deleteActivityImageById(img.id)));
+      }
+
       await deleteActivity(toDeleteId);
       setActivities(prevList => prevList.filter(item => item.id !== toDeleteId));
     } catch {
@@ -72,6 +75,7 @@ export default function ActivityAdmin() {
     } finally {
       setModalVisible(false);
       setToDeleteId(null);
+      setImagesToDelete([]);
     }
   };
 
