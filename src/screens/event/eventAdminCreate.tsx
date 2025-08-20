@@ -164,7 +164,6 @@ export default function EventAdminCreate() {
                     onChange={(date: Date | null) => {
                       if (date) {
                         setStartDate(date);
-                        console.log(startDate)
                         if (date > endDate) {
                             setEndDate(date);
                         }

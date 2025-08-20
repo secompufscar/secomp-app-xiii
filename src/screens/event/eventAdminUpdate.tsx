@@ -176,7 +176,6 @@ export default function EventAdminUpdate() {
                     onChange={(date: Date | null) => {
                       if (date) {
                         setStartDate(date);
-                        console.log(startDate)
                         if (date > endDate) {
                             setEndDate(date);
                         }
@@ -226,6 +225,7 @@ export default function EventAdminUpdate() {
                     locale={ptBR} 
                     dateFormat="dd/MM/yyyy"
                     popperClassName="z-50"
+                    portalId="root"
                     customInput={
                       <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
                         <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
