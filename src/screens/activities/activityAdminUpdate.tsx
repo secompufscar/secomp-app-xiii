@@ -189,10 +189,10 @@ export default function ActivityAdminUpdate() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'], 
       quality: 1,
     });
-
+    
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }

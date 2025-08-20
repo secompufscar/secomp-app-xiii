@@ -115,7 +115,7 @@ export default function ActivityAdminCreate() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'], 
       quality: 1,
     });
 
