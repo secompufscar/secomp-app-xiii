@@ -212,7 +212,7 @@ export default function ActivityDetails() {
                 <InfoRow
                   icon={faUser}
                   mainText="Vagas"
-                  subText={activity.vagas > 0 ? `${subscribedCount} / ${activity.vagas}` : "Ilimitadas"}
+                  subText={activity.vagas > 0 ? `${subscribedCount - waitingListCount} / ${activity.vagas}` : "Ilimitadas"}
                   className="flex-1"
                 />
 
