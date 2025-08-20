@@ -1,16 +1,17 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { updateActivity } from "../../services/activities";
+import { updateActivity, getActivityId } from "../../services/activities";
+import { getImagesByActivityId, updateActivityImageById } from "../../services/activityImage";
 import { getCategories } from "../../services/categories";
-import { getActivityId } from "../../services/activities";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
+import * as ImagePicker from "expo-image-picker";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
 import BackButton from "../../components/button/backButton";
@@ -43,6 +44,13 @@ export default function ActivityAdminUpdate() {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const [activityImage, setActivityImage] = useState<string | null>(null);
+  const [speakerImage, setSpeakerImage] = useState<string | null>(null);
+  const [originalActivityImage, setOriginalActivityImage] = useState<string | null>(null);
+  const [originalSpeakerImage, setOriginalSpeakerImage] = useState<string | null>(null);
+  const [activityImageId, setActivityImageId] = useState<string>();
+  const [speakerImageId, setSpeakerImageId] = useState<string>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -90,45 +98,64 @@ export default function ActivityAdminUpdate() {
     }, [selectedCategoryId])
   );
 
-  // Busca a atividade
+  // Busca os dados da atividade
   useEffect(() => {
     if (!activityId) return;
 
-    let isActive = true;
+    const abortController = new AbortController();
 
-    const fetchActivity = async () => {
+    const fetchActivityData = async () => {
       setIsLoading(true);
       try {
-        const activity = await getActivityId(activityId);
-        if (isActive) {
-          setName(activity.nome);
-          setSpeakerName(activity.palestranteNome);
-          const activityDate = new Date(activity.data);
-          setDate(activityDate);
-          setTime(activityDate);
-          setVacancies(String(activity.vagas));
-          setDetails(activity.detalhes);
-          setPoints(String(activity.points));
-          setLocation(activity.local);
-          setSelectedCategoryId(activity.categoriaId);
-        }
+        const [activity, images] = await Promise.all([
+          getActivityId(activityId),
+          getImagesByActivityId(activityId),
+        ]);
+
+        if (abortController.signal.aborted) return;
+
+        // Dados principais da atividade
+        setName(activity.nome);
+        setSpeakerName(activity.palestranteNome);
+
+        const activityDate = new Date(activity.data);
+        setDate(activityDate);
+        setTime(activityDate);
+
+        setVacancies(String(activity.vagas));
+        setDetails(activity.detalhes);
+        setPoints(String(activity.points));
+        setLocation(activity.local);
+        setSelectedCategoryId(activity.categoriaId);
+
+        // Imagens
+        images.forEach((img) => {
+          if (img.typeOfImage === "palestrante") {
+            setSpeakerImage(img.imageUrl);
+            setOriginalSpeakerImage(img.imageUrl); 
+            setSpeakerImageId(img.id);
+          } else {
+            setActivityImage(img.imageUrl);
+            setOriginalActivityImage(img.imageUrl); 
+            setActivityImageId(img.id);
+          }
+        });
       } catch (err) {
-        console.error("Erro ao buscar atividade:", err);
-        if (isActive) {
+        if (!abortController.signal.aborted) {
           setErrorMessage("Não foi possível carregar os dados da atividade");
           setErrorModalVisible(true);
         }
       } finally {
-        if (isActive) {
+        if (!abortController.signal.aborted) {
           setIsLoading(false);
         }
       }
     };
 
-    fetchActivity();
+    fetchActivityData();
 
     return () => {
-      isActive = false;
+      abortController.abort();
     };
   }, [activityId]);
 
@@ -143,6 +170,31 @@ export default function ActivityAdminUpdate() {
     setShowTimePicker(false);
     if (selectedTime) {
       setTime(selectedTime);
+    }
+  };
+
+  const uriToBlob = async (uri: string) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob;
+  }
+
+  // Função para abrir a galeria e selecionar imagem
+  const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      setWarningMessage("Permissão para acessar imagens foi negada");
+      setWarningModalVisible(true);
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -165,19 +217,19 @@ export default function ActivityAdminUpdate() {
     }
 
     const parsedVacancies = parseInt(vacancies, 10);
+    const parsedPoints = parseInt(points, 10);
+
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
       setWarningMessage("O número de vagas deve ser um valor numérico positivo");
       setWarningModalVisible(true);
       return;
     }
 
-    const parsedPoints = parseInt(points, 10);
     if (isNaN(parsedPoints) || parsedPoints < 0) {
       setWarningMessage("A pontuação deve ser um valor numérico positivo")
       setWarningModalVisible(true);  
       return;
     }
-
 
     setIsLoading(true);
 
@@ -204,6 +256,36 @@ export default function ActivityAdminUpdate() {
       };
 
       await updateActivity(activityId, activityData);
+      
+      // Atualiza imagens apenas se foram alteradas (uri local do dispositivo)
+      const uploadPromises: Promise<any>[] = [];
+
+      if (activityImage && activityImage !== originalActivityImage && activityImageId) {
+        const formDataActivity = new FormData();
+        formDataActivity.append("activityId", activityId);
+        formDataActivity.append("typeOfImage", "atividade");
+
+        const activityBlob = await uriToBlob(activityImage);
+        formDataActivity.append("image", activityBlob, "activity.jpg");
+
+        uploadPromises.push(updateActivityImageById(activityImageId, formDataActivity));
+      }
+
+      if (speakerImage && speakerImage !== originalSpeakerImage && speakerImageId) {
+        const formDataSpeaker = new FormData();
+        formDataSpeaker.append("activityId", activityId);
+        formDataSpeaker.append("typeOfImage", "palestrante");
+
+        const speakerBlob = await uriToBlob(speakerImage);
+        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
+
+        uploadPromises.push(updateActivityImageById(speakerImageId, formDataSpeaker));
+      }
+
+      if (uploadPromises.length > 0) {
+        await Promise.all(uploadPromises);
+      }
+
       navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao atualizar a atividade.";
@@ -248,12 +330,54 @@ export default function ActivityAdminUpdate() {
                 </Input>
               </View>
 
+              {/* Imagem da Atividade */}
+              <View className="w-full mb-2">
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem da Atividade</Text>
+                <Pressable
+                  onPress={() => pickImage(setActivityImage)}
+                  className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center justify-center"
+                >
+                  <Text className="text-gray-200 text-sm font-interMedium">
+                    {activityImage ? "Trocar Imagem" : "Selecionar Imagem"}
+                  </Text>
+                </Pressable>
+
+                {activityImage && (
+                  <Image
+                    source={{ uri: activityImage }}
+                    className="w-full h-[260px] mt-3 rounded-lg"
+                    resizeMode="cover"
+                  />
+                )}
+              </View>
+
               {/* Nome do Palestrante */}
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
                 <Input>
                   <Input.Field placeholder="Ex.: João Silva" onChangeText={setSpeakerName} value={speakerName} />
                 </Input>
+              </View>
+
+              {/* Imagem do Palestrante */}
+              <View className="w-full mb-2">
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem do Palestrante</Text>
+                <Pressable
+                  onPress={() => pickImage(setSpeakerImage)}
+                  className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
+                >
+                  <Text className="text-gray-200 text-sm font-interMedium">
+                    {speakerImage ? "Trocar Imagem" : "Selecionar Imagem"}
+                  </Text>
+                </Pressable>
+
+                {speakerImage && (
+                  <Image
+                    source={{ uri: speakerImage }}
+                    className="w-full h-[260px] mt-3 rounded-lg"
+                    resizeMode="cover"
+                  />
+                )}
               </View>
 
               {/* Data da atividade */}

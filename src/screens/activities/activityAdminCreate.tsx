@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -11,7 +11,6 @@ import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
 import * as ImagePicker from "expo-image-picker";
-import { Image } from "react-native";
 import { createActivityImage } from "../../services/activityImage";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
