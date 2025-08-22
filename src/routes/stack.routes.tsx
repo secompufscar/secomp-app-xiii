@@ -26,6 +26,7 @@ import {
   SponsorsAdminCreate,
   SponsorsAdminUpdate,
   TagsAdmin,
+  Notifications,
   AdminNotificationScreen,
   AdminNotificationSend,
 } from '../screens'
@@ -55,6 +56,7 @@ type StackNavigation = {
   SponsorsAdminCreate: undefined;
   SponsorsAdminUpdate: { id: string };
   TagsAdmin: undefined;
+  Notifications: undefined;
   AdminNotificationScreen: undefined;
   AdminNotificationSend: undefined;
 };
@@ -87,6 +89,7 @@ export default function StackRoutes() {
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
       <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
+      <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="AdminNotificationScreen" component={AdminNotificationScreen} />
       <Stack.Screen name="AdminNotificationSend" component={AdminNotificationSend} />
     </Stack.Navigator>

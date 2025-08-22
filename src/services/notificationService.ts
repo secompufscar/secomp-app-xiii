@@ -3,7 +3,17 @@ import * as Device from 'expo-device';
 import api from './api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { Platform } from 'react-native';
+
+export type Notification = {
+  id: string
+  title: string
+  message: string
+  sentAt: string
+  status?: "PENDING" | "SENT" | "FAILED"
+  data?: Record<string, unknown>
+}
 
 // Configurar o comportamento das notificações
 Notifications.setNotificationHandler({
@@ -16,21 +26,21 @@ Notifications.setNotificationHandler({
   }),
 });
 // Registrar o canal de notificações para Android
-export async function registerForPushNotifications() { 
+export async function registerForPushNotifications() {
   if (!Device.isDevice) {
     console.warn('Must use physical device for Push Notifications');
     console.log('Push notifications are not supported on simulators/emulators');
     return null;
   }
-  
+
   // Configurar canal Android
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync('default', {
       name: 'Notificações padrão',
-      importance: Notifications.AndroidImportance.MAX, 
+      importance: Notifications.AndroidImportance.MAX,
       lightColor: '#FF231F7C',
       sound: 'default',
-      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC, 
+      lockscreenVisibility: Notifications.AndroidNotificationVisibility.PUBLIC,
     });
     console.log('Canal de notificações configurado para Android');
   }
@@ -49,9 +59,9 @@ export async function registerForPushNotifications() {
   }
   let token;
   try {
-      token = await Notifications.getExpoPushTokenAsync({
-        projectId: Constants?.expoConfig?.extra?.eas?.projectId,
-      });
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants?.expoConfig?.extra?.eas?.projectId,
+    });
   }
   catch (error) {
     console.error('Error getting Expo push token:', error);
@@ -66,7 +76,7 @@ export async function registerForPushNotifications() {
 
   if (authToken) {
     try {
-      await api.post('/users/registerPushToken', { token: token.data  }, {
+      await api.post('/users/registerPushToken', { token: token.data }, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
     } catch (error) {
@@ -89,20 +99,25 @@ export async function scheduleNotification(params: any) {
 }
 
 // Listener para notificações recebidas
-export function setupNotificationListeners() {
+export function setupNotificationListeners(
+  navigation: NavigationProp<ParamListBase>
+) {
   Notifications.addNotificationReceivedListener(notification => {
-    console.log('Notification received:', notification);
-    // Aqui você pode lidar com a notificação em foreground
-  });
+    console.log('Notification received:', notification)
+  })
 
-  // Listener para quando o usuário toca na notificação
   Notifications.addNotificationResponseReceivedListener(response => {
-    const data = response.notification.request.content.data;
-    console.log('Notification touched:', data);
+    const data = response.notification.request.content.data as any
+    console.log('Notification touched:', data)
 
-    // Navegar para uma tela específica baseada nos dados
-    //if (data.eventId) {
-    //  navigation.navigate('EventDetails', { id: data.eventId });
-    //}
-  });
+    if (data.activityId) {
+      navigation.navigate('ActivityDetails', { item: { id: data.activityId } })
+    }
+  })
+}
+
+// Recupera o histórico de notificações do usuário
+export async function getNotifications(): Promise<Notification[]> {
+  const res = await api.get<Notification[]>('/notifications/history')
+  return res.data
 }

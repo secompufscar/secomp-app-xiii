@@ -116,19 +116,19 @@ export default function UserProfile() {
           <ProfileButton
             icon={faCalendarDays}
             label="Minhas Atividades"
-            onPress={() => {navigation.navigate("MyEvents");}}
+            onPress={() => { navigation.navigate("MyEvents"); }}
           />
 
           <ProfileButton
             icon={faBell}
             label="Notificações"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("Notifications"); }}
           />
 
           <ProfileButton
             icon={faQrcode}
             label="Credencial"
-            onPress={() => {navigation.navigate("Credential");}}
+            onPress={() => { navigation.navigate("Credential"); }}
           />
 
           {/* Sair */}

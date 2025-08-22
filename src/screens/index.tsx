@@ -42,6 +42,8 @@ import AdminNotificationSend from "./notification/adminNotificationSend"
 
 import EditProfile from "./profile/editProfileScreen";
 
+import Notifications from "./notification/notificationsScreen";
+
 export {
   Login,
   SignUp,
@@ -51,6 +53,7 @@ export {
   VerifyEmail,
   SetNewPassword,
   Home,
+  Notifications,
   EventGuide,
   UserProfile,
   EditProfile,
