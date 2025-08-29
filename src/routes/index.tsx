@@ -13,7 +13,7 @@ const linking = {
 };
 
 export default function Routes() {
-  const { user }: any = useAuth();
+  const { user } = useAuth();
 
   return (
     <NavigationContainer linking={linking}>

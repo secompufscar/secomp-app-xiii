@@ -31,7 +31,7 @@ export default function AuthRoutes() {
   return (
     <Stack.Navigator
       initialRouteName="Welcome"
-      screenOptions={{ headerShown: false, title: "SECOMP UFSCar 2025" }}
+      screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="SignUp" component={SignUp} />
