@@ -3,7 +3,7 @@ interface Sponsor {
   name: string;
   logoUrl: undefined;
   description: string;
-  starColor: string;
+  starColor: string; // Diamante, Ouro ou Prata
   link: string;
   tags: string[];
 }

@@ -4,6 +4,8 @@ interface User {
   email: string;
   tipo: string;
   qrCode: string;
+  pushToken?: string;
   points: int;
   registrationStatus: int;
+  currentEdition?: string;
 }
