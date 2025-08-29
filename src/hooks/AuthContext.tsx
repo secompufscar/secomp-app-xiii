@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Tipo do contexto de autenticação
@@ -13,56 +13,59 @@ interface AuthContextData {
 // Criação do contexto
 const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
-// Tipo das props do provider
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Provider da autenticação
+const USER_STORAGE_KEY = "user";
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Login
-  const signIn = async (data: User) => {
+  const signIn = useCallback(async (data: User) => {
     try {
-      await AsyncStorage.setItem("user", JSON.stringify(data));
+      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
       setUser(data);
     } catch (error) {
       console.error("Erro no signIn:", error);
     }
-  };
+  }, []);
 
-  // Logout
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem(USER_STORAGE_KEY);
       setUser(null);
     } catch (error) {
       console.error("Erro ao fazer sign out:", error);
     }
-  };
+  }, []);
 
-  // Atualiza o usuário no estado e no AsyncStorage
-  const updateUser = async (data: User) => {
+  const updateUser = useCallback(async (data: User) => {
     try {
+      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
       setUser(data);
-      await AsyncStorage.setItem("user", JSON.stringify(data));
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
     }
-  };
+  }, []);
 
   // Recuperar usuário do AsyncStorage (login automático)
   useEffect(() => {
     const loadUserFromStorage = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem("user");
+        const storedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (parseError) {
+            console.error("Erro ao parsear dados do usuário:", parseError);
+            await AsyncStorage.removeItem(USER_STORAGE_KEY);
+            setUser(null);
+          }
         }
       } catch (error) {
-        console.error("Erro ao carregar usuário:", error);
+        console.error("Erro ao carregar usuário do storage:", error);
         setUser(null);
       } finally {
         setLoading(false);
@@ -72,8 +75,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     loadUserFromStorage();
   }, []);
 
+  const contextValue = useMemo(() => ({
+    user,
+    loading,
+    signIn,
+    signOut,
+    updateUser,
+  }), [user, loading, signIn, signOut, updateUser]);
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut, updateUser }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
@@ -82,8 +93,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 // Hook para acessar o contexto
 export const useAuth = () => {
   const context = useContext(AuthContext);
+  
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");  
   }
+
   return context;
 };
