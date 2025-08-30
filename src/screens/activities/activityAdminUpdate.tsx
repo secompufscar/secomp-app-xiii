@@ -1,7 +1,22 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StatusBar,
+  Platform,
+  ActivityIndicator,
+  ScrollView,
+  Image,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, ParamListBase, useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
+import {
+  useNavigation,
+  ParamListBase,
+  useFocusEffect,
+  useRoute,
+  RouteProp,
+} from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { updateActivity, getActivityId } from "../../services/activities";
 import { getImagesByActivityId, updateActivityImageById } from "../../services/activityImage";
@@ -95,7 +110,7 @@ export default function ActivityAdminUpdate() {
       return () => {
         isActive = false;
       };
-    }, [selectedCategoryId])
+    }, [selectedCategoryId]),
   );
 
   // Busca os dados da atividade
@@ -132,11 +147,11 @@ export default function ActivityAdminUpdate() {
         images.forEach((img) => {
           if (img.typeOfImage === "palestrante") {
             setSpeakerImage(img.imageUrl);
-            setOriginalSpeakerImage(img.imageUrl); 
+            setOriginalSpeakerImage(img.imageUrl);
             setSpeakerImageId(img.id);
           } else {
             setActivityImage(img.imageUrl);
-            setOriginalActivityImage(img.imageUrl); 
+            setOriginalActivityImage(img.imageUrl);
             setActivityImageId(img.id);
           }
         });
@@ -172,13 +187,6 @@ export default function ActivityAdminUpdate() {
       setTime(selectedTime);
     }
   };
-
-  const uriToBlob = async (uri: string) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  }
-
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -189,18 +197,17 @@ export default function ActivityAdminUpdate() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'], 
+      mediaTypes: ["images"],
       quality: 1,
     });
-    
+
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
   };
 
   const handleUpdateActivity = async () => {
-    if (!activityId)
-      return;
+    if (!activityId) return;
 
     if (
       !name.trim() ||
@@ -226,8 +233,8 @@ export default function ActivityAdminUpdate() {
     }
 
     if (isNaN(parsedPoints) || parsedPoints < 0) {
-      setWarningMessage("A pontuação deve ser um valor numérico positivo")
-      setWarningModalVisible(true);  
+      setWarningMessage("A pontuação deve ser um valor numérico positivo");
+      setWarningModalVisible(true);
       return;
     }
 
@@ -239,7 +246,7 @@ export default function ActivityAdminUpdate() {
         date.getMonth(),
         date.getDate(),
         time.getHours(),
-        time.getMinutes()
+        time.getMinutes(),
       );
 
       const adjustedDateTime = new Date(dateTime.getTime() - dateTime.getTimezoneOffset() * 60000);
@@ -256,7 +263,7 @@ export default function ActivityAdminUpdate() {
       };
 
       await updateActivity(activityId, activityData);
-      
+
       // Atualiza imagens apenas se foram alteradas (uri local do dispositivo)
       const uploadPromises: Promise<any>[] = [];
 
@@ -265,8 +272,11 @@ export default function ActivityAdminUpdate() {
         formDataActivity.append("activityId", activityId);
         formDataActivity.append("typeOfImage", "atividade");
 
-        const activityBlob = await uriToBlob(activityImage);
-        formDataActivity.append("image", activityBlob, "activity.jpg");
+        formDataActivity.append("image", {
+          uri: activityImage,
+          name: "speaker.jpg",
+          type: "image/jpeg",
+        } as any);
 
         uploadPromises.push(updateActivityImageById(activityImageId, formDataActivity));
       }
@@ -276,8 +286,11 @@ export default function ActivityAdminUpdate() {
         formDataSpeaker.append("activityId", activityId);
         formDataSpeaker.append("typeOfImage", "palestrante");
 
-        const speakerBlob = await uriToBlob(speakerImage);
-        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
+        formDataSpeaker.append("image", {
+          uri: speakerImage,
+          name: "speaker.jpg",
+          type: "image/jpeg",
+        } as any);
 
         uploadPromises.push(updateActivityImageById(speakerImageId, formDataSpeaker));
       }
@@ -324,15 +337,23 @@ export default function ActivityAdminUpdate() {
             <View className="flex-col flex-1 w-full gap-4 text-center justify-start pb-8">
               {/* Nome da atividade */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Nome da Atividade
+                </Text>
                 <Input>
-                  <Input.Field placeholder="Ex.: Palestra de IA" onChangeText={setName} value={name} />
+                  <Input.Field
+                    placeholder="Ex.: Palestra de IA"
+                    onChangeText={setName}
+                    value={name}
+                  />
                 </Input>
               </View>
 
               {/* Imagem da Atividade */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Imagem da Atividade
+                </Text>
                 <Pressable
                   onPress={() => pickImage(setActivityImage)}
                   className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -353,15 +374,23 @@ export default function ActivityAdminUpdate() {
 
               {/* Nome do Palestrante */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Nome do Palestrante
+                </Text>
                 <Input>
-                  <Input.Field placeholder="Ex.: João Silva" onChangeText={setSpeakerName} value={speakerName} />
+                  <Input.Field
+                    placeholder="Ex.: João Silva"
+                    onChangeText={setSpeakerName}
+                    value={speakerName}
+                  />
                 </Input>
               </View>
 
               {/* Imagem do Palestrante */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Imagem do Palestrante
+                </Text>
                 <Pressable
                   onPress={() => pickImage(setSpeakerImage)}
                   className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -396,8 +425,11 @@ export default function ActivityAdminUpdate() {
                       portalId="root"
                       customInput={
                         <View
-                          className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}>
-                          <Text className="text-white font-inter text-sm">{date.toLocaleDateString("pt-BR")}</Text>
+                          className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}
+                        >
+                          <Text className="text-white font-inter text-sm">
+                            {date.toLocaleDateString("pt-BR")}
+                          </Text>
                         </View>
                       }
                     />
@@ -435,7 +467,9 @@ export default function ActivityAdminUpdate() {
                       portalId="root"
                       customInput={
                         <View className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center">
-                          <Text className="text-white font-inter text-sm">{format(time, "HH:mm")}</Text>
+                          <Text className="text-white font-inter text-sm">
+                            {format(time, "HH:mm")}
+                          </Text>
                         </View>
                       }
                     />
@@ -447,7 +481,9 @@ export default function ActivityAdminUpdate() {
                       className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
                       pointerEvents="none"
                     >
-                      <Text className="text-white font-inter text-sm">{format(time, "HH:mm", { locale: ptBR })}</Text>
+                      <Text className="text-white font-inter text-sm">
+                        {format(time, "HH:mm", { locale: ptBR })}
+                      </Text>
                     </View>
                   </Pressable>
                 )}
@@ -457,7 +493,11 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
                 <Input>
-                  <Input.Field placeholder="Ex.: Auditório" onChangeText={setLocation} value={location} />
+                  <Input.Field
+                    placeholder="Ex.: Auditório"
+                    onChangeText={setLocation}
+                    value={location}
+                  />
                 </Input>
               </View>
 
@@ -465,7 +505,12 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
                 <Input>
-                  <Input.Field placeholder="Ex.: 50" onChangeText={setVacancies} value={vacancies} keyboardType="numeric" />
+                  <Input.Field
+                    placeholder="Ex.: 50"
+                    onChangeText={setVacancies}
+                    value={vacancies}
+                    keyboardType="numeric"
+                  />
                 </Input>
               </View>
 
@@ -473,10 +518,13 @@ export default function ActivityAdminUpdate() {
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
                 <Input>
-                  <Input.Field placeholder="Detalhes da atividade" onChangeText={setDetails} value={details} />
+                  <Input.Field
+                    placeholder="Detalhes da atividade"
+                    onChangeText={setDetails}
+                    value={details}
+                  />
                 </Input>
               </View>
-
 
               {/* Pontos */}
               <View className="w-full">
@@ -509,7 +557,13 @@ export default function ActivityAdminUpdate() {
                             isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"
                           }`}
                         >
-                          <Text className={isSelected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>
+                          <Text
+                            className={
+                              isSelected
+                                ? "text-blue-500 font-interMedium"
+                                : "text-gray-400 font-interMedium"
+                            }
+                          >
                             {category.nome}
                           </Text>
                         </Pressable>
@@ -536,9 +590,21 @@ export default function ActivityAdminUpdate() {
         </>
       )}
 
-      <ErrorOverlay visible={errorModalVisible} title="Erro" message={errorMessage} onConfirm={() => setErrorModalVisible(false)} confirmText="OK" />
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => setErrorModalVisible(false)}
+        confirmText="OK"
+      />
 
-      <WarningOverlay visible={warningModalVisible} title="Aviso" message={warningMessage} onConfirm={() => setWarningModalVisible(false)} confirmText="OK" />
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message={warningMessage}
+        onConfirm={() => setWarningModalVisible(false)}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
