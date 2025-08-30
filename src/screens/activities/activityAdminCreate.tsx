@@ -1,10 +1,19 @@
 import React, { useState, useCallback } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView, Image } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StatusBar,
+  Platform,
+  ActivityIndicator,
+  ScrollView,
+  Image,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
-import { getCategories } from "../../services/categories"; 
+import { getCategories } from "../../services/categories";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -31,12 +40,12 @@ export default function ActivityAdminCreate() {
   const [details, setDetails] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [points, setPoints] = useState<string>("");
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null); 
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  
+
   const [activityImage, setActivityImage] = useState<string | null>(null);
   const [speakerImage, setSpeakerImage] = useState<string | null>(null);
 
@@ -82,7 +91,7 @@ export default function ActivityAdminCreate() {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, []),
   );
 
   const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -99,12 +108,6 @@ export default function ActivityAdminCreate() {
     }
   };
 
-  const uriToBlob = async (uri: string) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  }
-
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -115,7 +118,7 @@ export default function ActivityAdminCreate() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'], 
+      mediaTypes: ["images"],
       quality: 1,
     });
 
@@ -134,8 +137,8 @@ export default function ActivityAdminCreate() {
       !location.trim() ||
       !selectedCategoryId
     ) {
-      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
-      setWarningModalVisible(true);      
+      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria");
+      setWarningModalVisible(true);
       return;
     }
 
@@ -143,14 +146,14 @@ export default function ActivityAdminCreate() {
     const parsedPoints = parseInt(points, 10);
 
     if (isNaN(parsedVacancies) || parsedVacancies < 0) {
-      setWarningMessage("O número de vagas deve ser um valor numérico positivo")
-      setWarningModalVisible(true);  
+      setWarningMessage("O número de vagas deve ser um valor numérico positivo");
+      setWarningModalVisible(true);
       return;
     }
 
     if (isNaN(parsedPoints) || parsedPoints < 0) {
-      setWarningMessage("A pontuação deve ser um valor numérico positivo")
-      setWarningModalVisible(true);  
+      setWarningMessage("A pontuação deve ser um valor numérico positivo");
+      setWarningModalVisible(true);
       return;
     }
 
@@ -170,7 +173,7 @@ export default function ActivityAdminCreate() {
       const activityData = {
         nome: name,
         palestranteNome: speakerName,
-        data: adjustedDateTime.toISOString(), 
+        data: adjustedDateTime.toISOString(),
         vagas: parsedVacancies,
         detalhes: details,
         points: parsedPoints,
@@ -179,25 +182,33 @@ export default function ActivityAdminCreate() {
       };
 
       const createdActivity = await createActivity(activityData);
-
-      if (activityImage){
+      console.log("activity:" + activityImage);
+      if (activityImage) {
         const formDataActivity = new FormData();
         formDataActivity.append("activityId", createdActivity.id);
         formDataActivity.append("typeOfImage", "atividade");
 
-        const activityBlob = await uriToBlob(activityImage);
-        formDataActivity.append("image", activityBlob, "activity.jpg");
+        formDataActivity.append("image", {
+          uri: activityImage,
+          name: "activity.jpg",
+          type: "image/jpeg",
+        } as any);
 
-        await createActivityImage(formDataActivity);
+        const data = await createActivityImage(formDataActivity);
+        console.log(data);
       }
 
-      if (speakerImage){
+      console.log("speaker: " + speakerImage);
+      if (speakerImage) {
         const formDataSpeaker = new FormData();
         formDataSpeaker.append("activityId", createdActivity.id);
         formDataSpeaker.append("typeOfImage", "palestrante");
 
-        const speakerBlob = await uriToBlob(speakerImage);
-        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
+        formDataSpeaker.append("image", {
+          uri: speakerImage,
+          name: "speaker.jpg",
+          type: "image/jpeg",
+        } as any);
 
         await createActivityImage(formDataSpeaker);
       }
@@ -205,6 +216,7 @@ export default function ActivityAdminCreate() {
       navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao criar a atividade.";
+      console.error(error);
       setErrorMessage(errorMessage);
       setErrorModalVisible(true);
     } finally {
@@ -226,29 +238,29 @@ export default function ActivityAdminCreate() {
 
           {/* Cabeçalho */}
           <View className="mb-8">
-            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Criar nova atividade</Text>
-            <Text className="text-blue-200 font-inter">
-              Adicione uma nova atividade ao evento!
+            <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
+              Criar nova atividade
             </Text>
+            <Text className="text-blue-200 font-inter">Adicione uma nova atividade ao evento!</Text>
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
             <View className="flex-col flex-1 w-full gap-4 text-center justify-start pb-8">
               {/* Nome da atividade */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Nome da Atividade
+                </Text>
                 <Input>
-                  <Input.Field
-                    placeholder="Palestra de IA"
-                    onChangeText={setName}
-                    value={name}
-                  />
+                  <Input.Field placeholder="Palestra de IA" onChangeText={setName} value={name} />
                 </Input>
               </View>
 
               {/* Imagem da Atividade */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Imagem da Atividade
+                </Text>
                 <Pressable
                   onPress={() => pickImage(setActivityImage)}
                   className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -269,7 +281,9 @@ export default function ActivityAdminCreate() {
 
               {/* Nome do Palestrante */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Nome do Palestrante
+                </Text>
                 <Input>
                   <Input.Field
                     placeholder="João Silva"
@@ -281,7 +295,9 @@ export default function ActivityAdminCreate() {
 
               {/* Imagem do Palestrante */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-interMedium mb-2">
+                  Imagem do Palestrante
+                </Text>
                 <Pressable
                   onPress={() => pickImage(setSpeakerImage)}
                   className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -302,7 +318,7 @@ export default function ActivityAdminCreate() {
 
               {/* Data da atividade */}
               <View className="w-full mb-2">
-                {Platform.OS === 'web' ? (
+                {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <DatePicker
@@ -310,14 +326,16 @@ export default function ActivityAdminCreate() {
                       onChange={(date: Date | null) => {
                         if (date) setDate(date);
                       }}
-                      locale={ptBR} 
+                      locale={ptBR}
                       dateFormat="dd/MM/yyyy"
                       popperClassName="z-50"
                       portalId="root"
                       customInput={
-                        <View className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}>
+                        <View
+                          className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}
+                        >
                           <Text className="text-white font-inter text-sm">
-                            {date.toLocaleDateString('pt-BR')}
+                            {date.toLocaleDateString("pt-BR")}
                           </Text>
                         </View>
                       }
@@ -326,9 +344,12 @@ export default function ActivityAdminCreate() {
                 ) : (
                   <Pressable onPress={() => setShowDatePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
-                    <View className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                    <View
+                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
+                      pointerEvents="none"
+                    >
                       <Text className="text-white font-inter text-sm">
-                        {`${date.toLocaleDateString('pt-BR')}`}
+                        {`${date.toLocaleDateString("pt-BR")}`}
                       </Text>
                     </View>
                   </Pressable>
@@ -337,7 +358,7 @@ export default function ActivityAdminCreate() {
 
               {/* Horário da atividade */}
               <View className="w-full mb-2">
-                {Platform.OS === 'web' ? (
+                {Platform.OS === "web" ? (
                   <View>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <DatePicker
@@ -365,7 +386,10 @@ export default function ActivityAdminCreate() {
                 ) : (
                   <Pressable onPress={() => setShowTimePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
-                    <View className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                    <View
+                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
+                      pointerEvents="none"
+                    >
                       <Text className="text-white font-inter text-sm">
                         {format(time, "HH:mm", { locale: ptBR })}
                       </Text>
@@ -440,7 +464,13 @@ export default function ActivityAdminCreate() {
                           onPress={() => setSelectedCategoryId(category.id)}
                           className={`px-4 py-2 rounded-full border ${isSelected ? "bg-blue-500/10 border-blue-500" : "border-gray-600"}`}
                         >
-                          <Text className={isSelected ? "text-blue-500 font-interMedium" : "text-gray-400 font-interMedium"}>
+                          <Text
+                            className={
+                              isSelected
+                                ? "text-blue-500 font-interMedium"
+                                : "text-gray-400 font-interMedium"
+                            }
+                          >
                             {category.nome}
                           </Text>
                         </Pressable>
@@ -460,22 +490,10 @@ export default function ActivityAdminCreate() {
         </View>
       </View>
 
-      {Platform.OS !== 'web' && (
+      {Platform.OS !== "web" && (
         <>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              onChange={onChangeDate}
-            />
-          )}
-          {showTimePicker && (
-            <DateTimePicker
-              value={time}
-              mode="time"
-              onChange={onChangeTime}
-            />
-          )}
+          {showDatePicker && <DateTimePicker value={date} mode="date" onChange={onChangeDate} />}
+          {showTimePicker && <DateTimePicker value={time} mode="time" onChange={onChangeTime} />}
         </>
       )}
 
@@ -483,7 +501,9 @@ export default function ActivityAdminCreate() {
         visible={errorModalVisible}
         title="Erro"
         message={errorMessage}
-        onConfirm={() => {setErrorModalVisible(false)}}
+        onConfirm={() => {
+          setErrorModalVisible(false);
+        }}
         confirmText="OK"
       />
 
@@ -491,7 +511,9 @@ export default function ActivityAdminCreate() {
         visible={warningModalVisible}
         title="Aviso"
         message={warningMessage}
-        onConfirm={() => {setWarningModalVisible(false)}}
+        onConfirm={() => {
+          setWarningModalVisible(false);
+        }}
         confirmText="OK"
       />
     </SafeAreaView>
