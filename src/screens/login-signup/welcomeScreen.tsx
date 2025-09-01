@@ -16,7 +16,7 @@ export default function Welcome() {
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
-        <View className="flex-col w-full py-24 gap-10 items-center">
+        <View className="flex-col h-full w-full gap-10 items-center justify-center">
           <View className="w-full max-w-[400px] max-h-[400px] rounded-lg flex items-center">
             <Image
               source={require("../../../assets/welcome/team.png")}
