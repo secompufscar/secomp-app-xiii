@@ -99,12 +99,6 @@ export default function ActivityAdminCreate() {
     }
   };
 
-  const uriToBlob = async (uri: string) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  }
-
   // Função para compatibilidade das imagens em web e mobile
   const appendImageToFormData = async (formData: FormData, uri: string, typeOfImage: string) => {
     formData.append("typeOfImage", typeOfImage);

@@ -173,11 +173,21 @@ export default function ActivityAdminUpdate() {
     }
   };
 
-  const uriToBlob = async (uri: string) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  }
+  // Função para compatibilidade das imagens em web e mobile
+  const appendImageToFormData = async (formData: FormData, uri: string, typeOfImage: string) => {
+    formData.append("typeOfImage", typeOfImage);
+    if (Platform.OS === "web") {
+      const file = await fetch(uri).then(r => r.blob());
+      formData.append("image", file, `${typeOfImage}.jpg`);
+    } else {
+      formData.append("image", {
+        uri,
+        name: `${typeOfImage}.jpg`,
+        type: "image/jpeg",
+      } as any);
+    }
+  };
+
 
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
@@ -263,10 +273,7 @@ export default function ActivityAdminUpdate() {
       if (activityImage && activityImage !== originalActivityImage && activityImageId) {
         const formDataActivity = new FormData();
         formDataActivity.append("activityId", activityId);
-        formDataActivity.append("typeOfImage", "atividade");
-
-        const activityBlob = await uriToBlob(activityImage);
-        formDataActivity.append("image", activityBlob, "activity.jpg");
+        await appendImageToFormData(formDataActivity, activityImage, "atividade");
 
         uploadPromises.push(updateActivityImageById(activityImageId, formDataActivity));
       }
@@ -274,10 +281,7 @@ export default function ActivityAdminUpdate() {
       if (speakerImage && speakerImage !== originalSpeakerImage && speakerImageId) {
         const formDataSpeaker = new FormData();
         formDataSpeaker.append("activityId", activityId);
-        formDataSpeaker.append("typeOfImage", "palestrante");
-
-        const speakerBlob = await uriToBlob(speakerImage);
-        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
+        await appendImageToFormData(formDataSpeaker, speakerImage, "palestrante");
 
         uploadPromises.push(updateActivityImageById(speakerImageId, formDataSpeaker));
       }
