@@ -486,6 +486,7 @@ export default function ActivityAdminUpdate() {
                     placeholder="Pontuação da atividade"
                     onChangeText={setPoints}
                     value={points}
+                    keyboardType="numeric"
                   />
                 </Input>
               </View>

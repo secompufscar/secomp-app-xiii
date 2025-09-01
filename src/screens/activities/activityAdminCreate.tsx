@@ -419,6 +419,7 @@ export default function ActivityAdminCreate() {
                     placeholder="Pontuação da atividade"
                     onChangeText={setPoints}
                     value={points}
+                    keyboardType="numeric"
                   />
                 </Input>
               </View>
