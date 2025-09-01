@@ -4,10 +4,10 @@ import StackRoutes from "./stack.routes";
 import AuthRoutes from "./auth.routes";
 
 const linking = {
-  prefixes: ["https://secompapp.com", "secompapp://"],
+  prefixes: ["https://app.secompufscar.com.br", "secompapp://"],
   config: {
     screens: {
-      SetNewPassword: "SetNewPassword",
+      SetNewPassword: "SetNewPassword/:token",
     },
   },
 };
