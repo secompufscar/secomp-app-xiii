@@ -105,6 +105,21 @@ export default function ActivityAdminCreate() {
     return blob;
   }
 
+  // Função para compatibilidade das imagens em web e mobile
+  const appendImageToFormData = async (formData: FormData, uri: string, typeOfImage: string) => {
+    formData.append("typeOfImage", typeOfImage);
+    if (Platform.OS === "web") {
+      const file = await fetch(uri).then(r => r.blob());
+      formData.append("image", file, `${typeOfImage}.jpg`);
+    } else {
+      formData.append("image", {
+        uri,
+        name: `${typeOfImage}.jpg`,
+        type: "image/jpeg",
+      } as any);
+    }
+  };
+
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -180,25 +195,17 @@ export default function ActivityAdminCreate() {
 
       const createdActivity = await createActivity(activityData);
 
-      if (activityImage){
+      if (activityImage) {
         const formDataActivity = new FormData();
         formDataActivity.append("activityId", createdActivity.id);
-        formDataActivity.append("typeOfImage", "atividade");
-
-        const activityBlob = await uriToBlob(activityImage);
-        formDataActivity.append("image", activityBlob, "activity.jpg");
-
+        await appendImageToFormData(formDataActivity, activityImage, "atividade");
         await createActivityImage(formDataActivity);
       }
 
-      if (speakerImage){
+      if (speakerImage) {
         const formDataSpeaker = new FormData();
         formDataSpeaker.append("activityId", createdActivity.id);
-        formDataSpeaker.append("typeOfImage", "palestrante");
-
-        const speakerBlob = await uriToBlob(speakerImage);
-        formDataSpeaker.append("image", speakerBlob, "speaker.jpg");
-
+        await appendImageToFormData(formDataSpeaker, speakerImage, "palestrante");
         await createActivityImage(formDataSpeaker);
       }
 
