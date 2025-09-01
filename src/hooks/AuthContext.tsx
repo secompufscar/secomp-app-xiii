@@ -1,13 +1,14 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from "react";
+import { setGlobalSignOut } from "../utils/authHelper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Tipo do contexto de autenticação
 interface AuthContextData {
   user: User | null;
   loading: boolean;
-  signIn: (data: User) => Promise<void>;
+  signIn: (data: User, token: string) => Promise<void>;
   signOut: () => Promise<void>;
-  updateUser: (data: User) => Promise<void>; // <-- 1. ADICIONADO
+  updateUser: (data: User) => Promise<void>; 
 }
 
 // Criação do contexto
@@ -18,14 +19,16 @@ interface AuthProviderProps {
 }
 
 const USER_STORAGE_KEY = "user";
+const TOKEN_STORAGE_KEY = "userToken";
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const signIn = useCallback(async (data: User) => {
+  const signIn = useCallback(async (data: User, token: string) => {
     try {
       await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
+      await AsyncStorage.setItem(TOKEN_STORAGE_KEY, token);
       setUser(data);
     } catch (error) {
       console.error("Erro no signIn:", error);
@@ -35,6 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const signOut = useCallback(async () => {
     try {
       await AsyncStorage.removeItem(USER_STORAGE_KEY);
+      await AsyncStorage.removeItem(TOKEN_STORAGE_KEY);
       setUser(null);
     } catch (error) {
       console.error("Erro ao fazer sign out:", error);
@@ -50,12 +54,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    setGlobalSignOut(signOut);
+  }, [signOut]);
+
   // Recuperar usuário do AsyncStorage (login automático)
   useEffect(() => {
     const loadUserFromStorage = async () => {
-      try {
+      try {      
         const storedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
-        if (storedUser) {
+        const storedToken = await AsyncStorage.getItem(TOKEN_STORAGE_KEY);
+
+        if (storedUser && storedToken) {
           try {
             setUser(JSON.parse(storedUser));
           } catch (parseError) {

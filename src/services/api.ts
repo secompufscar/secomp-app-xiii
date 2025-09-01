@@ -1,6 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { callGlobalSignOut } from "../utils/authHelper";
 
 const api = axios.create({ baseURL: "https://api.secompufscar.com.br/api/v1", });
 
@@ -21,6 +21,17 @@ api.interceptors.request.use(
     }
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  response => response,
+  async error => {
+    const status = error.response?.status;
+    if (status === 401 || status === 500) {
+      await callGlobalSignOut();
+    }
     return Promise.reject(error);
   }
 );

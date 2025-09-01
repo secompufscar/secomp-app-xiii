@@ -62,8 +62,8 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const data = await login({ email, senha });
-      await signIn(data);
+      const { user, token } = await login({ email, senha }, navigation);
+      await signIn(user, token);
     } catch (error) {
       const err = error as any;
       const errorMessage = err.response?.data?.message || "Falha ao processar o login.";

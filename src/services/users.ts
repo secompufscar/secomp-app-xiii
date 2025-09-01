@@ -5,7 +5,7 @@ import { registerForPushNotifications, setupNotificationListeners } from './noti
 import { Platform } from 'react-native';
 
 // Realiza login do usuário e configura notificações push
-export const login = async (data: Login, navigation: NavigationProp<ParamListBase>): Promise<User> => {
+export const login = async (data: Login, navigation: NavigationProp<ParamListBase>): Promise<{user: User; token: string}> => {
   const response = await api.post("/users/login", data);
   const { user, token } = response.data;
 
@@ -23,7 +23,7 @@ export const login = async (data: Login, navigation: NavigationProp<ParamListBas
     }
   }
 
-  return user;
+  return { user, token };
 };
 
 // Realiza cadastro de novo usuário
