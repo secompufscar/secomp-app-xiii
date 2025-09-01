@@ -1,39 +1,12 @@
 import api from "./api";
 
-export type UpdateSponsorData = {
-  name?: string;
-  logoUrl?: string;
-  description?: string;
-  starColor?: string;
-  link?: string;
-};
-
-export type Sponsor = {
-  id: string
-  name: string
-  logoUrl: string
-  description: string
-  starColor: string
-  link: string
-  tags: string[]
-}
-
-export type CreateSponsorData = {
-  name: string
-  logoUrl: string
-  description: string
-  starColor: string
-  link: string
-  tagIds?: string[]
-}
-
 // Busca e retorna a lista de todos os patrocinadores
 export const getSponsors = async (): Promise<Sponsor[]> => {
   const response = await api.get('/sponsors');
   return response.data;
 };
 
-// Busca um por id
+// Busca um patrocinador por id
 export async function getSponsorById(id: string): Promise<Sponsor> {
   const response = await api.get(`/sponsors/${id}`);
   return response.data;

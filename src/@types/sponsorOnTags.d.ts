@@ -3,4 +3,4 @@ interface SponsorsOnTags {
   tagId: string;
   assignedAt: Date;
   assignedBy: string;
-}
+};

@@ -1,9 +1,5 @@
 import api from "./api";
 
-export interface CreateRegistrationDTO {
-  eventId: string;
-}
-
 // Busca e retorna a lista de todas as inscrições para um evento específico
 export const getRegistrationsByEventId = async (eventId: string): Promise<UserEvent[]> => {
   const response = await api.get(`/userEvent/event/${eventId}`);

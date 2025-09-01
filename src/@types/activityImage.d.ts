@@ -3,4 +3,4 @@ type ActivityImage = {
     activityId: string,
     typeOfImage: string, // Palestrante ou Atividade
     imageUrl: string
-}
+};

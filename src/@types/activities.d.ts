@@ -8,4 +8,4 @@ interface Activity {
   categoriaId: string;
   local: string;
   points: number;
-}
+};
