@@ -7,7 +7,12 @@ const linking = {
   prefixes: ["https://app.secompufscar.com.br", "secompapp://"],
   config: {
     screens: {
-      SetNewPassword: "SetNewPassword/:token",
+      SetNewPassword: {
+        path: "SetNewPassword",
+        parse: {
+          token: (token: string) => token,
+        },
+      },
     },
   },
 };
