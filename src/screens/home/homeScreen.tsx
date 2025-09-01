@@ -164,7 +164,7 @@ export default function Home() {
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
-        <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
+        <View className="w-full flex-row items-center justify-between mt-10 mb-6 gap-4">
           <View className="flex-col h-full flex-1 ">
             <Text className="text-base text-blue-100 font-inter">{eventStatusMessage}</Text>
             <View className="flex-row items-center justify-start mt-[6px]">

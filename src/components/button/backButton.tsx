@@ -9,7 +9,7 @@ export default function BackButton() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   return (
-    <Pressable className="w-[32px] h-[32px] mt-16 mb-10" onPress={() => navigation.goBack()}>
+    <Pressable className="w-[32px] h-[32px] mt-10 mb-10" onPress={() => navigation.goBack()}>
       {({ pressed }) => (
         <View
           className={`flex items-center justify-center p-2 rounded-[4px] ${pressed ? "bg-[#29303F]/80" : "bg-[#29303F]"}`}

@@ -36,7 +36,7 @@ export default function Activities() {
           translucent={Platform.OS === "android"}
         />
 
-        <View className="w-full flex-1 mt-16 px-6 max-w-[1000px] mx-auto">
+        <View className="w-full flex-1 mt-10 px-6 max-w-[1000px] mx-auto">
           {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Cronograma</Text>

@@ -6,7 +6,6 @@ import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faFlag, faUser, faStar, faTags, faTicket } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
-import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import EditButton from "../../components/button/editButton";
 import ProfileButton from "../../components/button/profileButton";
@@ -29,7 +28,7 @@ export default function AdminProfile() {
         <View className="flex-row justify-between items-center">
           <BackButton />
 
-          <Text className="text-white text-xl font-poppinsSemiBold text-center mt-8">Perfil</Text>
+          <Text className="text-white text-xl font-poppinsSemiBold text-center">Perfil</Text>
 
           <EditButton />
         </View>

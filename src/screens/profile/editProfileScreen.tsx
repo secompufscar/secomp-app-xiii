@@ -3,7 +3,7 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { updateProfile, UpdateProfile } from "../../services/users";
+import { updateProfile } from "../../services/users";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../styles/colors";

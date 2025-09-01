@@ -10,7 +10,7 @@ export default function EditButton() {
 
   return (
     <Pressable
-      className="w-[32px] h-[32px] mt-16 mb-10"
+      className="w-[32px] h-[32px] mt-10 mb-10"
       onPress={() => navigation.navigate("EditProfile")}
     >
       {({ pressed }) => (
