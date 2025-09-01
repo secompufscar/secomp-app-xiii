@@ -51,8 +51,8 @@ export const sendForgotPasswordEmail = async (data: { email: string }) => {
 };
 
 // Atualiza a senha do usuário usando token de recuperação
-export const updatePassword = async (token: string, newPassword: string) => {
-  const response = await api.patch(`/users/updatePassword/${token}`, { newPassword });
+export const updatePassword = async (token: string, senha: string) => {
+  const response = await api.patch(`/users/updatePassword/${token}`, { senha });
   return response.data;
 };
 
