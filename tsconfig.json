@@ -1,9 +1,15 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,                   
+    "target": "ESNext",                
+    "moduleResolution": "Node",        
+    "esModuleInterop": true,           
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",                 
+    "skipLibCheck": true,               
+    "resolveJsonModule": true        
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }
-
-/*fiz algumas alterações nesse arquivo, principalmente porque o compilador mostrou o
-erro "cannot use JSX unless '--jsx' flag is provided"*/

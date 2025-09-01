@@ -10,4 +10,15 @@ interface Notification {
 
     sender?: User;
     recipients: User[];
-}
+};
+
+interface CreateNotificationDTO {
+  title: string;
+  message: string;
+  recipientIds: string[];
+  data?: Record<string, unknown>;
+  sound?: boolean;
+  badge?: number;
+};
+
+interface SendToAllNotificationDTO extends Omit<CreateNotificationDTO, "recipientIds"> {};

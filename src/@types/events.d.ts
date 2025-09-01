@@ -4,6 +4,6 @@ interface Events {
   startDate: string;
   endDate: string;
   isCurrent: boolean;
-}
+};
 
 type UpdateEvent = Partial<Events>;

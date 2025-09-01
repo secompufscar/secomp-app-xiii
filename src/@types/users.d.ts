@@ -4,6 +4,29 @@ interface User {
   email: string;
   tipo: string;
   qrCode: string;
+  pushToken?: string;
   points: int;
   registrationStatus: int;
-}
+  currentEdition?: string;
+};
+
+interface Login {
+  email: string;
+  senha: string;
+};
+
+interface SignUp {
+  nome: string;
+  email: string;
+  senha: string;
+};
+
+interface SignupResponse {
+  message: string;
+  emailEnviado: boolean;
+};
+
+interface UpdateProfile {
+  nome?: string;
+  email?: string;
+};

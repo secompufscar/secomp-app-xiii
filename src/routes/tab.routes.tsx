@@ -7,9 +7,7 @@ import { useAuth } from "../hooks/AuthContext";
 
 const Tab = createBottomTabNavigator();
 
-// Menu do app
 export default function TabRoutes() {
-  // Usa para diferenciar entre navegação de user e admin
   const { user } = useAuth();
   const role = user?.tipo;
 
@@ -33,7 +31,7 @@ export default function TabRoutes() {
           gap: 4,
         },
         tabBarShowLabel: false,
-        title: "SECOMP UFSCar 2024",
+        title: "SECOMP UFSCar",
       }}
     >
       <Tab.Screen
@@ -122,7 +120,7 @@ export default function TabRoutes() {
           }}
         />
       ) : (
-        // Usuário Padrao
+        // Usuário Padrão
         <Tab.Screen
           name="Perfil"
           component={UserProfile}

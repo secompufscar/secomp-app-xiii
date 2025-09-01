@@ -66,7 +66,7 @@ export type StackTypes = NativeStackNavigationProp<StackNavigation>;
 export default function StackRoutes() {
   return (
     <Stack.Navigator
-        screenOptions={{ headerShown: false, title: "SECOMP UFScar 2024" }}
+        screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="App" component={TabRoutes} />
       <Stack.Screen name="Schedule" component={Schedule} />

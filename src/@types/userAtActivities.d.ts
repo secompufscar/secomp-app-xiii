@@ -5,4 +5,4 @@ interface UserAtActivity {
   presente: boolean;
   inscricaoPrevia: boolean;
   listaEspera: boolean;
-}
+};
