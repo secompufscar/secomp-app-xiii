@@ -335,7 +335,7 @@ export default function ActivityAdminUpdate() {
                 <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem da Atividade</Text>
                 <Pressable
                   onPress={() => pickImage(setActivityImage)}
-                  className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center justify-center"
+                  className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center justify-center"
                 >
                   <Text className="text-gray-200 text-sm font-interMedium">
                     {activityImage ? "Trocar Imagem" : "Selecionar Imagem"}
@@ -396,7 +396,7 @@ export default function ActivityAdminUpdate() {
                       portalId="root"
                       customInput={
                         <View
-                          className={`w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center`}>
+                          className={`w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center`}>
                           <Text className="text-white font-inter text-sm">{date.toLocaleDateString("pt-BR")}</Text>
                         </View>
                       }
@@ -406,7 +406,7 @@ export default function ActivityAdminUpdate() {
                   <Pressable onPress={() => setShowDatePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
                     <View
-                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
+                      className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center"
                       pointerEvents="none"
                     >
                       <Text className="text-white font-inter text-sm">{`${date.toLocaleDateString("pt-BR")}`}</Text>
@@ -434,7 +434,7 @@ export default function ActivityAdminUpdate() {
                       popperClassName="z-50"
                       portalId="root"
                       customInput={
-                        <View className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center">
+                        <View className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center">
                           <Text className="text-white font-inter text-sm">{format(time, "HH:mm")}</Text>
                         </View>
                       }
@@ -444,7 +444,7 @@ export default function ActivityAdminUpdate() {
                   <Pressable onPress={() => setShowTimePicker(true)}>
                     <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
                     <View
-                      className="w-full p-[16px] bg-background rounded-lg border border-border flex-row items-center"
+                      className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center"
                       pointerEvents="none"
                     >
                       <Text className="text-white font-inter text-sm">{format(time, "HH:mm", { locale: ptBR })}</Text>

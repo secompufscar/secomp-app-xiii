@@ -282,7 +282,7 @@ export default function ActivityDetails() {
                   onPressOut={() => setIsBtnPressed(false)}
                 >
                   <View
-                    className={`w-full px-4 py-[16px] items-center justify-center rounded-lg transition-transform duration-100 transform 
+                    className={`w-full px-4 h-[56px] px-5 items-center justify-center rounded-lg transition-transform duration-100 transform 
                       ${isSubscribed ? "bg-border" : "bg-blue-500 "} 
                       ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
                   >
