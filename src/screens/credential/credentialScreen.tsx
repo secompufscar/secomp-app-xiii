@@ -40,15 +40,27 @@ export default function Credential() {
         {/* Card Background */}
         <View className="relative self-center max-w-[440px] w-full h-fit bg-iconbg py-8 px-2 rounded-2xl">
           {/* User Info */}
-          <View className="flex-row items-center ml-6 mb-[28px]">
+          <View className="flex-row items-center mx-6 mb-[28px]">
             <Image
               source={require("../../../assets/qr-code/qrcode-perfil.png")}
               resizeMode="stretch"
               style={{ width: 48, height: 48, borderRadius: 24, marginRight: 16 }}
             />
-            <View>
-              <Text className="text-white text-lg font-poppinsMedium">{user.nome}</Text>
-              <Text className="text-blue-200 text-base">{user.email}</Text>
+            <View className="flex-1">
+              <Text
+                className="text-white text-base font-poppinsMedium flex-shrink"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {user.nome}
+              </Text>
+              <Text
+                className="text-blue-200 text-sm flex-shrink"
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {user.email}
+              </Text>
             </View>
           </View>
 
