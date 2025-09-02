@@ -6,7 +6,7 @@ import { CameraView } from "expo-camera";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute } from "@react-navigation/native";
 import { checkIn } from "../../services/checkIn";
-import { getActivityId, subscribeToActivity } from "../../services/activities";
+import { getActivityId } from "../../services/activities";
 
 export default function QRCode() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -45,28 +45,13 @@ export default function QRCode() {
         }
 
         if (userId && activityId) {
-          if (activity.categoriaId == "1") {
-            const response = await checkIn(userId, activityId);
+          const response = await checkIn(userId, activityId);
 
-            // Verificado resultado do checkIn
-            // console.log(response);
-            console.log(response);
-
-            Alert.alert(
-              "Check-In",
-              `Check-in realizado com sucesso! \nUsuário marcado como presente.`,
-              [{ text: "OK", onPress: () => navigation.goBack() }],
-            );
-          } else {
-            const data = await subscribeToActivity(userId, activityId);
-            const response = await checkIn(userId, activityId);
-
-            Alert.alert(
-              "Check-In",
-              `Check-in realizado com sucesso! \nUsuário marcado como presente.`,
-              [{ text: "OK", onPress: () => navigation.goBack() }],
-            );
-          }
+          Alert.alert(
+            "Check-In",
+            `Check-in realizado com sucesso! \nUsuário marcado como presente.`,
+            [{ text: "OK", onPress: () => navigation.goBack() }],
+          );
         } else {
           Alert.alert("Erro", "Dados inválidos para check-in.", [
             { text: "OK", onPress: () => navigation.goBack() },
