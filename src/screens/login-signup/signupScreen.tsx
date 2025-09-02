@@ -12,16 +12,6 @@ import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import validator from "validator";
 
-function capitalizeFirstLetter(string: string) {
-  const words = string.toLocaleLowerCase().split(" ");
-
-  for (let i = 0; i < words.length; i++) {
-    words[i] = words[i][0] ? words[i][0].toUpperCase() + words[i].substr(1) : "";
-  }
-
-  return words.join(" ");
-}
-
 export default function SignUp() {
   const navigation = useNavigation<AuthTypes>();
   const [nome, setNome] = useState("");
@@ -52,6 +42,22 @@ export default function SignUp() {
     return validator.isEmail(email);
   };
 
+  function normalizeName(name: string): string {
+    const particles = ["de", "da", "do", "das", "dos", "e", "em", "no", "na", "nos", "nas"];
+
+    return name
+      .toLowerCase()
+      .split(" ")
+      .filter(Boolean)
+      .map((word, index) => {
+        if (index > 0 && particles.includes(word)) {
+          return word; 
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
+
   const handleRegister = async () => {
     setIsEmailValid(true);
     setIsPasswordValid(true);
@@ -80,7 +86,11 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const data = await signup({ nome, email, senha });
+      const data = await signup({ 
+        nome: normalizeName(nome), 
+        email, 
+        senha 
+      });
 
       if (data.emailEnviado) {
         navigation.navigate("EmailConfirmation", { email: email });
@@ -122,7 +132,7 @@ export default function SignUp() {
 
               <Input.Field
                 placeholder="Nome completo"
-                onChangeText={(text) => setNome(capitalizeFirstLetter(text))}
+                onChangeText={setNome}
                 value={nome}
               />
             </Input>
