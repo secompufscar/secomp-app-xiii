@@ -25,7 +25,7 @@ export function NotificationItem({ notification, onPress }: Props) {
   return (
     <Pressable
       onPress={() => onPress?.(notification)}
-      className="flex-row items-center bg-background rounded-lg p-5 mb-8 shadow-md/90 active:bg-background/70"
+      className="flex-row items-center bg-background rounded-lg p-5 mb-9 shadow-md/90 active:bg-background/70"
     >
       <View className="flex-1 gap-1 relative justify-center mt-3">
         <Text className="text-white font-poppinsMedium">

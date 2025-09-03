@@ -1,27 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StatusBar,
-  Platform,
-  ActivityIndicator,
-  ScrollView,
-  Switch,
-  Alert,
-} from "react-native";
+import { useState } from "react";
+import { View, Text, StatusBar, Platform, ActivityIndicator, ScrollView, Switch } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, ParamListBase } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
+import { sendPushNotification, sendNotificationToAll } from "../../services/notifications";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
-
-// Import the actual API calls for sending notifications
-import { sendPushNotification, sendNotificationToAll } from "../../services/notifications";
+import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay";
 
 type AdminNotificationSendNavigationProp = NativeStackNavigationProp<ParamListBase>;
 
@@ -30,39 +18,39 @@ export default function AdminNotificationSend() {
 
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [recipientIdsInput, setRecipientIdsInput] = useState<string>(""); // Comma-separated user IDs
+  const [recipientIdsInput, setRecipientIdsInput] = useState<string>(""); 
   const [sendToAll, setSendToAll] = useState<boolean>(false);
-  const [dataInput, setDataInput] = useState<string>(""); // JSON string for data
+  const [dataInput, setDataInput] = useState<string>(""); 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [badgeCount, setBadgeCount] = useState<string>(""); // Numeric string for badge
+  const [badgeCount, setBadgeCount] = useState<string>(""); 
 
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [alertText, setAlertText] = useState("");
-  const [alertColor, setAlertColor] = useState("text-gray-400");
+  const [errorMessage, setErrorMessage] = useState("Erro");
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+
+  const [warningMessage, setWarningMessage] = useState("Aviso");
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSendNotification = async () => {
-    setIsAlertOpen(false);
     if (!title.trim() || !message.trim()) {
-      setAlertText("Título e Mensagem são obrigatórios.");
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);
+      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
+      setWarningModalVisible(true); 
       return;
     }
 
     let recipientIds: string[] = [];
     if (!sendToAll) {
       if (!recipientIdsInput.trim()) {
-        setAlertText("Por favor, insira IDs de destinatários ou selecione 'Enviar para todos'.");
-        setAlertColor("text-warning");
-        setIsAlertOpen(true);
+        setWarningMessage("Por favor, insira os IDs dos destinatários ou selecione 'Enviar para todos'.")
+        setWarningModalVisible(true); 
         return;
       }
+
       recipientIds = recipientIdsInput.split(',').map(id => id.trim()).filter(id => id);
       if (recipientIds.length === 0) {
-        setAlertText("Nenhum ID de destinatário válido encontrado.");
-        setAlertColor("text-warning");
-        setIsAlertOpen(true);
+        setWarningMessage("Nenhum ID de destinatário válido encontrado.")
+        setWarningModalVisible(true); 
         return;
       }
     }
@@ -72,18 +60,16 @@ export default function AdminNotificationSend() {
       try {
         parsedData = JSON.parse(dataInput);
       } catch (e) {
-        setAlertText("Formato de 'Dados Adicionais' inválido. Deve ser um JSON válido.");
-        setAlertColor("text-warning");
-        setIsAlertOpen(true);
+        setWarningMessage("Formato de 'Dados Adicionais' inválido. Deve ser um JSON válido.")
+        setWarningModalVisible(true); 
         return;
       }
     }
 
     const parsedBadge = badgeCount.trim() ? parseInt(badgeCount, 10) : undefined;
     if (badgeCount.trim() && (isNaN(parsedBadge!) || parsedBadge! < 0)) {
-      setAlertText("O número do Badge deve ser um valor numérico não negativo.");
-      setAlertColor("text-warning");
-      setIsAlertOpen(true);
+      setWarningMessage("O número do Badge deve ser um valor numérico não negativo.")
+      setWarningModalVisible(true); 
       return;
     }
 
@@ -109,10 +95,6 @@ export default function AdminNotificationSend() {
         });
       }
 
-      setAlertText("Notificação enviada com sucesso!");
-      setAlertColor("text-success");
-      setIsAlertOpen(true);
-
       setTitle("");
       setMessage("");
       setRecipientIdsInput("");
@@ -120,12 +102,11 @@ export default function AdminNotificationSend() {
       setBadgeCount("");
       setSendToAll(false);
       setSoundEnabled(true);
+      navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao enviar a notificação.";
-      setAlertText(errorMessage);
-      setAlertColor("text-danger");
-      setIsAlertOpen(true);
-      console.error("Error sending notification:", error);
+      setErrorMessage(errorMessage);
+      setErrorModalVisible(true);
     } finally {
       setIsLoading(false);
     }
@@ -146,20 +127,17 @@ export default function AdminNotificationSend() {
           {/* Header */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Enviar Notificação</Text>
-            <Text className="text-gray-400 font-inter">
-              Crie e envie notificações push para usuários.
-            </Text>
+            <Text className="text-blue-200 font-inter"> Crie e envie notificações push para usuários </Text>
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
             <View className="flex-col w-full gap-4 text-center justify-start pb-24">
-
+              {/* Título */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Título da Notificação</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Título da Notificação</Text>
                 <Input>
-                  <Ionicons name="notifications" size={20} color={colors.border} />
                   <Input.Field
-                    placeholder="Ex.: Lembrete do Evento, Nova Atividade!"
+                    placeholder="Lembrete do evento, nova atividade!"
                     onChangeText={setTitle}
                     value={title}
                   />
@@ -168,25 +146,23 @@ export default function AdminNotificationSend() {
 
               {/* Corpo da mensagem da notificação */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Mensagem</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Mensagem</Text>
                 <Input>
-                  <FontAwesome5 name="comment-dots" size={20} color={colors.border} />
                   <Input.Field
-                    placeholder="Corpo da mensagem da notificação."
+                    placeholder="Corpo da mensagem da notificação"
                     onChangeText={setMessage}
                     value={message}
                     multiline={true}
                     numberOfLines={4}
-                    style={{ minHeight: 80, textAlignVertical: 'top' }}
                   />
                 </Input>
               </View>
 
               {/* Enviar todos */}
               <View className="w-full flex-row items-center justify-between">
-                <Text className="text-blue-200 text-sm font-interMedium">Enviar para todos os usuários</Text>
+                <Text className="text-blue-200 text-sm font-inter">Enviar para todos os usuários</Text>
                 <Switch
-                  trackColor={{ false: colors.border, true: colors.green }}
+                  trackColor={{ false: colors.border, true: colors.blue[500] }}
                   thumbColor={sendToAll ? colors.white : colors.neutral[300]}
                   ios_backgroundColor={colors.border}
                   onValueChange={setSendToAll}
@@ -197,25 +173,22 @@ export default function AdminNotificationSend() {
               {/* Selecionar usuarios */}
               {!sendToAll && (
                 <View className="w-full">
-                  <Text className="text-blue-200 text-sm font-interMedium mb-2">IDs dos Destinatários (separados por vírgula)</Text>
+                  <Text className="text-gray-400 text-sm font-inter mb-2">IDs dos Destinatários (separados por vírgula)</Text>
                   <Input>
-                    <FontAwesome5 name="users" size={20} color={colors.border} />
                     <Input.Field
-                      placeholder="Ex.: id1, id2, id3"
+                      placeholder="ID1, ID2, ID3"
                       onChangeText={setRecipientIdsInput}
                       value={recipientIdsInput}
                       autoCapitalize="none"
                     />
                   </Input>
-                  <Text className="text-gray-500 text-xs mt-1">Deixe em branco se for enviar para todos.</Text>
                 </View>
               )}
 
               {/* JSON */}
               <View className="w-full">
-                <Text className="text-blue-200 text-sm font-interMedium mb-2">Dados Adicionais (JSON Opcional)</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Dados Adicionais (JSON Opcional)</Text>
                 <Input>
-                  <FontAwesome5 name="code" size={20} color={colors.border} />
                   <Input.Field
                     placeholder='Ex.: {"key": "value", "type": "event"}'
                     onChangeText={setDataInput}
@@ -225,23 +198,20 @@ export default function AdminNotificationSend() {
                     style={{ minHeight: 60, textAlignVertical: 'top' }}
                     autoCapitalize="none"
                   />
-                  <Text className="text-gray-500 text-xs mt-1">Deve ser um objeto JSON válido.</Text>
                 </Input>
               </View>
 
               {/* Toggle para som*/}
               <View className="w-full flex-row items-center justify-between">
-                <Text className="text-blue-200 text-sm font-interMedium">Reproduzir Som</Text>
+                <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
                 <Switch
-                  trackColor={{ false: colors.border, true: colors.green }}
+                  trackColor={{ false: colors.border, true: colors.blue[500] }}
                   thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
                   ios_backgroundColor={colors.border}
                   onValueChange={setSoundEnabled}
                   value={soundEnabled}
                 />
               </View>
-
-              {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
 
               {isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
@@ -252,6 +222,22 @@ export default function AdminNotificationSend() {
           </ScrollView>
         </View>
       </View>
+
+      <ErrorOverlay
+        visible={errorModalVisible}
+        title="Erro"
+        message={errorMessage}
+        onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
+
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message={warningMessage}
+        onConfirm={() => {setWarningModalVisible(false)}}
+        confirmText="OK"
+      />
     </SafeAreaView>
   );
 }
