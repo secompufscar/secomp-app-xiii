@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Input } from "../../components/input/input";
 import { useForm, Controller } from "react-hook-form";
-import { getSponsorById, updateSponsor, linkTagToSponsor, unlinkTagFromSponsor, Sponsor, UpdateSponsorData } from "../../services/sponsors";
-import { getTags, Tag } from "../../services/tags";;
+import { getSponsorById, updateSponsor, linkTagToSponsor, unlinkTagFromSponsor } from "../../services/sponsors";
+import { getTags } from "../../services/tags";;
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { colors } from "../../styles/colors";
@@ -21,6 +21,11 @@ type FormData = {
   link: string
   starColor: string
 }
+
+interface Tag {
+  id: string;
+  name: string;
+};
 
 function parseStarColor(hexColor: string): string {
   switch (hexColor) {
@@ -80,7 +85,7 @@ export default function SponsorsAdminUpdateScreen() {
 
         // Busca todas as tags
         const all = await getTags();
-        setAllTags(all);
+        setAllTags(all.map(tag => ({ id: tag.id ?? "", name: tag.name })));
       } catch {
         setErrorMessage("Não foi possível carregar os dados do patrocinador")
         setErrorModalVisible(true);
@@ -137,10 +142,8 @@ export default function SponsorsAdminUpdateScreen() {
     try {
       setErrorModalVisible(false);
 
-      // 1) atualiza dados básicos
       await updateSponsor(id, {...formData, starColor: mappedStarColor});
 
-      // 2) sincroniza tags
       const added: string[] = selectedTagIds.filter(t => !originalTagIds.includes(t));
       const removed: string[] = originalTagIds.filter(t => !selectedTagIds.includes(t));
 
@@ -178,7 +181,7 @@ export default function SponsorsAdminUpdateScreen() {
 
         <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
           <View className="w-full">
-            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-2">Nome do patrocinador</Text>
             <Controller
               control={control}
               name="name"
@@ -197,7 +200,7 @@ export default function SponsorsAdminUpdateScreen() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-400 text-sm font-interMedium mb-2">Descrição</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-2">Descrição</Text>
             <Controller
               control={control}
               name="description"
@@ -217,7 +220,7 @@ export default function SponsorsAdminUpdateScreen() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-400 text-sm font-interMedium mb-2">URL do logo</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-2">URL do logo</Text>
             <Controller
               control={control}
               name="logoUrl"
@@ -237,7 +240,7 @@ export default function SponsorsAdminUpdateScreen() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-2">Nível de patrocínio</Text>
             <Controller
               control={control}
               name="starColor"
@@ -257,7 +260,7 @@ export default function SponsorsAdminUpdateScreen() {
           </View>
 
           <View className="w-full">
-            <Text className="text-gray-400 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-2">Link para a página do patrocinador</Text>
             <Controller
               control={control}
               name="link"
@@ -277,7 +280,7 @@ export default function SponsorsAdminUpdateScreen() {
           </View>
 
           <View className="w-full mb-4">
-            <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
+            <Text className="text-gray-400 text-sm font-inter mb-3">Tags</Text>
             <View className="flex-row flex-wrap gap-3 mb-2">
               {allTags.map(renderTagCheckbox)}
             </View>

@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { View, Text, ActivityIndicator, Pressable, StatusBar, Platform, ScrollView } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { ParamListBase, useNavigation } from "@react-navigation/native"
 import { Input } from "../../components/input/input"
 import { createSponsor } from "../../services/sponsors"
-import { getTags, Tag } from "../../services/tags";
+import { getTags } from "../../services/tags";
 import { colors } from "../../styles/colors"
-import AppLayout from "../../components/app/appLayout"
 import BackButton from "../../components/button/backButton"
 import Button from "../../components/button/button"
 import ErrorOverlay from "../../components/overlay/errorOverlay";
+
+interface Tag {
+  id: string;
+  name: string;
+};
 
 export default function SponsorsAdminCreate() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>()
@@ -36,8 +40,8 @@ export default function SponsorsAdminCreate() {
   useEffect(() => {
     (async () => {
       try {
-        const tags = await getTags();
-        setAllTags(tags);
+        const all = await getTags();
+        setAllTags(all.map(tag => ({ id: tag.id ?? "", name: tag.name })));
       } catch {
         setTagError("Não foi possível carregar as tags")
       } finally {
@@ -50,8 +54,8 @@ export default function SponsorsAdminCreate() {
   const toggleTag = (tagId: string) => {
     setSelectedTagIds(prev =>
       prev.includes(tagId)
-        ? prev.filter(x => x !== tagId) // Remove se já estiver
-        : [...prev, tagId] // Adiciona se não estiver
+        ? prev.filter(x => x !== tagId) 
+        : [...prev, tagId] 
     );
   };
 
@@ -120,7 +124,7 @@ export default function SponsorsAdminCreate() {
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
             <View className="flex-col flex-1 w-full text-center justify-start gap-4">
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do patrocinador</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Nome do patrocinador</Text>
                 <Input>
                   <Input.Field
                     placeholder="Nome do patrocinador"
@@ -131,7 +135,7 @@ export default function SponsorsAdminCreate() {
               </View>
 
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Descrição</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Descrição</Text>
                 <Input>
                   <Input.Field
                     placeholder="Descrição do patrocinador"
@@ -142,7 +146,7 @@ export default function SponsorsAdminCreate() {
               </View>
 
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">URL do logo</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">URL do logo</Text>
                 <Input>
                   <Input.Field
                     placeholder="URL"
@@ -154,7 +158,7 @@ export default function SponsorsAdminCreate() {
               </View>
 
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nível de patrocínio</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Nível de patrocínio</Text>
                 <Input>
                   <Input.Field
                     placeholder="Prata, Ouro ou Diamante"
@@ -166,7 +170,7 @@ export default function SponsorsAdminCreate() {
               </View>
 
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Link para a página do patrocinador</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Link para a página do patrocinador</Text>
                 <Input>
                   <Input.Field
                     placeholder="Link para a empresa"
@@ -178,7 +182,7 @@ export default function SponsorsAdminCreate() {
               </View>
 
               <View className="w-full mb-4">
-                <Text className="text-gray-400 text-sm font-interMedium mb-3">Tags</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-3">Tags</Text>
                 {loadingTags
                   ? <ActivityIndicator color={colors.blue[200]} />
                   : (

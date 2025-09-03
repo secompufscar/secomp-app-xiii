@@ -237,7 +237,7 @@ export default function ActivityAdminCreate() {
             <View className="flex-col flex-1 w-full gap-4 text-center justify-start pb-8">
               {/* Nome da atividade */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Nome da Atividade</Text>
                 <Input>
                   <Input.Field
                     placeholder="Palestra de IA"
@@ -249,7 +249,7 @@ export default function ActivityAdminCreate() {
 
               {/* Imagem da Atividade */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem da Atividade</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Imagem da Atividade</Text>
                 <Pressable
                   onPress={() => pickImage(setActivityImage)}
                   className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -270,7 +270,7 @@ export default function ActivityAdminCreate() {
 
               {/* Nome do Palestrante */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Nome do Palestrante</Text>
                 <Input>
                   <Input.Field
                     placeholder="João Silva"
@@ -282,7 +282,7 @@ export default function ActivityAdminCreate() {
 
               {/* Imagem do Palestrante */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Imagem do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Imagem do Palestrante</Text>
                 <Pressable
                   onPress={() => pickImage(setSpeakerImage)}
                   className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
@@ -305,7 +305,7 @@ export default function ActivityAdminCreate() {
               <View className="w-full mb-2">
                 {Platform.OS === 'web' ? (
                   <View>
-                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data</Text>
                     <DatePicker
                       selected={date}
                       onChange={(date: Date | null) => {
@@ -326,7 +326,7 @@ export default function ActivityAdminCreate() {
                   </View>
                 ) : (
                   <Pressable onPress={() => setShowDatePicker(true)}>
-                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Data</Text>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data</Text>
                     <View className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
                       <Text className="text-white font-inter text-sm">
                         {`${date.toLocaleDateString('pt-BR')}`}
@@ -340,7 +340,7 @@ export default function ActivityAdminCreate() {
               <View className="w-full mb-2">
                 {Platform.OS === 'web' ? (
                   <View>
-                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Horário</Text>
                     <DatePicker
                       selected={time}
                       onChange={(time: Date | null) => {
@@ -365,7 +365,7 @@ export default function ActivityAdminCreate() {
                   </View>
                 ) : (
                   <Pressable onPress={() => setShowTimePicker(true)}>
-                    <Text className="text-gray-400 text-sm font-interMedium mb-2">Horário</Text>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Horário</Text>
                     <View className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
                       <Text className="text-white font-inter text-sm">
                         {format(time, "HH:mm", { locale: ptBR })}
@@ -377,7 +377,7 @@ export default function ActivityAdminCreate() {
 
               {/* Local */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Local</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Local</Text>
                 <Input>
                   <Input.Field
                     placeholder="Anfiteatro Bento Prado Júnior"
@@ -389,7 +389,7 @@ export default function ActivityAdminCreate() {
 
               {/* Vagas */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Número de Vagas</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Número de Vagas</Text>
                 <Input>
                   <Input.Field
                     placeholder="50"
@@ -402,7 +402,7 @@ export default function ActivityAdminCreate() {
 
               {/* Detalhes */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Detalhes</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Detalhes</Text>
                 <Input>
                   <Input.Field
                     placeholder="Detalhes da atividade"
@@ -414,7 +414,7 @@ export default function ActivityAdminCreate() {
 
               {/* Pontos */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-interMedium mb-2">Pontos</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Pontos</Text>
                 <Input>
                   <Input.Field
                     placeholder="Pontuação da atividade"
@@ -427,7 +427,7 @@ export default function ActivityAdminCreate() {
 
               {/* Categoria */}
               <View className="w-full mb-4">
-                <Text className="text-gray-400 text-sm font-interMedium mb-3">Categoria</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-3">Categoria</Text>
                 {categoriesLoading ? (
                   <ActivityIndicator size="small" color={colors.blue[500]} />
                 ) : categoriesError ? (
