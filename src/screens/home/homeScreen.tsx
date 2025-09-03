@@ -152,7 +152,6 @@ export default function Home() {
 
   const greeting = getCurrentTime();
 
-  // Nome do usuário
   const nomeCompleto = new BeautifulName(user.nome).beautifulName;
   const nomes = nomeCompleto.trim().split(" ");
 

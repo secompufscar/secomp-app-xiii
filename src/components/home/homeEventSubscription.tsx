@@ -25,12 +25,12 @@ export default function HomeEventSubscription({
   let buttonColor = "";
 
   if (!isEventActive) {
-    titleText = "Preparando a próxima edição ...";
+    titleText = "Estamos preparando a próxima edição!";
     subtitleText = "O evento ainda não está ativo. Aguarde o período para inscrição";
     buttonText = "Inscrições fechadas";
     buttonDisabled = true;
     borderColor = "border-gray-700";
-    buttonColor = "bg-gray-700";
+    buttonColor = "bg-gray-400/10";
   } else if (isUserSubscribed) {
     titleText = "Inscrição confirmada!";
     subtitleText = "Você já pode participar de nossas atividades";
@@ -48,22 +48,25 @@ export default function HomeEventSubscription({
   }
 
   return (
-    <View className={`flex-col w-full rounded-[8px] justify-start mb-8 px-6 py-5 bg-background border ${borderColor}`}>
-      <Text className="text-white text-base font-poppinsSemiBold mb-1">{titleText}</Text>
-      <Text className="text-default font-inter leading-[1.5] mb-4">
+    <View className={`flex-col w-full rounded-[8px] items-start justify-start mb-8 px-6 py-5 bg-background border ${borderColor}`}>
+      <Text className="text-white text-base font-poppinsMedium mb-1">{titleText}</Text>
+      <Text className="text-default font-inter leading-[1.5] mb-1">
         {subtitleText}
       </Text>
-      <Pressable
-        onPress={onPressHandler}
-        onPressIn={() => setIsBtnPressed(true)}
-        onPressOut={() => setIsBtnPressed(false)}
-        disabled={buttonDisabled}
-        className={`w-44 rounded-[6px] py-3 px-4 items-center mt-2 mb-1 ${buttonColor} ${
-          isBtnPressed ? "opacity-80" : "opacity-100"
-        }`}
-      >
-        <Text className="text-white font-poppinsMedium">{buttonText}</Text>
-      </Pressable>
+
+      { isEventActive &&
+        <Pressable
+          onPress={onPressHandler}
+          onPressIn={() => setIsBtnPressed(true)}
+          onPressOut={() => setIsBtnPressed(false)}
+          disabled={buttonDisabled}
+          className={`rounded-[6px] py-4 px-6 items-center mt-4 mb-1 ${buttonColor} ${
+            isBtnPressed ? "opacity-80" : "opacity-100"
+          }`}
+        >
+          <Text className="text-white font-poppinsMedium">{buttonText}</Text>
+        </Pressable>
+      }
     </View>
   );
 }
