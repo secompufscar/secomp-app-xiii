@@ -49,6 +49,13 @@ export default function SetNewPassword() {
       return;
     }
 
+    if (password.length < 6) {
+      setAlertText("A senha deve conter no mínimo 6 caracteres");
+      setAlertColor("text-danger");
+      setIsAlertOpen(true);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
