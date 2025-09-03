@@ -19,7 +19,7 @@ export default function AdminNotificationSend() {
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
   const [recipientIdsInput, setRecipientIdsInput] = useState<string>(""); 
-  const [sendToAll, setSendToAll] = useState<boolean>(false);
+  const [sendToAll, setSendToAll] = useState<boolean>(true);
   const [dataInput, setDataInput] = useState<string>(""); 
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [badgeCount, setBadgeCount] = useState<string>(""); 
@@ -127,7 +127,7 @@ export default function AdminNotificationSend() {
           {/* Header */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Enviar Notificação</Text>
-            <Text className="text-blue-200 font-inter"> Crie e envie notificações push para usuários </Text>
+            <Text className="text-blue-200 font-inter">Crie e envie notificações push para usuários</Text>
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
@@ -152,10 +152,33 @@ export default function AdminNotificationSend() {
                     placeholder="Corpo da mensagem da notificação"
                     onChangeText={setMessage}
                     value={message}
-                    multiline={true}
-                    numberOfLines={4}
                   />
                 </Input>
+              </View>
+
+              {/* JSON */}
+              <View className="w-full">
+                <Text className="text-gray-400 text-sm font-inter mb-2">Dados Adicionais (JSON Opcional)</Text>
+                <Input>
+                  <Input.Field
+                    placeholder='Ex.: {"key": "value", "type": "event"}'
+                    onChangeText={setDataInput}
+                    value={dataInput}
+                    autoCapitalize="none"
+                  />
+                </Input>
+              </View>
+
+              {/* Toggle para som*/}
+              <View className="w-full flex-row items-center justify-between">
+                <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
+                <Switch
+                  trackColor={{ false: colors.border, true: colors.blue[500] }}
+                  thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
+                  ios_backgroundColor={colors.border}
+                  onValueChange={setSoundEnabled}
+                  value={soundEnabled}
+                />
               </View>
 
               {/* Enviar todos */}
@@ -184,34 +207,6 @@ export default function AdminNotificationSend() {
                   </Input>
                 </View>
               )}
-
-              {/* JSON */}
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Dados Adicionais (JSON Opcional)</Text>
-                <Input>
-                  <Input.Field
-                    placeholder='Ex.: {"key": "value", "type": "event"}'
-                    onChangeText={setDataInput}
-                    value={dataInput}
-                    multiline={true}
-                    numberOfLines={2}
-                    style={{ minHeight: 60, textAlignVertical: 'top' }}
-                    autoCapitalize="none"
-                  />
-                </Input>
-              </View>
-
-              {/* Toggle para som*/}
-              <View className="w-full flex-row items-center justify-between">
-                <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
-                <Switch
-                  trackColor={{ false: colors.border, true: colors.blue[500] }}
-                  thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
-                  ios_backgroundColor={colors.border}
-                  onValueChange={setSoundEnabled}
-                  value={soundEnabled}
-                />
-              </View>
 
               {isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />

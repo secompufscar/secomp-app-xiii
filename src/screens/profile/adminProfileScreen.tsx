@@ -53,13 +53,13 @@ export default function AdminProfile() {
           <ProfileButton
             icon={faQrcode}
             label="Credenciamento"
-            onPress={() => {}}
+            onPress={() => { navigation.navigate("QRCode", { id: "a1487b34-5494-4f62-83a7-074503dd87b5" }) }}
           />
 
           <ProfileButton
             icon={faBell}
             label="Notificações"
-            onPress={() => { navigation.navigate("AdminNotificationScreen")}}
+            onPress={() => { navigation.navigate("AdminNotificationScreen") }}
           />
 
           <ProfileButton

@@ -268,9 +268,9 @@ export default function ActivityAdminCreate() {
                 )}
               </View>
 
-              {/* Nome do Palestrante */}
+              {/* Nome do Apresentador(a) */}
               <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Nome do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Nome do Apresentador(a)</Text>
                 <Input>
                   <Input.Field
                     placeholder="João Silva"
@@ -280,9 +280,9 @@ export default function ActivityAdminCreate() {
                 </Input>
               </View>
 
-              {/* Imagem do Palestrante */}
+              {/* Imagem do Apresentador(a) */}
               <View className="w-full mb-2">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Imagem do Palestrante</Text>
+                <Text className="text-gray-400 text-sm font-inter mb-2">Imagem do Apresentador(a)</Text>
                 <Pressable
                   onPress={() => pickImage(setSpeakerImage)}
                   className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"

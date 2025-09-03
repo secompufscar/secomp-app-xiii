@@ -239,7 +239,7 @@ export default function ActivityDetails() {
                 {palestranteImageUrl !== "" ? (
                   <Image
                     source={{ uri: palestranteImageUrl }}
-                    style={{ width: 72, height: 72, resizeMode: "cover" }}
+                    style={{ width: 52, height: 52, resizeMode: "cover" }}
                     className="rounded-full"
                   />
                 ) : (
@@ -248,9 +248,9 @@ export default function ActivityDetails() {
 
                 <View className="ml-4">
                   <Text className="text-white text-base font-poppinsSemiBold">
-                    {activity.palestranteNome}
+                    Apresentador
                   </Text>
-                  <Text className="text-gray-400 text-base font-inter">Organização da SECOMP</Text>
+                  <Text className="text-gray-400 text-base font-inter">{activity.palestranteNome}</Text>
                 </View>
               </View>
             </View>
