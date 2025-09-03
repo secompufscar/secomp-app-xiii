@@ -74,7 +74,7 @@ export default function Notifications() {
               <FlatList
                 data={notifications}
                 keyExtractor={(item) => item.id}
-                contentContainerStyle={{ paddingBottom: 36 }}
+                contentContainerStyle={{ paddingBottom: 24, paddingTop: 16 }}
                 renderItem={({ item }) => (
                   <NotificationItem
                     notification={item}
