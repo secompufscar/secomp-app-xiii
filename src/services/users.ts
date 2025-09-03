@@ -1,7 +1,7 @@
 import api from './api'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
-import { registerForPushNotifications, setupNotificationListeners } from './notificationService';
+import { registerForPushNotifications, setupNotificationListeners } from './notifications';
 import { Platform } from 'react-native';
 
 // Realiza login do usuário e configura notificações push

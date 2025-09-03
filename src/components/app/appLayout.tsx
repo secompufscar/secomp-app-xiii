@@ -2,7 +2,7 @@
 import { ScrollView, View, StatusBar, Platform } from "react-native";
 import { ReactNode, useEffect} from "react";
 import { useNavigation, NavigationProp, ParamListBase  } from "@react-navigation/native";
-import { setupNotificationListeners } from "../../services/notificationService";
+import { setupNotificationListeners } from "../../services/notifications";
 
 interface AppLayoutProps {
   children: ReactNode;

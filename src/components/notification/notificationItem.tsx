@@ -1,7 +1,6 @@
 import { View, Text, Pressable } from "react-native";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Notification } from "../../services/notificationService";
 
 interface Props {
   notification: Notification

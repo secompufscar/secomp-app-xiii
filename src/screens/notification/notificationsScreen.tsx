@@ -3,7 +3,7 @@ import { View, Text, FlatList, ActivityIndicator, StatusBar, Platform } from "re
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { getNotifications, Notification } from '../../services/notificationService';
+import { getNotifications } from '../../services/notifications';
 import { NotificationItem } from "../../components/notification/notificationItem";
 import { getActivities } from "../../services/activities";
 import { colors } from "../../styles/colors";
@@ -73,7 +73,7 @@ export default function Notifications() {
             <View className="flex-1">
               <FlatList
                 data={notifications}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => String(item.id)}
                 contentContainerStyle={{ paddingBottom: 24, paddingTop: 16 }}
                 renderItem={({ item }) => (
                   <NotificationItem

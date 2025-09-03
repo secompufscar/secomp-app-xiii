@@ -117,6 +117,7 @@ export default function Login() {
                 onChangeText={setSenha}
                 value={senha}
                 secureTextEntry={!isPasswordVisible}
+                autoCapitalize="none"
               />
 
               <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
