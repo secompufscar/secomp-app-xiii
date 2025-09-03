@@ -1,40 +1,52 @@
-import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { Linking, Pressable, View } from "react-native";
+import { Linking, Platform, Pressable, View } from "react-native";
 import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 
-const openLink = async (url: string) => {
+const openLink = async (appUrl: string, webUrl: string) => {
   try {
-    const supported = await Linking.canOpenURL(url);
+    if (Platform.OS === "web") {
+      window.open(webUrl, "_blank");
+      return;
+    }
+
+    const supported = await Linking.canOpenURL(appUrl);
     if (supported) {
-      await Linking.openURL(url);
+      await Linking.openURL(appUrl);
     } else {
-      console.warn(`Não é possível abrir este link: ${url}`);
+      await Linking.openURL(webUrl);
     }
   } catch (error) {
-    console.error("Ocorreu um erro ao abrir o link:", error);
+    if (Platform.OS === "web") {
+      window.open(webUrl, "_blank");
+    } else {
+      await Linking.openURL(webUrl);
+    }
   }
 };
 
 const socialLinks = [
   {
     key: "instagram",
-    url: "https://www.instagram.com/secompufscar/",
+    appUrl: "instagram://user?username=secompufscar",
+    webUrl: "https://www.instagram.com/secompufscar/",
     icon: <FontAwesome6 name="instagram" size={36} color="white" />,
   },
   {
     key: "facebook",
-    url: "https://www.facebook.com/secompufscar",
+    appUrl: "fb://page/secompufscar",
+    webUrl: "https://www.facebook.com/secompufscar",
     icon: <FontAwesome6 name="square-facebook" size={36} color="white" />,
   },
   {
     key: "linkedin",
-    url: "https://www.linkedin.com/company/secomp-ufscar/posts",
+    appUrl: "linkedin://company/secomp-ufscar",
+    webUrl: "https://www.linkedin.com/company/secomp-ufscar/posts",
     icon: <FontAwesome6 name="linkedin" size={36} color="white" />,
   },
   {
     key: "website",
-    url: "https://www.secompufscar.com.br/",
+    appUrl: "https://www.secompufscar.com.br/", 
+    webUrl: "https://www.secompufscar.com.br/",
     icon: <MaterialCommunityIcons name="web" size={36} color="white" />,
   },
 ];
@@ -42,10 +54,10 @@ const socialLinks = [
 export default function HomeSocials() {
   return (
     <View className="flex-row justify-between items-center gap-3">
-      {socialLinks.map(({ key, url, icon }) => (
+      {socialLinks.map(({ key, appUrl, webUrl, icon }) => (
         <Pressable
           key={key}
-          onPress={() => openLink(url)}
+          onPress={() => openLink(appUrl, webUrl)}
           className="flex-1 rounded-[6px] overflow-hidden"
         >
           {({ pressed }) => (
