@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { createActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories"; 
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { format } from "date-fns";
+import { parseISO, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";

@@ -30,8 +30,11 @@ export default function EmailConfirmation() {
             <Text className="text-white text-xl font-poppinsSemiBold mb-2">
               Confirme seu e-mail
             </Text>
+            <Text className="text-gray-400 text-base font-inter mb-2">
+              Um e-mail foi enviado para <Text className="text-green">{email}</Text>. 
+            </Text>
             <Text className="text-gray-400 text-base font-inter">
-              Um e-mail foi enviado para <Text className="text-green">{email}</Text>.
+              Se o e-mail não estiver na sua caixa de entrada, confira também a pasta de spam!
             </Text>
           </View>
 

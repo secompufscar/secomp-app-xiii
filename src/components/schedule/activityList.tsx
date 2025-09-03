@@ -185,7 +185,7 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
                   <Text className="text-green font-inter">{item.data.substring(11, 16)}</Text>
                 </Text>
 
-                <Text className="text-default text-[13px] font-inter">
+                <Text className="text-default text-[13px] font-inter flex-shrink" numberOfLines={1} ellipsizeMode="tail">
                   Local: <Text className="text-green font-inter">{item.local}</Text>
                 </Text>
               </View>

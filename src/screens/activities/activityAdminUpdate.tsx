@@ -119,8 +119,9 @@ export default function ActivityAdminUpdate() {
         setSpeakerName(activity.palestranteNome);
 
         const activityDate = new Date(activity.data);
-        setDate(activityDate);
-        setTime(activityDate);
+        const offsetDate = new Date(activityDate.getTime() + activityDate.getTimezoneOffset() * 60000);
+        setDate(offsetDate);
+        setTime(offsetDate);
 
         setVacancies(String(activity.vagas));
         setDetails(activity.detalhes);
