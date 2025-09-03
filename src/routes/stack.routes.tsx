@@ -88,7 +88,7 @@ export default function StackRoutes() {
       <Stack.Screen name="SponsorsAdmin" component={SponsorsAdmin} />
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />
-      <Stack.Screen name="TagsAdmin" component={TagsAdmin} options={{ headerShown: false }} />
+      <Stack.Screen name="TagsAdmin" component={TagsAdmin} />
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="AdminNotificationScreen" component={AdminNotificationScreen} />
       <Stack.Screen name="AdminNotificationSend" component={AdminNotificationSend} />
