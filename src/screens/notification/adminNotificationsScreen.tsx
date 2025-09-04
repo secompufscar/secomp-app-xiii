@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, FlatList, Alert } from "react-native";
+import { View, Text, StatusBar, Platform, ActivityIndicator, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -6,6 +6,7 @@ import { useCallback, useState } from "react";
 import { colors } from "../../styles/colors";
 import { getNotifications } from "../../services/notifications";
 import { NotificationItem } from "../../components/notification/notificationItem";
+import { getActivities } from "../../services/activities";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 
@@ -13,16 +14,18 @@ export default function AdminNotificationScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const loadNotifications = async () => {
     setLoading(true)
     try {
-      const [notifs] = await Promise.all([
-        getNotifications(),  
+      const [notifs, acts] = await Promise.all([
+        getNotifications(), 
+        getActivities(),   
       ])
       setNotifications(notifs)
+      setActivities(acts)
     } catch (err) {
       console.error("Erro ao carregar notificações:", err)
     } finally {
@@ -35,6 +38,16 @@ export default function AdminNotificationScreen() {
       loadNotifications()
     }, [])
   )
+
+  const handlePressNotification = (notification: Notification) => {
+    const activityId = notification.data?.activityId
+    if (!activityId) return
+
+    const activity = activities.find((a) =>  String(a.id) === String(activityId))
+    if (activity) {
+      navigation.navigate("ActivityDetails", { item: activity })
+    }
+  }
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -68,6 +81,7 @@ export default function AdminNotificationScreen() {
                 renderItem={({ item }) => (
                   <NotificationItem
                     notification={item}
+                    onPress={handlePressNotification}
                   />
                 )}
               />

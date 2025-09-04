@@ -41,7 +41,7 @@ export default function Notifications() {
     const activityId = notification.data?.activityId
     if (!activityId) return
 
-    const activity = activities.find((a) => a.id === activityId)
+    const activity = activities.find((a) =>  String(a.id) === String(activityId))
     if (activity) {
       navigation.navigate("ActivityDetails", { item: activity })
     }

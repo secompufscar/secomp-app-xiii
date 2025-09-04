@@ -163,7 +163,7 @@ export default function ActivityDetails() {
               <FontAwesome6 name="image" size={56} color={colors.border}/>
             </View>
           )}
-          <View className="absolute top-4 left-4">
+          <View className="absolute top-6 left-6">
             <BackButton />
           </View>
         </View>

@@ -21,7 +21,6 @@ export default function AdminNotificationSend() {
   const [message, setMessage] = useState<string>("");
   const [recipientIdsInput, setRecipientIdsInput] = useState<string>("");
   const [sendToAll, setSendToAll] = useState<boolean>(true);
-  const [dataInput, setDataInput] = useState<string>("");
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [badgeCount, setBadgeCount] = useState<string>("");
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
@@ -62,23 +61,14 @@ export default function AdminNotificationSend() {
       }
     }
 
-    let parsedData: Record<string, unknown> | undefined;
-    if (dataInput.trim()) {
-      try {
-        parsedData = JSON.parse(dataInput);
-      } catch (e) {
-        setWarningMessage("Formato de 'Dados Adicionais' inválido. Deve ser um JSON válido.")
-        setWarningModalVisible(true);
-        return;
-      }
-    }
-
     const parsedBadge = badgeCount.trim() ? parseInt(badgeCount, 10) : undefined;
     if (badgeCount.trim() && (isNaN(parsedBadge!) || parsedBadge! < 0)) {
       setWarningMessage("O número do Badge deve ser um valor numérico não negativo.")
       setWarningModalVisible(true);
       return;
     }
+
+    const data = selectedActivityId ? { activityId: selectedActivityId } : undefined;
 
     setIsLoading(true);
 
@@ -87,7 +77,7 @@ export default function AdminNotificationSend() {
         await sendNotificationToAll({
           title,
           message,
-          data: parsedData,
+          data,
           sound: soundEnabled,
           badge: parsedBadge,
         });
@@ -96,7 +86,7 @@ export default function AdminNotificationSend() {
           title,
           message,
           recipientIds,
-          data: parsedData,
+          data,
           sound: soundEnabled,
           badge: parsedBadge,
         });
@@ -105,7 +95,6 @@ export default function AdminNotificationSend() {
       setTitle("");
       setMessage("");
       setRecipientIdsInput("");
-      setDataInput("");
       setBadgeCount("");
       setSendToAll(false);
       setSoundEnabled(true);
@@ -198,19 +187,6 @@ export default function AdminNotificationSend() {
                 </Input>
               </View>
 
-              {/* JSON */}
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Dados Adicionais (JSON Opcional)</Text>
-                <Input>
-                  <Input.Field
-                    placeholder='Ex.: {"key": "value", "type": "event"}'
-                    onChangeText={setDataInput}
-                    value={dataInput}
-                    autoCapitalize="none"
-                  />
-                </Input>
-              </View>
-
               <View className="w-full">
                 <Text className="text-gray-400 text-sm font-inter mb-2">Referenciar Atividade (opcional)</Text>
 
@@ -234,6 +210,7 @@ export default function AdminNotificationSend() {
                       </View>
                     ) : (
                       <FlatList
+                        nestedScrollEnabled={true}
                         data={activities}
                         keyExtractor={(item) => String(item?.id ?? Math.random())}
                         renderItem={({ item }) => (
