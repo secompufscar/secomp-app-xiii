@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { View, Text, StatusBar, Platform, ActivityIndicator, ScrollView, Switch } from "react-native";
+import { useState, useCallback } from "react";
+import { View, Text, StatusBar, Platform, ActivityIndicator, ScrollView, Switch, Pressable, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, ParamListBase } from "@react-navigation/native";
+import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
 import { sendPushNotification, sendNotificationToAll } from "../../services/notifications";
+import { getActivities } from "../../services/activities";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
@@ -18,11 +19,13 @@ export default function AdminNotificationSend() {
 
   const [title, setTitle] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [recipientIdsInput, setRecipientIdsInput] = useState<string>(""); 
+  const [recipientIdsInput, setRecipientIdsInput] = useState<string>("");
   const [sendToAll, setSendToAll] = useState<boolean>(true);
-  const [dataInput, setDataInput] = useState<string>(""); 
+  const [dataInput, setDataInput] = useState<string>("");
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [badgeCount, setBadgeCount] = useState<string>(""); 
+  const [badgeCount, setBadgeCount] = useState<string>("");
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
+  const [selectedActivityName, setSelectedActivityName] = useState<string | null>(null);
 
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -32,10 +35,14 @@ export default function AdminNotificationSend() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [activities, setActivities] = useState<any[]>([]);
+  const [activitiesLoading, setActivitiesLoading] = useState<boolean>(true);
+  const [showActivitiesList, setShowActivitiesList] = useState<boolean>(false);
+
   const handleSendNotification = async () => {
     if (!title.trim() || !message.trim()) {
       setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
-      setWarningModalVisible(true); 
+      setWarningModalVisible(true);
       return;
     }
 
@@ -43,14 +50,14 @@ export default function AdminNotificationSend() {
     if (!sendToAll) {
       if (!recipientIdsInput.trim()) {
         setWarningMessage("Por favor, insira os IDs dos destinatários ou selecione 'Enviar para todos'.")
-        setWarningModalVisible(true); 
+        setWarningModalVisible(true);
         return;
       }
 
       recipientIds = recipientIdsInput.split(',').map(id => id.trim()).filter(id => id);
       if (recipientIds.length === 0) {
         setWarningMessage("Nenhum ID de destinatário válido encontrado.")
-        setWarningModalVisible(true); 
+        setWarningModalVisible(true);
         return;
       }
     }
@@ -61,7 +68,7 @@ export default function AdminNotificationSend() {
         parsedData = JSON.parse(dataInput);
       } catch (e) {
         setWarningMessage("Formato de 'Dados Adicionais' inválido. Deve ser um JSON válido.")
-        setWarningModalVisible(true); 
+        setWarningModalVisible(true);
         return;
       }
     }
@@ -69,7 +76,7 @@ export default function AdminNotificationSend() {
     const parsedBadge = badgeCount.trim() ? parseInt(badgeCount, 10) : undefined;
     if (badgeCount.trim() && (isNaN(parsedBadge!) || parsedBadge! < 0)) {
       setWarningMessage("O número do Badge deve ser um valor numérico não negativo.")
-      setWarningModalVisible(true); 
+      setWarningModalVisible(true);
       return;
     }
 
@@ -102,6 +109,8 @@ export default function AdminNotificationSend() {
       setBadgeCount("");
       setSendToAll(false);
       setSoundEnabled(true);
+      setSelectedActivityId(null);
+      setSelectedActivityName(null);
       navigation.goBack();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "Falha ao enviar a notificação.";
@@ -111,6 +120,39 @@ export default function AdminNotificationSend() {
       setIsLoading(false);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      const fetchActivities = async () => {
+        setActivitiesLoading(true);
+        try {
+          const acts = await getActivities(); // retorna whatever do service
+          if (!active) return;
+          setActivities(Array.isArray(acts) ? acts : []);
+        } catch (err) {
+          console.error("Erro ao buscar atividades:", err);
+          if (active) setActivities([]);
+        } finally {
+          if (active) setActivitiesLoading(false);
+        }
+      };
+
+      fetchActivities();
+      return () => {
+        active = false;
+      };
+    }, [])
+  );
+
+  const handleSelectActivity = (act: any) => {
+    setSelectedActivityId(String(act?.id ?? ""));
+    setSelectedActivityName(String(act?.nome ?? act?.title ?? "Atividade"));
+    setShowActivitiesList(false);
+  };
+
+  // Monta objeto data com activityId se selecionada
+  const data = selectedActivityId ? { activityId: selectedActivityId } : undefined;
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -169,6 +211,47 @@ export default function AdminNotificationSend() {
                 </Input>
               </View>
 
+              <View className="w-full">
+                <Text className="text-gray-400 text-sm font-inter mb-2">Referenciar Atividade (opcional)</Text>
+
+                <Pressable
+                  onPress={() => setShowActivitiesList((p) => !p)}
+                  className="w-full h-[56px] px-4 bg-background rounded-lg border border-border flex-row items-center justify-between"
+                >
+                  <Text className="text-white font-inter text-sm">{selectedActivityName ?? "Nenhuma atividade selecionada"}</Text>
+                  <Text className="text-gray-400 text-sm">Selecionar</Text>
+                </Pressable>
+
+                {showActivitiesList && (
+                  <View className="mt-3 max-h-[260px] bg-background rounded-lg border border-border p-2">
+                    {activitiesLoading ? (
+                      <View className="py-6 items-center">
+                        <ActivityIndicator size="small" color={colors.blue[500]} />
+                      </View>
+                    ) : activities.length === 0 ? (
+                      <View className="py-4 items-center">
+                        <Text className="text-gray-400 text-sm">Nenhuma atividade encontrada</Text>
+                      </View>
+                    ) : (
+                      <FlatList
+                        data={activities}
+                        keyExtractor={(item) => String(item?.id ?? Math.random())}
+                        renderItem={({ item }) => (
+                          <Pressable
+                            onPress={() => handleSelectActivity(item)}
+                            className={`px-3 py-3 rounded ${selectedActivityId === String(item?.id ?? "") ? "bg-blue-500/10 border border-blue-500" : ""}`}
+                          >
+                            <Text className="text-white font-interMedium">{String(item?.nome ?? item?.title ?? "Atividade")}</Text>
+                            {item?.data && <Text className="text-gray-400 text-xs mt-1">{String(item.data).substring(0, 16)}</Text>}
+                          </Pressable>
+                        )}
+                        ItemSeparatorComponent={() => <View className="h-2" />}
+                      />
+                    )}
+                  </View>
+                )}
+              </View>
+
               {/* Toggle para som*/}
               <View className="w-full flex-row items-center justify-between">
                 <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
@@ -222,7 +305,7 @@ export default function AdminNotificationSend() {
         visible={errorModalVisible}
         title="Erro"
         message={errorMessage}
-        onConfirm={() => {setErrorModalVisible(false)}}
+        onConfirm={() => { setErrorModalVisible(false) }}
         confirmText="OK"
       />
 
@@ -230,7 +313,7 @@ export default function AdminNotificationSend() {
         visible={warningModalVisible}
         title="Aviso"
         message={warningMessage}
-        onConfirm={() => {setWarningModalVisible(false)}}
+        onConfirm={() => { setWarningModalVisible(false) }}
         confirmText="OK"
       />
     </SafeAreaView>
