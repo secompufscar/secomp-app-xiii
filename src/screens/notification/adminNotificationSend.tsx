@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { View, Text, StatusBar, Platform, ActivityIndicator, ScrollView, Switch, Pressable, FlatList } from "react-native";
+import { View, Text, StatusBar, Platform, ActivityIndicator, Switch, Pressable, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -74,22 +74,9 @@ export default function AdminNotificationSend() {
 
     try {
       if (sendToAll) {
-        await sendNotificationToAll({
-          title,
-          message,
-          data,
-          sound: soundEnabled,
-          badge: parsedBadge,
-        });
+        await sendNotificationToAll({ title, message, data, sound: soundEnabled, badge: parsedBadge });
       } else {
-        await sendPushNotification({
-          title,
-          message,
-          recipientIds,
-          data,
-          sound: soundEnabled,
-          badge: parsedBadge,
-        });
+        await sendPushNotification({ title, message, recipientIds, data, sound: soundEnabled, badge: parsedBadge });
       }
 
       setTitle("");
@@ -116,7 +103,7 @@ export default function AdminNotificationSend() {
       const fetchActivities = async () => {
         setActivitiesLoading(true);
         try {
-          const acts = await getActivities(); // retorna whatever do service
+          const acts = await getActivities();
           if (!active) return;
           setActivities(Array.isArray(acts) ? acts : []);
         } catch (err) {
@@ -128,9 +115,7 @@ export default function AdminNotificationSend() {
       };
 
       fetchActivities();
-      return () => {
-        active = false;
-      };
+      return () => { active = false; };
     }, [])
   );
 
@@ -139,160 +124,137 @@ export default function AdminNotificationSend() {
     setSelectedActivityName(String(act?.nome ?? act?.title ?? "Atividade"));
     setShowActivitiesList(false);
   };
+  
+  // Lista de atividades
+  const renderActivityItem = ({ item }: { item: any }) => (
+    <Pressable
+      onPress={() => handleSelectActivity(item)}
+      className={`px-3 py-3 rounded ${selectedActivityId === String(item?.id ?? "") ? "bg-blue-500/10 border border-blue-500" : ""}`}
+    >
+      <Text className="text-white font-interMedium">{String(item?.nome ?? item?.title ?? "Atividade")}</Text>
+      <Text className="text-gray-400 text-xs mt-1">{item.local}</Text>
+    </Pressable>
+  );
 
-  // Monta objeto data com activityId se selecionada
-  const data = selectedActivityId ? { activityId: selectedActivityId } : undefined;
+  // Cabeçalho da lista 
+  const ListHeader = () => (
+    <View className="flex-col w-full gap-4 text-center justify-start">
+      {/* Título */}
+      <View className="w-full">
+        <Text className="text-gray-400 text-sm font-inter mb-2">Título da Notificação</Text>
+        <Input>
+          <Input.Field placeholder="Lembrete do evento, nova atividade!" onChangeText={setTitle} value={title} />
+        </Input>
+      </View>
+
+      {/* Corpo da mensagem da notificação */}
+      <View className="w-full">
+        <Text className="text-gray-400 text-sm font-inter mb-2">Mensagem</Text>
+        <Input>
+          <Input.Field placeholder="Corpo da mensagem da notificação" onChangeText={setMessage} value={message} />
+        </Input>
+      </View>
+
+      <View className="w-full">
+        <Text className="text-gray-400 text-sm font-inter mb-2">Referenciar Atividade (opcional)</Text>
+        <Pressable
+          onPress={() => setShowActivitiesList((p) => !p)}
+          className="w-full h-[56px] px-4 bg-background rounded-lg border border-border flex-row items-center justify-between"
+        >
+          <Text className="text-white font-inter text-sm">{selectedActivityName ?? "Nenhuma atividade selecionada"}</Text>
+          <Text className="text-gray-400 text-sm">Selecionar</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+
+  // Componente que renderiza o rodapé 
+  const ListFooter = () => (
+    <View className="flex-col w-full gap-4 text-center justify-start mt-4">
+      {/* Toggle para som*/}
+      <View className="w-full flex-row items-center justify-between">
+        <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
+        <Switch
+          trackColor={{ false: colors.border, true: colors.blue[500] }}
+          thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
+          ios_backgroundColor={colors.border}
+          onValueChange={setSoundEnabled}
+          value={soundEnabled}
+        />
+      </View>
+
+      {/* Enviar todos */}
+      <View className="w-full flex-row items-center justify-between">
+        <Text className="text-blue-200 text-sm font-inter">Enviar para todos os usuários</Text>
+        <Switch
+          trackColor={{ false: colors.border, true: colors.blue[500] }}
+          thumbColor={sendToAll ? colors.white : colors.neutral[300]}
+          ios_backgroundColor={colors.border}
+          onValueChange={setSendToAll}
+          value={sendToAll}
+        />
+      </View>
+
+      {/* Selecionar usuarios */}
+      {!sendToAll && (
+        <View className="w-full">
+          <Text className="text-gray-400 text-sm font-inter mb-2">IDs dos Destinatários (separados por vírgula)</Text>
+          <Input>
+            <Input.Field placeholder="ID1, ID2, ID3" onChangeText={setRecipientIdsInput} value={recipientIdsInput} autoCapitalize="none" />
+          </Input>
+        </View>
+      )}
+
+      {isLoading ? (
+        <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+      ) : (
+        <Button title="Enviar Notificação" className="mt-8" onPress={handleSendNotification} />
+      )}
+    </View>
+  );
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <View className="flex-1 w-full">
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent={Platform.OS === "android"}
-        />
+        <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={Platform.OS === "android"} />
 
         <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
           <BackButton />
 
-          {/* Header */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Enviar Notificação</Text>
             <Text className="text-blue-200 font-inter">Crie e envie notificações push para usuários</Text>
           </View>
 
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
-            <View className="flex-col w-full gap-4 text-center justify-start pb-24">
-              {/* Título */}
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Título da Notificação</Text>
-                <Input>
-                  <Input.Field
-                    placeholder="Lembrete do evento, nova atividade!"
-                    onChangeText={setTitle}
-                    value={title}
-                  />
-                </Input>
-              </View>
-
-              {/* Corpo da mensagem da notificação */}
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Mensagem</Text>
-                <Input>
-                  <Input.Field
-                    placeholder="Corpo da mensagem da notificação"
-                    onChangeText={setMessage}
-                    value={message}
-                  />
-                </Input>
-              </View>
-
-              <View className="w-full">
-                <Text className="text-gray-400 text-sm font-inter mb-2">Referenciar Atividade (opcional)</Text>
-
-                <Pressable
-                  onPress={() => setShowActivitiesList((p) => !p)}
-                  className="w-full h-[56px] px-4 bg-background rounded-lg border border-border flex-row items-center justify-between"
-                >
-                  <Text className="text-white font-inter text-sm">{selectedActivityName ?? "Nenhuma atividade selecionada"}</Text>
-                  <Text className="text-gray-400 text-sm">Selecionar</Text>
-                </Pressable>
-
-                {showActivitiesList && (
-                  <View className="mt-3 max-h-[260px] bg-background rounded-lg border border-border p-2">
-                    {activitiesLoading ? (
-                      <View className="py-6 items-center">
-                        <ActivityIndicator size="small" color={colors.blue[500]} />
-                      </View>
-                    ) : activities.length === 0 ? (
-                      <View className="py-4 items-center">
-                        <Text className="text-gray-400 text-sm">Nenhuma atividade encontrada</Text>
-                      </View>
-                    ) : (
-                      <FlatList
-                        nestedScrollEnabled={true}
-                        data={activities}
-                        keyExtractor={(item) => String(item?.id ?? Math.random())}
-                        renderItem={({ item }) => (
-                          <Pressable
-                            onPress={() => handleSelectActivity(item)}
-                            className={`px-3 py-3 rounded ${selectedActivityId === String(item?.id ?? "") ? "bg-blue-500/10 border border-blue-500" : ""}`}
-                          >
-                            <Text className="text-white font-interMedium">{String(item?.nome ?? item?.title ?? "Atividade")}</Text>
-                            {item?.data && <Text className="text-gray-400 text-xs mt-1">{String(item.data).substring(0, 16)}</Text>}
-                          </Pressable>
-                        )}
-                        ItemSeparatorComponent={() => <View className="h-2" />}
-                      />
-                    )}
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={showActivitiesList ? activities : []}
+            keyExtractor={(item) => String(item?.id ?? Math.random())}
+            renderItem={renderActivityItem}
+            ListHeaderComponent={<ListHeader />}
+            ListFooterComponent={<ListFooter />}
+            contentContainerStyle={{ paddingBottom: 96 }}
+            ListHeaderComponentStyle={{ marginBottom: showActivitiesList ? 12 : 0 }}
+            ListEmptyComponent={
+              showActivitiesList ? (
+                activitiesLoading ? (
+                  <View className="py-6 items-center">
+                    <ActivityIndicator size="small" color={colors.blue[500]} />
                   </View>
-                )}
-              </View>
-
-              {/* Toggle para som*/}
-              <View className="w-full flex-row items-center justify-between">
-                <Text className="text-blue-200 text-sm font-inter">Reproduzir Som</Text>
-                <Switch
-                  trackColor={{ false: colors.border, true: colors.blue[500] }}
-                  thumbColor={soundEnabled ? colors.white : colors.neutral[300]}
-                  ios_backgroundColor={colors.border}
-                  onValueChange={setSoundEnabled}
-                  value={soundEnabled}
-                />
-              </View>
-
-              {/* Enviar todos */}
-              <View className="w-full flex-row items-center justify-between">
-                <Text className="text-blue-200 text-sm font-inter">Enviar para todos os usuários</Text>
-                <Switch
-                  trackColor={{ false: colors.border, true: colors.blue[500] }}
-                  thumbColor={sendToAll ? colors.white : colors.neutral[300]}
-                  ios_backgroundColor={colors.border}
-                  onValueChange={setSendToAll}
-                  value={sendToAll}
-                />
-              </View>
-
-              {/* Selecionar usuarios */}
-              {!sendToAll && (
-                <View className="w-full">
-                  <Text className="text-gray-400 text-sm font-inter mb-2">IDs dos Destinatários (separados por vírgula)</Text>
-                  <Input>
-                    <Input.Field
-                      placeholder="ID1, ID2, ID3"
-                      onChangeText={setRecipientIdsInput}
-                      value={recipientIdsInput}
-                      autoCapitalize="none"
-                    />
-                  </Input>
-                </View>
-              )}
-
-              {isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-              ) : (
-                <Button title="Enviar Notificação" className="mt-8" onPress={handleSendNotification} />
-              )}
-            </View>
-          </ScrollView>
+                ) : (
+                  <View className="py-4 items-center">
+                    <Text className="text-gray-400 text-sm">Nenhuma atividade encontrada</Text>
+                  </View>
+                )
+              ) : null
+            }
+            ItemSeparatorComponent={() => <View className="h-2" />}
+          />
         </View>
       </View>
 
-      <ErrorOverlay
-        visible={errorModalVisible}
-        title="Erro"
-        message={errorMessage}
-        onConfirm={() => { setErrorModalVisible(false) }}
-        confirmText="OK"
-      />
-
-      <WarningOverlay
-        visible={warningModalVisible}
-        title="Aviso"
-        message={warningMessage}
-        onConfirm={() => { setWarningModalVisible(false) }}
-        confirmText="OK"
-      />
+      <ErrorOverlay visible={errorModalVisible} title="Erro" message={errorMessage} onConfirm={() => { setErrorModalVisible(false) }} confirmText="OK" />
+      <WarningOverlay visible={warningModalVisible} title="Aviso" message={warningMessage} onConfirm={() => { setWarningModalVisible(false) }} confirmText="OK" />
     </SafeAreaView>
   );
 }
