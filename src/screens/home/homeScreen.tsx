@@ -201,7 +201,7 @@ export default function Home() {
             title="Como participar da Secomp?"
             subtitle="Um guia com tudo o que você precisa!"
             subtitleAlt="Um guia contendo tudo!"
-            icon={require("../../../assets/home/guidebook.png")}
+            icon={require("../../../assets/icons/guidebook.png")}
             onPress={() => navigation.navigate("EventGuide")}
           />
         </View>
@@ -216,24 +216,13 @@ export default function Home() {
         <View className="w-full mb-8 gap-4">
           <Text className="text-sm text-green font-poppinsSemiBold">Nossos apoiadores</Text>
 
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Sponsors");
-            }}
-            className={`w-full h-[62px] p-2 gap-3 flex-row items-center border border-border rounded-[8px] transition-all duration-50 active:bg-background`}
-          >
-            <View className="w-[44px] h-full flex items-center justify-center bg-background rounded-[5px]">
-              <FontAwesomeIcon icon={faStar} size={20} color={colors.blue[500]} />
-            </View>
-
-            <Text className="flex-1 text-white text-[13px] font-inter font-medium">
-              Patrocinadores
-            </Text>
-
-            <View className="w-6 h-full flex items-center justify-center">
-              <FontAwesomeIcon icon={faChevronRight} size={16} color="#FFFFFF" />
-            </View>
-          </Pressable>
+          <IconButton 
+            title="Conheça nossos patrocinadores!"
+            subtitle="Descubra as empresas que confiam em nós"
+            subtitleAlt="Empresas que confiam em nós"
+            icon={require("../../../assets/icons/stall.png")}
+            onPress={() => navigation.navigate("Sponsors")}
+          />
         </View>
 
         {/* Redes sociais */}

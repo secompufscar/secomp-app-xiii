@@ -63,7 +63,7 @@ export default function HomeCompetitions() {
 
                 <View className="flex items-center justify-center">
                   <Image
-                    source={require("../../../assets/home/arrow.png")}
+                    source={require("../../../assets/icons/arrow.png")}
                     style={{
                       height: 42,
                       width: 42,
