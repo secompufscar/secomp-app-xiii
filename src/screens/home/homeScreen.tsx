@@ -178,6 +178,7 @@ export default function Home() {
             onPress={() => {
               navigation.navigate("Notifications");
             }}
+            className="active:opacity-80"
           >
             <View className="w-11 h-11 flex items-center justify-center rounded-[8px] p-2 bg-iconbg">
               <FontAwesomeIcon icon={faBell} size={20} color={colors.blue[200]} />
