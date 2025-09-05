@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { parseISO, addHours, getDay, isPast } from "date-fns";
@@ -11,7 +11,8 @@ import {
   faTrophy,
   faGamepad,
   faUsers,
-  faCalendarDays,
+  faIdBadge,
+  faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
@@ -37,7 +38,10 @@ const categoryIconMap: { [key: string]: IconDefinition } = {
   sociocultural: faUsers,
   "5": faUsers,
 
-  default: faCalendarDays,
+  credenciamento: faIdBadge,
+  "6": faIdBadge,
+
+  default: faCalendar,
 };
 
 export default function ActivityList({ selectedDay, onPressActivity }: ActivityListProps) {
@@ -158,7 +162,7 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
         const hasOccurred = isPast(activityDateTime);
 
         // Cor do icone
-        const iconColor = hasOccurred ? "#3B465E" : "#4153DF";
+        const iconColor = hasOccurred ? "#3B465E" : colors.blue[500];
 
         return (
           <Pressable
