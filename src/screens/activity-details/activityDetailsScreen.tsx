@@ -239,11 +239,11 @@ export default function ActivityDetails() {
                 {palestranteImageUrl !== "" ? (
                   <Image
                     source={{ uri: palestranteImageUrl }}
-                    style={{ width: 52, height: 52, resizeMode: "cover" }}
+                    style={{ width: 56, height: 56, resizeMode: "cover" }}
                     className="rounded-full"
                   />
                 ) : (
-                  <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
+                  <FontAwesomeIcon icon={faUserCircle} size={56} color={colors.border} />
                 )}
 
                 <View className="ml-4">
