@@ -15,6 +15,7 @@ import AppLayout from "../../components/app/appLayout";
 import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import IconButton from "../../components/button/iconButton";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 
@@ -195,29 +196,14 @@ export default function Home() {
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
           <Text className="text-sm text-green font-poppinsSemiBold">Guia do evento</Text>
-
-          <Pressable
-            onPress={() => {
-              navigation.navigate("EventGuide");
-            }}
-            className={`h-[80px] py-3 px-5 flex-row items-center gap-4 rounded-[8px] bg-background active:bg-background/80`}
-          >
-            <Image
-              source={require("../../../assets/home/guidebook.png")}
-              style={{ width: 54, height: 54 }}
-            />
-            <View className="flex-col w-full justify-start gap-1">
-              <Text className="text-white text-[12px] font-poppinsMedium">
-                Como participar da Secomp?
-              </Text>
-              <Text className="hidden text-default text-[12px] font-inter leading-[1.4] xxs:block">
-                Um guia com tudo o que você precisa!
-              </Text>
-              <Text className="block text-default text-[12px] font-inter leading-[1.4] xxs:hidden">
-                Um guia contendo tudo!
-              </Text>
-            </View>
-          </Pressable>
+          
+          <IconButton 
+            title="Como participar da Secomp?"
+            subtitle="Um guia com tudo o que você precisa!"
+            subtitleAlt="Um guia contendo tudo!"
+            icon={require("../../../assets/home/guidebook.png")}
+            onPress={() => navigation.navigate("EventGuide")}
+          />
         </View>
 
         {/* Competições */}

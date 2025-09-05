@@ -60,11 +60,11 @@ export default function HomeEventSubscription({
           onPressIn={() => setIsBtnPressed(true)}
           onPressOut={() => setIsBtnPressed(false)}
           disabled={buttonDisabled}
-          className={`rounded-[6px] py-[14px] px-5 items-center mt-4 mb-1 ${buttonColor} ${
+          className={`rounded-[6px] py-[12px] px-5 items-center mt-4 mb-1 ${buttonColor} ${
             isBtnPressed ? "opacity-80" : "opacity-100"
           }`}
         >
-          <Text className="text-white text-base font-poppinsMedium">{buttonText}</Text>
+          <Text className="text-white text-[14px] font-poppinsMedium">{buttonText}</Text>
         </Pressable>
       }
     </View>
