@@ -1,10 +1,13 @@
-import React from "react";
 import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import BackButton from "../../components/button/backButton";
 import AppLayout from "../../components/app/appLayout";
 
 export default function EventGuide() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
@@ -19,14 +22,19 @@ export default function EventGuide() {
         </View>
 
         {/* Parágrafo 1 */}
-        <Text className="text-default text-sm mb-4 font-inter leading-relaxed">
+        <Text className="text-default text-base mb-4 font-inter leading-relaxed">
           Antes de tudo, para participar de qualquer atividade, você precisa estar inscrito na
           Secomp. Garanta sua inscrição na página inicial, na primeira seção, clicando em{" "}
-          <Text className="text-green font-inter">Inscrever-se.</Text>
+          <Text
+            onPress={() => { navigation.navigate("Home") }} 
+            className="text-green font-inter"
+          >
+            Inscrever-se.
+          </Text>
         </Text>
 
         {/* Parágrafo 2 */}
-        <Text className="text-default text-sm mb-8 font-inter">
+        <Text className="text-default text-base mb-8 font-inter">
           Agora, você está pronto para se juntar a nós!
         </Text>
 
@@ -34,7 +42,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Palestras</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             As palestras são eventos abertos,{" "}
             <Text className="text-green font-inter">sem necessidade de inscrição prévia</Text>.
             Basta comparecer ao local, na data e horário indicados no cronograma!
@@ -57,14 +65,14 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Minicursos</Text>
 
-          <Text className="text-default text-sm mb-4 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
             Para participar de minicursos do evento, é preciso{" "}
             <Text className="text-green font-inter">se inscrever com antecedência</Text> pelo
             aplicativo, na página da atividade desejada. As opções estão disponíveis em Atividades e
             Cronograma.
           </Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             As inscrições podem ser acompanhadas no perfil do usuário!
           </Text>
 
@@ -80,7 +88,7 @@ export default function EventGuide() {
             Minicurso – Controle de versão com git
           </Text>
 
-          <Text className="text-default text-sm font-inter leading-relaxed">
+          <Text className="text-default text-base font-inter leading-relaxed">
             Para os minicursos, é cobrada uma{" "}
             <Text className="text-green font-inter leading-relaxed">
               taxa de 1kg de alimento não perecível
@@ -94,7 +102,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Competições</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             Para participar das competições, a{" "}
             <Text className="text-green font-inter">
               inscrição é obrigatória e não ocorre pelo aplicativo
@@ -120,7 +128,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Feira empresarial</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             A feira empresarial conecta empresas, profissionais e estudantes, promovendo networking.{" "}
             <Text className="text-green font-inter">
               Não é necessário realizar inscrição prévia
@@ -147,7 +155,7 @@ export default function EventGuide() {
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">
             Fique atento no cronograma!
           </Text>
-          <Text className="text-default text-sm font-inter leading-relaxed">
+          <Text className="text-default text-base font-inter leading-relaxed">
             Sempre confira a data, o horário e o local de cada atividade. Fique atento às
             publicações nas redes sociais para acompanhar qualquer novidade.
           </Text>
