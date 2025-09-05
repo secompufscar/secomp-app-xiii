@@ -263,6 +263,7 @@ export default function ActivityDetails() {
                 <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
                 <Button
                   title="Participantes"
+                  bgColor="bg-gray-700"
                   className="w-[40%]"
                   onPress={() =>
                     navigation.navigate("ParticipantsList", {
