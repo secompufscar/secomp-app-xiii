@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Text, View, Pressable, Image } from "react-native";
+import { useCallback, useState } from "react";
+import { Text, View, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../styles/colors";
 import { getCurrentEvent } from "../../services/events";
-import { createRegistration, deleteRegistration, getRegistrationByUserIdAndEventId } from "../../services/userEvents";
+import { createRegistration, getRegistrationByUserIdAndEventId } from "../../services/userEvents";
 import AppLayout from "../../components/app/appLayout";
 import HomeEventSubscription from "../../components/home/homeEventSubscription";
 import HomeCompetitions from "../../components/home/homeCompetitions";
@@ -28,7 +28,6 @@ export default function Home() {
   const [isUserSubscribed, setIsUserSubscribed] = useState(false);
   const [isEventActive, setIsEventActive] = useState(false);
   const [currentEvent, setCurrentEvent] = useState<Events | null>(null);
-  const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<null | "subscribe" | "unsubscribe">(null);
 
   useFocusEffect(
@@ -68,10 +67,8 @@ export default function Home() {
             if (!isActive) return;
 
             setIsUserSubscribed(!!registration);
-            setRegistrationId(registration?.id || null);
           } else {
             setIsUserSubscribed(false);
-            setRegistrationId(null);
           }
         } catch (error) {
           console.error("Erro ao buscar dados do evento:", error);
@@ -79,7 +76,6 @@ export default function Home() {
 
           setIsUserSubscribed(false);
           setIsEventActive(false);
-          setRegistrationId(null);
           setEventStatusMessage("Não foi possível carregar o evento");
         }
       };
@@ -95,22 +91,10 @@ export default function Home() {
   const subscribe = async () => {
     try {
       if (!user?.id || !currentEvent?.id) throw new Error("Usuário ou evento inválido");
-      const registration = await createRegistration({ eventId: currentEvent.id });
+      await createRegistration({ eventId: currentEvent.id });
       setIsUserSubscribed(true);
-      setRegistrationId(registration.id ?? null);
     } catch {
       handleError("Não foi possível realizar a inscrição");
-    }
-  };
-
-  const unsubscribe = async () => {
-    try {
-      if (!registrationId) return;
-      await deleteRegistration(registrationId);
-      setIsUserSubscribed(false);
-      setRegistrationId(null);
-    } catch {
-      handleError("Não foi possível cancelar a inscrição.");
     }
   };
 
@@ -204,7 +188,6 @@ export default function Home() {
             isEventActive={isEventActive}
             isUserSubscribed={isUserSubscribed}
             onSubscribeRequest={() => setConfirmAction("subscribe")}
-            onUnsubscribeRequest={() => setConfirmAction("unsubscribe")}
           />
         }
 
@@ -249,15 +232,14 @@ export default function Home() {
 
       <ConfirmationOverlay
         visible={!!confirmAction}
-        title={confirmAction === "subscribe" ? "Confirmar inscrição" : "Cancelar inscrição"}
-        message={confirmAction === "subscribe" ? "Você deseja se inscrever neste evento?" : "Tem certeza que deseja cancelar sua inscrição?"}
+        title={"Confirmar inscrição"}
+        message={"Você deseja se inscrever neste evento?"}
         onCancel={() => setConfirmAction(null)}
         onConfirm={async () => {
-          if (confirmAction === "subscribe") await subscribe();
-          if (confirmAction === "unsubscribe") await unsubscribe();
+          await subscribe();
           setConfirmAction(null);
         }}
-        confirmText="Continuar"
+        confirmText="Confirmar"
         confirmButtonColor={colors.blue[500]}
       />
 

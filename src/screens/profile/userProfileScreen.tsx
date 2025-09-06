@@ -5,7 +5,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faArrowRightFromBracket, faChevronRight, faQrcode, faCalendarDays, faUser, faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faArrowRightFromBracket, faQrcode, faCalendarDays, faUser, faCalendarXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../../hooks/AuthContext";
 import { getUserRanking, getProfile, getUserActivitiesCount } from "../../services/users";
 import { colors } from "../../styles/colors";

@@ -5,12 +5,10 @@ export default function HomeEventSubscription({
   isEventActive,
   isUserSubscribed,
   onSubscribeRequest,
-  onUnsubscribeRequest
 }: {
   isEventActive: boolean;
   isUserSubscribed: boolean;
   onSubscribeRequest: () => void;
-  onUnsubscribeRequest: () => void;
 }) {
   const [isBtnPressed, setIsBtnPressed] = useState(false);
 
