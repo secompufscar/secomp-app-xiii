@@ -7,7 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { BeautifulName } from "beautiful-name";
 import { useAuth } from "../../hooks/AuthContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faBell, faStar, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { colors } from "../../styles/colors";
 import { getCurrentEvent } from "../../services/events";
 import { createRegistration, deleteRegistration, getRegistrationByUserIdAndEventId } from "../../services/userEvents";
@@ -39,46 +39,58 @@ export default function Home() {
     }, [])
   );
 
-  useEffect(() => {
-    const fetchEventData = async () => {
-      try {
-        const event = await getCurrentEvent();
-        setCurrentEvent(event);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-        // Status do evento
-        if (event) {
-          const today = new Date();
-          const start = new Date(event.startDate);
-          const end = new Date(event.endDate);
-          setIsEventActive(today >= start && today <= end);
+      const fetchEventData = async () => {
+        try {
+          const event = await getCurrentEvent();
+          if (!isActive) return;
 
-          const message = getEventStatusMessage(event);
-          setEventStatusMessage(message);
-        } else {
-          setIsEventActive(false);
-          setEventStatusMessage("Nenhum evento ativo no momento");
-        }
+          setCurrentEvent(event);
 
-        // Inscrição do usuário
-        if (event?.id && user?.id) {
-          const registration = await getRegistrationByUserIdAndEventId(user.id, event.id);
-          setIsUserSubscribed(!!registration);
-          setRegistrationId(registration?.id || null);
-        } else {
+          if (event) {
+            const today = new Date();
+            const start = new Date(event.startDate);
+            const end = new Date(event.endDate);
+            setIsEventActive(today >= start && today <= end);
+
+            const message = getEventStatusMessage(event);
+            setEventStatusMessage(message);
+          } else {
+            setIsEventActive(false);
+            setEventStatusMessage("Nenhum evento ativo no momento");
+          }
+
+          if (event?.id && user?.id) {
+            const registration = await getRegistrationByUserIdAndEventId(user.id, event.id);
+            if (!isActive) return;
+
+            setIsUserSubscribed(!!registration);
+            setRegistrationId(registration?.id || null);
+          } else {
+            setIsUserSubscribed(false);
+            setRegistrationId(null);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar dados do evento:", error);
+          if (!isActive) return;
+
           setIsUserSubscribed(false);
+          setIsEventActive(false);
           setRegistrationId(null);
+          setEventStatusMessage("Não foi possível carregar o evento");
         }
-      } catch (error) {
-        console.error("Erro ao buscar dados do evento:", error);
-        setIsUserSubscribed(false);
-        setIsEventActive(false);
-        setRegistrationId(null);
-        setEventStatusMessage("Não foi possível carregar o evento");
-      }
-    };
+      };
 
-    fetchEventData();
-  }, [user]);
+      fetchEventData();
+
+      return () => {
+        isActive = false;
+      };
+    }, [user])
+  );
 
   const subscribe = async () => {
     try {
@@ -187,12 +199,14 @@ export default function Home() {
         </View>
 
         {/* Inscrição no evento */}
-        <HomeEventSubscription
-          isEventActive={isEventActive}
-          isUserSubscribed={isUserSubscribed}
-          onSubscribeRequest={() => setConfirmAction("subscribe")}
-          onUnsubscribeRequest={() => setConfirmAction("unsubscribe")}
-        />
+        {!isUserSubscribed && 
+          <HomeEventSubscription
+            isEventActive={isEventActive}
+            isUserSubscribed={isUserSubscribed}
+            onSubscribeRequest={() => setConfirmAction("subscribe")}
+            onUnsubscribeRequest={() => setConfirmAction("unsubscribe")}
+          />
+        }
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
