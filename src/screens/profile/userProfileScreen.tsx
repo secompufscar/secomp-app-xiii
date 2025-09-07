@@ -84,6 +84,8 @@ export default function UserProfile() {
 
       return () => {
         isActive = false;
+        setConfirmAction(false);
+        setErrorModalVisible(false);
       };
     }, [updateUser])
   );
@@ -179,8 +181,8 @@ export default function UserProfile() {
           <Pressable onPress={signOut}>
             {({ pressed }) => (
               <View
-                className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 border border-iconbg 
-                  ${ pressed ? "bg-background/60" : "" }
+                className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 border border-iconbg transition-all duration-100 
+                  ${ pressed ? "bg-background/30" : "" }
                   ${ isUserSubscribed ? "mb-8" : "mb-24" }
                 `}
               >
@@ -196,14 +198,14 @@ export default function UserProfile() {
           </Pressable>
 
           {isUserSubscribed && 
-            <View className="w-full flex flex-col gap-4">
+            <View className="w-full flex flex-col gap-4 mb-24">
               <Text className="text-sm text-[#F8F8F8] font-poppinsMedium">Inscrição no evento</Text>
 
               <Pressable onPress={() => {setConfirmAction(true)}}>
                 {({ pressed }) => (
                   <View
-                    className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-24 border border-danger ${
-                      pressed ? "bg-danger/10" : ""
+                    className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 border border-danger transition-all duration-100 ${
+                      pressed ? "bg-[#ff99a3]/10" : ""
                     }`}
                   >
                     <View className="flex-row items-center gap-4">

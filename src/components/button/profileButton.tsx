@@ -14,7 +14,7 @@ const ProfileButton = ({ icon, label, onPress }: MenuButtonProps) => {
     <Pressable onPress={onPress}>
       {({ pressed }) => (
         <View
-          className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-3 ${
+          className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 mb-3 transition-all duration-100 ${
             pressed ? "bg-background/60" : "bg-background"
           }`}
         >

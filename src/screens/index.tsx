@@ -11,6 +11,7 @@ import ParticipantsList from './participants/participantsListScreen';
 
 import Home from "./home/homeScreen";
 import EventGuide from "./event/eventGuideScreen";
+import EventConfirmation from "./event/eventConfirmation";
 
 import UserProfile from "./profile/userProfileScreen";
 import AdminProfile from "./profile/adminProfileScreen";
@@ -55,6 +56,7 @@ export {
   Home,
   Notifications,
   EventGuide,
+  EventConfirmation,
   UserProfile,
   EditProfile,
   AdminProfile,

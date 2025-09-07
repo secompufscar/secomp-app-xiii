@@ -236,6 +236,7 @@ export default function Home() {
         message={"Você deseja se inscrever neste evento?"}
         onCancel={() => setConfirmAction(null)}
         onConfirm={async () => {
+          navigation.navigate("EventConfirmation", { currentEvent });
           await subscribe();
           setConfirmAction(null);
         }}
