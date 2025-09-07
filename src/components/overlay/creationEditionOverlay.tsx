@@ -14,8 +14,6 @@ interface CreationEditionOverlayProps {
   originalNavBarColor?: string;
 }
 
-const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
-
 const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
   visible,
   title,
@@ -36,10 +34,6 @@ const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
     };
 
     if (visible) {
-      // Quando o modal está visível
-      StatusBar.setBackgroundColor(OVERLAY_COLOR, true);
-      setAndroidNavColor(OVERLAY_COLOR);
-    } else {
       StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);
     }

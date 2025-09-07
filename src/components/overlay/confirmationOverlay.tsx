@@ -15,8 +15,6 @@ interface ConfirmationOverlayProps {
   confirmButtonColor?: string;
 }
 
-const OVERLAY_COLOR = 'rgba(0, 0, 0, 0.6)';
-
 const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
   visible,
   title,
@@ -39,11 +37,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
     };
 
     if (visible) {
-      // Quando o modal está visível
-      StatusBar.setBackgroundColor(OVERLAY_COLOR, true);
-      setAndroidNavColor(OVERLAY_COLOR);
-    } else {
-      StatusBar.setBackgroundColor('transparent', true); 
+      StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);
     }
 
