@@ -273,7 +273,7 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : activity.categoriaId === "1" ? ( 
+            ) : activity.categoriaId !== "6" ? ( 
               subscriptionLoading || isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} />
               ) : (
@@ -288,7 +288,13 @@ export default function ActivityDetails() {
                       ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
                   >
                     <Text className="text-white text-base font-interMedium">
-                      {isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+                      {activity.categoriaId === "1"
+                        ? isSubscribed
+                          ? "Cancelar Inscrição"
+                          : "Inscrever-se"
+                        : isSubscribed
+                          ? "Deixar de acompanhar"
+                          : "Acompanhar"}
                     </Text>
                   </View>
                 </Pressable>
