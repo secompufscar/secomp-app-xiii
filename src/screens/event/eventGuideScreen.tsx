@@ -68,8 +68,11 @@ export default function EventGuide() {
           <Text className="text-default text-base mb-4 font-inter leading-relaxed">
             Para participar de minicursos do evento, é preciso{" "}
             <Text className="text-green font-inter">se inscrever com antecedência</Text> pelo
-            aplicativo, na página da atividade desejada. As opções estão disponíveis em Atividades e
-            Cronograma.
+            aplicativo, na página da atividade desejada. As vagas são limitadas, então não deixe para depois!
+          </Text>
+
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
+            Se a atividade estiver cheia, não se preocupe, existe a fila de espera. Caso alguma vaga fique livre, o próximo da lista poderá garantir a sua participação.
           </Text>
 
           <Text className="text-default text-base mb-6 font-inter leading-relaxed">
@@ -147,6 +150,22 @@ export default function EventGuide() {
 
           <Text className="text-[#7D88A2] text-sm font-inter leading-relaxed">
             Estande da Magalu Cloud
+          </Text>
+        </View>
+
+        {/* Inscrever-se x Salvar atividade*/}
+        <View className="mb-8">
+          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
+            Inscrever-se ou salvar atividade?
+          </Text>
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
+            Durante o evento, só os minicursos precisam de inscrição pelo app. As outras atividades são livres ou acontecem de forma externa. 
+            Mesmo assim, <Text className="text-green font-inter">você pode salvar as atividades que curtir</Text> e acompanhar tudo o que vai rolar na semana sem se preocupar com inscrição!
+          </Text>
+
+          <Text className="text-default text-base font-inter leading-relaxed">
+            Todas as atividades que você salvar vão direto para o mesmo lugar das que você se inscreveu, em: <Text className="text-green font-inter" onPress={() => { navigation.navigate("MyEvents") }} >Minhas Atividades</Text>.
+            Assim, fica fácil acompanhar tudo o que você quer participar durante a semana em um só lugar! 😉
           </Text>
         </View>
 

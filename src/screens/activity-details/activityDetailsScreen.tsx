@@ -293,8 +293,8 @@ export default function ActivityDetails() {
                           ? "Cancelar Inscrição"
                           : "Inscrever-se"
                         : isSubscribed
-                          ? "Deixar de acompanhar"
-                          : "Acompanhar"}
+                          ? "Deixar de seguir"
+                          : "Salvar atividade"}
                     </Text>
                   </View>
                 </Pressable>
