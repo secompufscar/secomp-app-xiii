@@ -14,7 +14,7 @@ export default function EventConfirmation() {
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
         <View className="mt-16">
-          <Button className="mt-8" title="Entrar" onPress={() => {navigation.navigate("Home")}} />
+          <Button className="mt-8" title="Continuar" onPress={() => {navigation.navigate("Home")}} />
         </View>
       </AppLayout>
     </SafeAreaView>

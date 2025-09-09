@@ -193,7 +193,20 @@ export default function Home() {
 
         {/* Guia do evento */}
         <View className="w-full mb-8 gap-4">
-          <Text className="text-sm text-green font-poppinsSemiBold">Guia do evento</Text>
+          <Text className="text-sm text-green font-poppinsMedium">Minhas atividades</Text>
+          
+          <IconButton 
+            title="Sua programação do dia"
+            subtitle="Pronto para hoje?"
+            subtitleAlt="Pronto para hoje?"
+            icon={require("../../../assets/icons/calendar.png")}
+            onPress={() => navigation.navigate("MyEvents")}
+          />
+        </View>
+
+        {/* Guia do evento */}
+        <View className="w-full mb-8 gap-4">
+          <Text className="text-sm text-green font-poppinsMedium">Guia do evento</Text>
           
           <IconButton 
             title="Como participar da Secomp?"
