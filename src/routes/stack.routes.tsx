@@ -22,6 +22,7 @@ import {
   EventAdmin,
   EventAdminCreate,
   EventAdminUpdate,
+  EventConfirmation,
   SponsorsAdmin,
   SponsorsAdminCreate,
   SponsorsAdminUpdate,
@@ -52,6 +53,7 @@ type StackNavigation = {
   EventAdmin: undefined;
   EventAdminCreate: undefined;
   EventAdminUpdate: { id: string };
+  EventConfirmation: { event: Events};
   SponsorsAdmin: undefined;
   SponsorsAdminCreate: undefined;
   SponsorsAdminUpdate: { id: string };
@@ -85,6 +87,7 @@ export default function StackRoutes() {
       <Stack.Screen name="EventAdmin" component={EventAdmin} />
       <Stack.Screen name="EventAdminCreate" component={EventAdminCreate} />
       <Stack.Screen name="EventAdminUpdate" component={EventAdminUpdate} />
+      <Stack.Screen name="EventConfirmation" component={EventConfirmation} />
       <Stack.Screen name="SponsorsAdmin" component={SponsorsAdmin} />
       <Stack.Screen name="SponsorsAdminCreate" component={SponsorsAdminCreate} />
       <Stack.Screen name="SponsorsAdminUpdate" component={SponsorsAdminUpdate} />

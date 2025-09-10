@@ -223,7 +223,7 @@ export default function SignUp() {
             <Button className="mt-8" title="Criar" onPress={handleRegister} />
           )}
 
-          <View className="flex-row mt-10 items-center justify-center gap-1">
+          <View className="flex-row mt-8 items-center justify-center gap-1">
             <Text className="text-white text-sm font-inter">Já possui uma conta?</Text>
 
             <Pressable onPress={() => navigation.navigate("Login")}>

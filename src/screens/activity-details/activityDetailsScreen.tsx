@@ -212,7 +212,7 @@ export default function ActivityDetails() {
                 <InfoRow
                   icon={faUser}
                   mainText="Vagas"
-                  subText={activity.vagas > 0 ? `${subscribedCount - waitingListCount} / ${activity.vagas}` : "Ilimitadas"}
+                  subText={activity.vagas > 0 && activity.vagas < 999 ? `${subscribedCount - waitingListCount} / ${activity.vagas}` : "Ilimitadas"}
                   className="flex-1"
                 />
 
@@ -239,11 +239,11 @@ export default function ActivityDetails() {
                 {palestranteImageUrl !== "" ? (
                   <Image
                     source={{ uri: palestranteImageUrl }}
-                    style={{ width: 52, height: 52, resizeMode: "cover" }}
+                    style={{ width: 56, height: 56, resizeMode: "cover" }}
                     className="rounded-full"
                   />
                 ) : (
-                  <FontAwesomeIcon icon={faUserCircle} size={52} color={colors.border} />
+                  <FontAwesomeIcon icon={faUserCircle} size={56} color={colors.border} />
                 )}
 
                 <View className="ml-4">
@@ -263,6 +263,7 @@ export default function ActivityDetails() {
                 <Button title="Ler Presença" onPress={handleScanPresence} className="flex-1" />
                 <Button
                   title="Participantes"
+                  bgColor="bg-gray-700"
                   className="w-[40%]"
                   onPress={() =>
                     navigation.navigate("ParticipantsList", {
@@ -272,7 +273,7 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : activity.categoriaId === "1" ? ( 
+            ) : activity.categoriaId !== "6" ? ( 
               subscriptionLoading || isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} />
               ) : (
@@ -287,7 +288,13 @@ export default function ActivityDetails() {
                       ${isBtnPressed ? "opacity-80" : "opacity-100"}`}
                   >
                     <Text className="text-white text-base font-interMedium">
-                      {isSubscribed ? "Cancelar Inscrição" : "Inscrever-se"}
+                      {activity.categoriaId === "1"
+                        ? isSubscribed
+                          ? "Cancelar Inscrição"
+                          : "Inscrever-se"
+                        : isSubscribed
+                          ? "Deixar de seguir"
+                          : "Salvar atividade"}
                     </Text>
                   </View>
                 </Pressable>

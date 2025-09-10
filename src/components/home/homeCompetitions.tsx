@@ -61,12 +61,12 @@ export default function HomeCompetitions() {
                   </View>
                 </View>
 
-                <View className="flex items-center justify-center">
+                <View className="flex items-center justify-center pt-1">
                   <Image
-                    source={require("../../../assets/home/arrow.png")}
+                    source={require("../../../assets/icons/arrow.png")}
                     style={{
-                      height: 42,
-                      width: 42,
+                      height: 22,
+                      width: 22,
                       opacity: isPressed ? 0.9 : 1,
                       transform: isPressed ? [{ scale: 1.1 }] : [{ scale: 1 }],
                     }}

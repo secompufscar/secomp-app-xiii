@@ -1,10 +1,13 @@
-import React from "react";
 import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import BackButton from "../../components/button/backButton";
 import AppLayout from "../../components/app/appLayout";
 
 export default function EventGuide() {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
       <AppLayout>
@@ -19,14 +22,19 @@ export default function EventGuide() {
         </View>
 
         {/* Parágrafo 1 */}
-        <Text className="text-default text-sm mb-4 font-inter leading-relaxed">
+        <Text className="text-default text-base mb-4 font-inter leading-relaxed">
           Antes de tudo, para participar de qualquer atividade, você precisa estar inscrito na
           Secomp. Garanta sua inscrição na página inicial, na primeira seção, clicando em{" "}
-          <Text className="text-green font-inter">Inscrever-se.</Text>
+          <Text
+            onPress={() => { navigation.navigate("Home") }} 
+            className="text-green font-inter"
+          >
+            Inscrever-se.
+          </Text>
         </Text>
 
         {/* Parágrafo 2 */}
-        <Text className="text-default text-sm mb-8 font-inter">
+        <Text className="text-default text-base mb-8 font-inter">
           Agora, você está pronto para se juntar a nós!
         </Text>
 
@@ -34,7 +42,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Palestras</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             As palestras são eventos abertos,{" "}
             <Text className="text-green font-inter">sem necessidade de inscrição prévia</Text>.
             Basta comparecer ao local, na data e horário indicados no cronograma!
@@ -57,14 +65,17 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Minicursos</Text>
 
-          <Text className="text-default text-sm mb-4 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
             Para participar de minicursos do evento, é preciso{" "}
             <Text className="text-green font-inter">se inscrever com antecedência</Text> pelo
-            aplicativo, na página da atividade desejada. As opções estão disponíveis em Atividades e
-            Cronograma.
+            aplicativo, na página da atividade desejada. As vagas são limitadas, então não deixe para depois!
           </Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
+            Se a atividade estiver cheia, não se preocupe, existe a fila de espera. Caso alguma vaga fique livre, o próximo da lista poderá garantir a sua participação.
+          </Text>
+
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             As inscrições podem ser acompanhadas no perfil do usuário!
           </Text>
 
@@ -80,7 +91,7 @@ export default function EventGuide() {
             Minicurso – Controle de versão com git
           </Text>
 
-          <Text className="text-default text-sm font-inter leading-relaxed">
+          <Text className="text-default text-base font-inter leading-relaxed">
             Para os minicursos, é cobrada uma{" "}
             <Text className="text-green font-inter leading-relaxed">
               taxa de 1kg de alimento não perecível
@@ -94,7 +105,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Competições</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             Para participar das competições, a{" "}
             <Text className="text-green font-inter">
               inscrição é obrigatória e não ocorre pelo aplicativo
@@ -120,7 +131,7 @@ export default function EventGuide() {
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Feira empresarial</Text>
 
-          <Text className="text-default text-sm mb-6 font-inter leading-relaxed">
+          <Text className="text-default text-base mb-6 font-inter leading-relaxed">
             A feira empresarial conecta empresas, profissionais e estudantes, promovendo networking.{" "}
             <Text className="text-green font-inter">
               Não é necessário realizar inscrição prévia
@@ -142,12 +153,28 @@ export default function EventGuide() {
           </Text>
         </View>
 
+        {/* Inscrever-se x Salvar atividade*/}
+        <View className="mb-8">
+          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
+            Inscrever-se ou salvar atividade?
+          </Text>
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
+            Durante o evento, só os minicursos precisam de inscrição pelo app. As outras atividades são livres ou acontecem de forma externa. 
+            Mesmo assim, <Text className="text-green font-inter">você pode salvar as atividades que curtir</Text> e acompanhar tudo o que vai rolar na semana sem se preocupar com inscrição!
+          </Text>
+
+          <Text className="text-default text-base font-inter leading-relaxed">
+            Todas as atividades que você salvar vão direto para o mesmo lugar das que você se inscreveu, em: <Text className="text-green font-inter" onPress={() => { navigation.navigate("MyEvents") }} >Minhas Atividades</Text>.
+            Assim, fica fácil acompanhar tudo o que você quer participar durante a semana em um só lugar! 😉
+          </Text>
+        </View>
+
         {/* Seção final */}
         <View className="mb-16">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">
             Fique atento no cronograma!
           </Text>
-          <Text className="text-default text-sm font-inter leading-relaxed">
+          <Text className="text-default text-base font-inter leading-relaxed">
             Sempre confira a data, o horário e o local de cada atividade. Fique atento às
             publicações nas redes sociais para acompanhar qualquer novidade.
           </Text>
