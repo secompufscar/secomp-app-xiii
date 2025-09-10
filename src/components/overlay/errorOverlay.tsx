@@ -59,7 +59,7 @@ const ErrorOverlay: React.FC<ErrorOverlayProps> = ({
         <View className="flex-row justify-end">
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-danger bg-danger/10 active:bg-danger/20"
+            className="w-full min-[375px]:w-28 h-11 px-2 flex justify-center items-center rounded border border-danger bg-danger/10 active:bg-danger/20"
           >
             <Text className="text-danger font-poppinsMedium">{confirmText}</Text>
           </Pressable>

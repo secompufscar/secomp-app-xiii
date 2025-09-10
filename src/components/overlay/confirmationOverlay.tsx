@@ -58,10 +58,10 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
         <Text className="text-white text-lg font-poppinsSemiBold mb-2">{title}</Text>
         <Text className="text-gray-400 mb-6 font-inter leading-normal">{message}</Text>
 
-        <View className="flex-row justify-end gap-4 mt-2">
+        <View className="flex-row flex-wrap justify-end gap-4 mt-2">
           <Pressable
             onPress={onCancel}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-gray-600 bg-gray-600/20 active:bg-gray-600/40"
+            className="w-full min-[375px]:w-28 h-11 px-2 flex justify-center items-center rounded border border-gray-600 bg-gray-600/20 active:bg-gray-600/40 order-2 min-[375px]:order-1"
           >
             <Text className="text-gray-400 font-poppinsMedium">{cancelText}</Text>
           </Pressable>
@@ -69,7 +69,7 @@ const ConfirmationOverlay: React.FC<ConfirmationOverlayProps> = ({
           <Pressable
             onPress={onConfirm}
             style={{ backgroundColor: confirmButtonColor }}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded active:opacity-80"
+            className="w-full min-[375px]:w-28 h-11 px-2 flex justify-center items-center rounded active:opacity-80 order-1 min-[375px]:order-2"
           >
             <Text className="text-white font-poppinsMedium">{confirmText}</Text>
           </Pressable>

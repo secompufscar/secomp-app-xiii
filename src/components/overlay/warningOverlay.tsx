@@ -59,7 +59,7 @@ const WarningOverlay: React.FC<WarningOverlayProps> = ({
         <View className="flex-row justify-end">
           <Pressable
             onPress={onConfirm}
-            className="w-28 h-11 px-2 flex justify-center items-center rounded border border-warning bg-warning/10 active:bg-warning/20"
+            className="w-full min-[375px]:w-28 h-11 px-2 flex justify-center items-center rounded border border-warning bg-warning/10 active:bg-warning/20"
           >
             <Text className="text-warning font-poppinsMedium">{confirmText}</Text>
           </Pressable>

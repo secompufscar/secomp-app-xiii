@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { View, Text, FlatList, Pressable, ActivityIndicator, Image, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../styles/colors";
-import { getSponsors, deleteSponsor, Sponsor } from "../../services/sponsors";
+import { getSponsors, deleteSponsor } from "../../services/sponsors";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { ParamListBase, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -83,13 +83,13 @@ export default function SponsorsAdmin() {
               />
             </View>
 
-            <Text className="text-base text-white font-poppins">{item.name}</Text>
+            <Text className="text-white font-poppins">{item.name}</Text>
           </View>
 
           {/* Botão de deletar evento */}
           <Pressable onPress={(e) => {
             e.stopPropagation(); 
-            confirmDelete(item.id);
+            confirmDelete(String(item.id));
           }}>
             {({ pressed }) => (
               <View className={`flex w-[34px] h-[34px] items-center justify-center bg-danger/10 rounded border border-danger ${pressed ? "bg-danger/20" : "bg-danger/10"}`}>
@@ -141,7 +141,7 @@ export default function SponsorsAdmin() {
               data={list}
               renderItem={renderEventItem}
               ListEmptyComponent={emptyList}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => String(item.id)}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 36 }}
             />

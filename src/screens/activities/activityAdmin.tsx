@@ -88,7 +88,7 @@ export default function ActivityAdmin() {
       {({ pressed }) => (
         <View className={`flex flex-row items-center justify-between p-4 rounded-lg shadow mb-4 border border-iconbg gap-3 ${pressed ? "bg-background/80" : "bg-background"}`}>
           <View className="flex-1 flex-col gap-1">
-            <Text className="text-base text-white font-poppinsMedium line-clamp-1">{item.nome}</Text>
+            <Text className="text-white font-poppinsMedium line-clamp-1">{item.nome}</Text>
             <Text className="text-sm text-gray-600 font-interMedium line-clamp-1">{item.palestranteNome}</Text>
           </View>
 

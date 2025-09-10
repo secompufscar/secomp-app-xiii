@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, FlatList, Pressable, ActivityIndicator, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { FontAwesome } from "@expo/vector-icons";
 import { faTag } from "@fortawesome/free-solid-svg-icons";
 import { Input } from "../../components/input/input";
-import { getTags, createTag, updateTag, deleteTag, Tag } from "../../services/tags";
+import { getTags, createTag, updateTag, deleteTag } from "../../services/tags";
 import { colors } from "../../styles/colors";
 import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import CreationEditionOverlay from "../../components/overlay/creationEditionOverlay";
@@ -77,7 +77,7 @@ export default function TagsAdmin() {
 
     try {
       if (editingTag) {
-        await updateTag(editingTag.id, { id: editingTag.id, name: newTagName.trim() });
+        await updateTag(String(editingTag.id), { id: editingTag.id, name: newTagName.trim() });
       } else {
         await createTag({ name: newTagName.trim() });
       }
@@ -104,7 +104,7 @@ export default function TagsAdmin() {
     setDeleteModalVisible(false);
 
     try {
-      await deleteTag(toDeleteTag.id);
+      await deleteTag(String(toDeleteTag.id));
       setTags(prevList => prevList.filter(item => item.id !== toDeleteTag.id));
     } catch {
       setErrorMessage("Não foi possível excluir esta tag");
@@ -127,7 +127,7 @@ export default function TagsAdmin() {
               <FontAwesomeIcon icon={faTag} size={24} color="#a9c3f4ff" />
             </View>
 
-            <Text className="text-base text-white font-poppins">{item.name}</Text>
+            <Text className="text-white font-poppins">{item.name}</Text>
           </View>
          
           {/* Botão de deletar evento */}
@@ -184,7 +184,7 @@ export default function TagsAdmin() {
               data={tags}
               renderItem={renderTagItem}
               ListEmptyComponent={emptyList}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => String(item.id)}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ paddingBottom: 36 }}
             />
