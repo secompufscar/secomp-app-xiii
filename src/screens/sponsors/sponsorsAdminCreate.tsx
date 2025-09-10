@@ -217,7 +217,7 @@ export default function SponsorsAdminCreate() {
                   className="mt-6"
                 />
               ) : (
-                <Button title="Criar" className="mt-auto mb-12" onPress={handleCreate} />
+                <Button title="Criar" className="mt-auto mb-8" onPress={handleCreate} />
               )}
             </View>
           </ScrollView>

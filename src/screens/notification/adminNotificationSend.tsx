@@ -182,7 +182,7 @@ export default function AdminNotificationSend() {
             <View className="w-full flex-row items-center justify-between">
               <Text className="text-blue-200 text-sm font-inter">Enviar para todos os usuários</Text>
               <Switch
-                trackColor={{ false: colors.border, true: colors.blue[500] }}
+                trackColor={{ false: colors.iconbg, true: colors.iconbg }}
                 thumbColor={sendToAll ? colors.white : colors.neutral[300]}
                 ios_backgroundColor={colors.border}
                 onValueChange={setSendToAll}
@@ -200,7 +200,7 @@ export default function AdminNotificationSend() {
               </View>
             )}
 
-            <View className="w-full">
+            <View className={`w-full ${showActivitiesList ? "" : "mb-8"}`}>
               <Text className="text-gray-400 text-sm font-inter mb-2">Referenciar Atividade (opcional)</Text>
               <Pressable
                 onPress={() => setShowActivitiesList((p) => !p)}
@@ -216,6 +216,7 @@ export default function AdminNotificationSend() {
             <FlatList
               data={activities}
               keyExtractor={(item) => String(item?.id ?? Math.random())}
+              showsVerticalScrollIndicator={false}
               renderItem={renderActivityItem}
               contentContainerStyle={{ paddingBottom: 6 }}
               ListEmptyComponent={
@@ -237,7 +238,7 @@ export default function AdminNotificationSend() {
           {isLoading ? (
             <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
           ) : (
-            <Button title="Enviar Notificação" className="mt-8" onPress={handleSendNotification} />
+            <Button title="Enviar Notificação" className="mt-auto mb-8" onPress={handleSendNotification} />
           )}
         </View>
       </View>

@@ -295,7 +295,7 @@ export default function SponsorsAdminUpdateScreen() {
           ) : (
             <Button
               title="Salvar alterações"
-              className="mt-auto mb-12"
+              className="mt-auto mb-8"
               onPress={handleSubmit(onSubmit)}
             />
           )}

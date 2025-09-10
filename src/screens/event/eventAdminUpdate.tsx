@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
 import { ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -150,111 +150,113 @@ export default function EventAdminUpdate() {
               Tenha extrema cautela ao modificar informações de um evento, pois isso pode impactar outras interações dentro do aplicativo
             </Text>
           </View>
+          
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
+            <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
+              {/* Ano da edição */}
+              <View className="w-full">
+                <Text className="text-gray-400 text-sm font-inter mb-2">Ano da edição</Text>
+                <Input>
+                  <FontAwesome5 name="calendar-week" size={20} color={colors.border} />
 
-          <View className="flex-col flex-1 w-full gap-4 text-center justify-start">
-            {/* Ano da edição */}
-            <View className="w-full">
-              <Text className="text-gray-400 text-sm font-inter mb-2">Ano da edição</Text>
-              <Input>
-                <FontAwesome5 name="calendar-week" size={20} color={colors.border} />
-
-                <Input.Field
-                  placeholder="Ano (Ex.: 2025)"
-                  onChangeText={setYear}
-                  value={year}
-                />
-              </Input>
-            </View>
-
-            {/* Data de início */}
-            <View className="w-full z-10 mb-2">
-              {Platform.OS === 'web' ? (
-                <View>
-                  <Text className="text-gray-400 text-sm font-inter mb-2">Data de início</Text>
-                  <DatePicker
-                    selected={startDate}
-                    onChange={(date: Date | null) => {
-                      if (date) {
-                        setStartDate(date);
-                        if (date > endDate) {
-                            setEndDate(date);
-                        }
-                      }
-                    }}
-                    locale={ptBR} 
-                    dateFormat="dd/MM/yyyy"
-                    popperClassName="z-50"
-                    customInput={
-                      <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
-                        <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                        <Text className="text-white font-inter text-base ml-4">
-                          {startDate.toLocaleDateString('pt-BR')}
-                        </Text>
-                      </View>
-                    }
+                  <Input.Field
+                    placeholder="Ano (Ex.: 2025)"
+                    onChangeText={setYear}
+                    value={year}
                   />
-                </View>
-              ) : (
-                <Pressable onPress={() => setShowStartDatePicker(true)}>
-                  <Text className="text-gray-400 text-sm font-inter mb-2">Data de início</Text>
-                  <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
-                    <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
-                    <Text className="text-white font-inter text-base ml-4">
-                      {`${startDate.toLocaleDateString('pt-BR')}`}
-                    </Text>
+                </Input>
+              </View>
+
+              {/* Data de início */}
+              <View className="w-full z-10 mb-2">
+                {Platform.OS === 'web' ? (
+                  <View>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data de início</Text>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date: Date | null) => {
+                        if (date) {
+                          setStartDate(date);
+                          if (date > endDate) {
+                              setEndDate(date);
+                          }
+                        }
+                      }}
+                      locale={ptBR} 
+                      dateFormat="dd/MM/yyyy"
+                      popperClassName="z-50"
+                      customInput={
+                        <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
+                          <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
+                          <Text className="text-white font-inter text-base ml-4">
+                            {startDate.toLocaleDateString('pt-BR')}
+                          </Text>
+                        </View>
+                      }
+                    />
                   </View>
-                </Pressable>
+                ) : (
+                  <Pressable onPress={() => setShowStartDatePicker(true)}>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data de início</Text>
+                    <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center" pointerEvents="none">
+                      <FontAwesome5 name="calendar-day" size={20} color={colors.border} />
+                      <Text className="text-white font-inter text-base ml-4">
+                        {`${startDate.toLocaleDateString('pt-BR')}`}
+                      </Text>
+                    </View>
+                  </Pressable>
+                )}
+              </View>
+
+              {/* Data de fim */}
+              <View className="w-full mb-6">
+                {Platform.OS === 'web' ? (
+                  <View>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data de fim</Text>
+                    <DatePicker
+                      selected={endDate}
+                      onChange={(date: Date | null) => {
+                        if (date) {
+                          setEndDate(date);
+                          if (date > endDate) {
+                              setEndDate(date);
+                          }
+                        }
+                      }}
+                      locale={ptBR} 
+                      dateFormat="dd/MM/yyyy"
+                      popperClassName="z-50"
+                      portalId="root"
+                      customInput={
+                        <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
+                          <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
+                          <Text className="text-white font-inter text-base ml-4">
+                            {endDate.toLocaleDateString('pt-BR')}
+                          </Text>
+                        </View>
+                      }
+                    />
+                  </View>
+                ) : (
+                  <Pressable onPress={() => setShowEndDatePicker(true)}>
+                    <Text className="text-gray-400 text-sm font-inter mb-2">Data de fim</Text>
+                    <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center px-4" pointerEvents="none">
+                      <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
+                      <Text className="text-white font-inter text-base ml-4">
+                        {`${endDate.toLocaleDateString('pt-BR')}`}
+                      </Text>
+                    </View>
+                  </Pressable>
+                )}
+              </View>
+                
+              {isLoading ? (
+                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
+              ) : (
+                <Button title="Atualizar" className="mt-auto mb-8" onPress={handleUpdateEvent}/>
               )}
             </View>
-
-            {/* Data de fim */}
-            <View className="w-full">
-              {Platform.OS === 'web' ? (
-                <View>
-                  <Text className="text-gray-400 text-sm font-inter mb-2">Data de fim</Text>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date: Date | null) => {
-                      if (date) {
-                        setEndDate(date);
-                        if (date > endDate) {
-                            setEndDate(date);
-                        }
-                      }
-                    }}
-                    locale={ptBR} 
-                    dateFormat="dd/MM/yyyy"
-                    popperClassName="z-50"
-                    portalId="root"
-                    customInput={
-                      <View className={`w-full ${Platform.OS === "web" ? "p-4" : "py-2 px-4"} bg-background rounded-lg border border-border flex-row items-center`}>
-                        <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
-                        <Text className="text-white font-inter text-base ml-4">
-                          {endDate.toLocaleDateString('pt-BR')}
-                        </Text>
-                      </View>
-                    }
-                  />
-                </View>
-              ) : (
-                <Pressable onPress={() => setShowEndDatePicker(true)}>
-                  <Text className="text-gray-400 text-sm font-inter mb-2">Data de fim</Text>
-                  <View className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center px-4" pointerEvents="none">
-                    <FontAwesome5 name="calendar-times" size={20} color={colors.border} />
-                    <Text className="text-white font-inter text-base ml-4">
-                      {`${endDate.toLocaleDateString('pt-BR')}`}
-                    </Text>
-                  </View>
-                </Pressable>
-              )}
-            </View>
-              
-            {isLoading ? (
-              <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-            ) : (
-              <Button title="Atualizar" className="mt-auto mb-12" onPress={handleUpdateEvent}/>
-            )}
-          </View>
+          </ScrollView>
         </View>
       </View>
 
