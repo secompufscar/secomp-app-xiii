@@ -10,6 +10,7 @@
     "build:web": "expo export --platform web"
   },
   "dependencies": {
+    "@cmdnio/react-qr-reader": "^3.0.2",
     "@expo-google-fonts/inter": "~0.2.3",
     "@expo-google-fonts/poppins": "~0.3.1",
     "@fortawesome/fontawesome-svg-core": "~6.7.2",
