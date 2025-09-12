@@ -129,7 +129,7 @@ export default function UserProfile() {
 
           <Text className="text-white text-2xl font-poppinsSemiBold mb-1">{nomeCompleto}</Text>
 
-          <Text className="text-gray-400 font-poppins text-base">{user.email}</Text>
+          <Text className="text-gray-400 font-poppins">{user.email}</Text>
         </View>
 
         {/* Stats */}
@@ -204,7 +204,7 @@ export default function UserProfile() {
               <Pressable onPress={() => {setConfirmAction(true)}}>
                 {({ pressed }) => (
                   <View
-                    className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 border border-danger transition-all duration-100 ${
+                    className={`flex-row h-[58px] items-center justify-between rounded-lg p-4 border border-danger/50 transition-all duration-100 ${
                       pressed ? "bg-[#ff99a3]/10" : ""
                     }`}
                   >
