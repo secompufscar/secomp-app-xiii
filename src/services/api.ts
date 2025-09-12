@@ -29,7 +29,7 @@ api.interceptors.response.use(
   response => response,
   async error => {
     const status = error.response?.status;
-    if (status === 401 || status === 500) {
+    if (status === 401) {
       await callGlobalSignOut();
     }
     return Promise.reject(error);

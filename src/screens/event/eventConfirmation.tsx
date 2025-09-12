@@ -1,8 +1,7 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import AppLayout from "../../components/app/appLayout";
 import Button from "../../components/button/button";
 
 export default function EventConfirmation() {
@@ -11,16 +10,28 @@ export default function EventConfirmation() {
   const event = route.params as { event: Events };
 
   return (
-    <SafeAreaView className="bg-blue-900 flex-1 items-center justify-center">
-      <AppLayout>
-        <View className="flex flex-col items-center justify-center mt-16">
-          <View className="flex w-56 h-56 p-2 items-center justify-center rounded-full border border-iconbg">
+    <SafeAreaView className="bg-blue-900 flex-1 items-center">
+      <View className="flex-1 w-full">
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent={Platform.OS === "android"}
+        />
+
+        <View className="flex flex-col w-full items-center justify-center px-6 max-w-[1000px] mx-auto min-h-screen">
+          <View className="flex w-64 h-64 p-3 items-center justify-center border border-iconbg bg-iconbg/20 rounded-xl">
             <Image source={require("../../../assets/icons/celebration.png")} className="w-full h-full" />
           </View>
 
-          <Button className="mt-16 w-[80%]" title="Continuar" onPress={() => {navigation.navigate("Home")}} />
+          <View className="flex flex-col my-14 gap-5">
+            <Text className="text-white text-xl text-center font-poppinsSemiBold">Sua vaga está garantida!</Text>
+
+            <Text className="text-default text-center font-inter leading-[1.8]">Agora é só se preparar para um dia cheio de inovação, tecnologia e boas conexões.</Text>
+          </View>
+
+          <Button className="mt-4 w-[80%]" title="Continuar" onPress={() => {navigation.navigate("Home")}} />
         </View>
-      </AppLayout>
+      </View>
     </SafeAreaView>
   );
 }
