@@ -1,4 +1,13 @@
 export const colors = {
+  light: {
+    icon: "#000000",
+    icon2: "#0C4A49",
+    light: "#CCEADF",
+  },
+  dark: {
+    icon: "#A9B4F4",
+  },
+  
   white: "#ffffff",
 
   neutral: {

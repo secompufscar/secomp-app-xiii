@@ -13,12 +13,14 @@ import { getCurrentEvent } from "../../services/events";
 import AppLayout from "../../components/app/appLayout";
 import HomeCompetitions from "../../components/home/homeCompetitions";
 import HomeSocials from "../../components/home/homeSocials";
+import { useTheme } from "../../hooks/ThemeContext";
 
 export default function Home() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { user }: any = useAuth();
   const [isBtnPressed, setIsBtnPressed] = useState(false);
   const [eventStatusMessage, setEventStatusMessage] = useState("Carregando informações do evento...");
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const fetchAndSetEventStatus = async () => {
@@ -101,13 +103,13 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView className="bg-blue-900 flex-1 items-center">
+    <SafeAreaView className="bg-light-background dark:bg-dark-background flex-1 items-center">
       <AppLayout>
         <View className="w-full flex-row items-center justify-between mt-8 mb-6 gap-4">
           <View className="flex-col h-full flex-1 ">
             <Text className="text-base text-blue-100 font-inter">{eventStatusMessage}</Text>
             <View className="flex-row items-center justify-start mt-[6px]">
-              <Text className="text-[18px] text-white font-poppinsSemiBold">{greeting} </Text>
+              <Text className="text-[18px] text-light-text dark:text-dark-text font-poppinsSemiBold">{greeting} </Text>
               <Text className="text-[18px] text-green font-poppinsSemiBold">{`${nomeParaMostrar}`}</Text>
             </View>
           </View>
@@ -118,8 +120,8 @@ export default function Home() {
               navigation.navigate("");
             }}
           >
-            <View className="w-11 h-11 flex items-center justify-center rounded-[8px] p-2 bg-iconbg">
-              <FontAwesomeIcon icon={faBell} size={20} color={colors.blue[200]} />
+            <View className="w-11 h-11 flex items-center justify-center p-2 rounded-[8px] bg-light-secondary dark:bg-dark-secondary">
+              <FontAwesomeIcon icon={faBell} size={20} color={theme === "dark" ? colors.dark.icon : colors.light.icon} />
             </View>
           </Pressable>
         </View>
