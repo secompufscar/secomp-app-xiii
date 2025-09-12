@@ -35,9 +35,9 @@ export default function MyEvents() {
         {/* Cabeçalho */}
         <View className="mb-6">
           <Text className="text-white text-2xl font-poppinsSemiBold mb-2">
-            Atividades Inscritas
+            Minhas Atividades
           </Text>
-          <Text className="text-gray-400 font-inter">Uma lista com todas as suas inscrições</Text>
+          <Text className="text-gray-400 font-inter">Todas as suas inscrições e atividades salvas</Text>
         </View>
 
         {/* Lista de Inscrições */}

@@ -129,11 +129,11 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
     <FlatList
       data={filtered}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
+      contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         const rawDate = parseISO(item.data);
-        const dataObj = addHours(rawDate, 3); // Corrige para UTC-3 (Brasília)
+        const dataObj = addHours(rawDate, 3); 
         const dia = format(dataObj, "dd", { locale: ptBR });
         const mes = format(dataObj, "MMMM", { locale: ptBR });
 
@@ -142,16 +142,13 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
             onPress={() => onPressActivity?.(item)}
             className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
           >
-            {/* Bloco com a data (dia + mês) */}
             <View className="items-center mr-4">
               <Text className="text-white text-3xl font-poppinsSemiBold">{dia}</Text>
               <Text className="text-blue-300 text-xs font-inter lowercase">{mes}</Text>
             </View>
 
-            {/* Linha vertical separadora */}
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
-            {/* Bloco com nome da atividade e horário */}
             <View className="flex-1 flex-col flex-wrap justify-between py-1">
               <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium mb-1">
                 {item.nome}

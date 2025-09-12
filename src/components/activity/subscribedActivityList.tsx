@@ -82,6 +82,7 @@ export function SubscribedActivityList({ onPressActivity }: SubscribedActivityLi
       data={activities}
       keyExtractor={(item) => item.id}
       contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
+      showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         const rawDate = parseISO(item.data);
         const dateObj = addHours(rawDate, 0);
@@ -91,19 +92,16 @@ export function SubscribedActivityList({ onPressActivity }: SubscribedActivityLi
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg px-4 py-6 mx-0 mb-4 shadow-sm active:bg-background/70"
+            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
           >
-            {/* Data */}
             <View className="items-center mr-4">
               <Text className="text-white text-3xl font-poppinsSemiBold">{dia}</Text>
               <Text className="text-blue-300 text-xs font-inter lowercase">{mes}</Text>
             </View>
 
-            {/* Separador */}
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
-            {/* Detalhes */}
-            <View className="flex-1 flex-col flex-wrap justify-between">
+            <View className="flex-1 flex-col flex-wrap justify-between py-1">
               <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium mb-1">
                 {item.nome}
               </Text>
