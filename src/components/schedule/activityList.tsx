@@ -13,6 +13,7 @@ import {
   faUsers,
   faIdBadge,
   faCalendar,
+  faMugHot,
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
@@ -23,23 +24,26 @@ type ActivityListProps = {
 };
 
 const categoryIconMap: { [key: string]: IconDefinition } = {
-  minicursos: faLaptopCode,
+  Minicursos: faLaptopCode,
   "1": faLaptopCode,
 
-  palestra: faMicrophone,
+  Palestra: faMicrophone,
   "2": faMicrophone,
 
-  competicoes: faTrophy,
+  Competicoes: faTrophy,
   "3": faTrophy,
 
-  gamenight: faGamepad,
+  Gamenight: faGamepad,
   "4": faGamepad,
 
-  sociocultural: faUsers,
+  Sociocultural: faUsers,
   "5": faUsers,
 
-  credenciamento: faIdBadge,
+  Credenciamento: faIdBadge,
   "6": faIdBadge,
+
+  Coffee: faMugHot,
+  "7": faMugHot,
 
   default: faCalendar,
 };

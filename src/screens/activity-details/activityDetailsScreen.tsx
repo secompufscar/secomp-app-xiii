@@ -24,7 +24,8 @@ const categoryIdToName: { [key: string]: string } = {
   "4": "Gamenight",
   "5": "Sociocultural",
   "6": "Credenciamento",
-  default: "Atividade",
+  "7": "Coffee",
+  default: "Secomp",
 };
 
 export default function ActivityDetails() {
