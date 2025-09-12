@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { View, Text, StyleSheet, AppState, Platform } from "react-native";
 import { ParamListBase, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { CameraView } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { checkIn } from "../../services/checkIn";
 import { getActivityId } from "../../services/activities";
@@ -26,6 +26,14 @@ export default function QRCode() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
+
+  const [permission, requestPermission] = useCameraPermissions();
+
+  useEffect(() => {
+    if (permission && !permission.granted) {
+      requestPermission();
+    }
+  }, [permission]);
 
   // Evita múltiplos scans consecutivos usando qrLock, que pode ser resetado
   useEffect(() => {

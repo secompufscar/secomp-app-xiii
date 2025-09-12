@@ -109,7 +109,7 @@ export default function EditProfileScreen() {
         <View className="flex-col w-full gap-2 mt-2">
           {/* Nome Completo */}
           <View className="w-full">
-            <Text className="text-white text-sm font-interMedium mb-2">Nome</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">Nome</Text>
             <Input>
               <Ionicons name="person" size={20} color={colors.border} />
 
@@ -123,7 +123,7 @@ export default function EditProfileScreen() {
 
           {/* Email */}
           <View className="w-full mt-2">
-            <Text className="text-white text-sm font-interMedium mb-2">E-mail</Text>
+            <Text className="text-gray-400 text-sm font-interMedium mb-2">E-mail</Text>
             <Input>
               <MaterialIcons name="email" size={20} color={colors.border} />
 
