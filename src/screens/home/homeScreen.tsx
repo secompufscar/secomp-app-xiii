@@ -199,7 +199,7 @@ export default function Home() {
             title="Sua programação para o evento"
             subtitle="Pronto para hoje?"
             subtitleAlt="Pronto para hoje?"
-            icon={require("../../../assets/icons/calendar.png")}
+            icon={require("../../../assets/icons/book.png")}
             onPress={() => navigation.navigate("MyEvents")}
           />
         </View>
