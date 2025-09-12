@@ -153,7 +153,7 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
     const rawDate = parseISO(item.data);
     const activityDateTime = addHours(rawDate, 3); 
     const hasOccurred = isPast(activityDateTime);
-    const iconColor = hasOccurred ? "#3B465E" : colors.blue[500];
+    const iconColor = hasOccurred ? "#3B465E" : "#4153DF";
 
     return (
       <Pressable
@@ -161,13 +161,13 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
         className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
       >
         <View className="items-center justify-center mr-4 w-[48px] h-[56px]">
-          <FontAwesomeIcon icon={activityIcon} size={45} color={iconColor} />
+          <FontAwesomeIcon icon={activityIcon} size={42} color={iconColor} />
         </View>
 
         <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
         <View className="flex flex-1 flex-col">
-          <Text numberOfLines={1} className="text-white text-[14px] mb-1 font-poppinsMedium">
+          <Text numberOfLines={1} className="text-white text-[14px] mb-[6px] font-poppinsMedium">
             {item.nome}
           </Text>
 

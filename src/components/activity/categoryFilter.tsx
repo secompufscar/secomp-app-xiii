@@ -26,7 +26,7 @@ export default function CategoryFilter({ onSelect }: { onSelect?: (category: str
               key={category}
               onPress={() => handlePress(category)}
               className={`px-5 py-2.5 rounded-full
-                ${isSelected ? "bg-green" : "border border-neutral-200"}
+                ${isSelected ? "border border-green bg-green" : "border border-neutral-200"}
                 justify-center items-center`}
             >
               <Text

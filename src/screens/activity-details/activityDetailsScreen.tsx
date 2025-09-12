@@ -229,7 +229,7 @@ export default function ActivityDetails() {
             {/* Detalhes */}
             <View className="mb-10">
               <Text className="text-white text-lg font-poppinsSemiBold mb-1">Detalhes</Text>
-              <Text className="text-gray-400 text-base font-inter leading-relaxed">
+              <Text className="text-gray-400 font-inter leading-relaxed">
                 {activity.detalhes}
               </Text>
             </View>
@@ -247,11 +247,11 @@ export default function ActivityDetails() {
                   <FontAwesomeIcon icon={faUserCircle} size={56} color={colors.border} />
                 )}
 
-                <View className="ml-4">
+                <View className="flex-1 ml-4">
                   <Text className="text-white text-base font-poppinsSemiBold">
                     Apresentador
                   </Text>
-                  <Text className="text-gray-400 text-base font-inter">{activity.palestranteNome}</Text>
+                  <Text className="text-gray-400 font-inter leading-[1.8]">{activity.palestranteNome}</Text>
                 </View>
               </View>
             </View>
@@ -274,7 +274,7 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : activity.categoriaId !== "6" ? ( 
+            ) : !["6", "7"].includes(activity.categoriaId) ? ( 
               subscriptionLoading || isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} />
               ) : (
