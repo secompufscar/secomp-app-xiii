@@ -11,7 +11,7 @@ import SuccessOverlay from "../../components/overlay/successOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
 
 let QrReader: any = null;
-if (Platform.OS === "web") {
+if (typeof window !== "undefined") {
   QrReader = require("@cmdnio/react-qr-reader").QrReader;
 }
 
@@ -66,17 +66,12 @@ export default function QRCode() {
         const errorMsg = err.response?.data?.message || "Falha ao processar o check-in.";
         setErrorMessage(errorMsg);
         setErrorModalVisible(true);
-      } finally {
-        // Libera o qrLock após 1 segundo para evitar múltiplos scans rápidos
-        setTimeout(() => {
-          qrLock.current = false;
-        }, 1000);
       }
     }
   };
 
   return (
-    <SafeAreaView style={StyleSheet.absoluteFillObject}>
+    <SafeAreaView className="flex-1" style={StyleSheet.absoluteFillObject}>
       {Platform.OS === "web" ? (
         <View style={styles.webContainer}>
           <Text style={styles.webText}>Escaneie o QR Code</Text>
@@ -103,7 +98,7 @@ export default function QRCode() {
         visible={errorModalVisible}
         title="Erro ao ler presença"
         message={errorMessage}
-        onConfirm={() => {setErrorModalVisible(false); navigation.goBack()}}
+        onConfirm={() => {setErrorModalVisible(false); qrLock.current = false; navigation.goBack()}}
         confirmText="OK"
       />
       
@@ -111,7 +106,7 @@ export default function QRCode() {
         visible={successModalVisible}
         title="Sucesso ao ler presença"
         message="Check-in realizado com sucesso."
-        onConfirm={() => {setSuccessModalVisible(false);}}
+        onConfirm={() => {setSuccessModalVisible(false); qrLock.current = false;}}
         confirmText="OK"
       />
 
@@ -119,7 +114,7 @@ export default function QRCode() {
         visible={warningModalVisible}
         title="Aviso"
         message="Atividade não encontrada!"
-        onConfirm={() => {setWarningModalVisible(false)}}
+        onConfirm={() => {setWarningModalVisible(false); qrLock.current = false;}}
         confirmText="OK"
       />
     </SafeAreaView>
