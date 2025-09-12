@@ -104,11 +104,21 @@ export default function EventAdmin() {
   );
 
   // Lista vazia
-  const emptyList = () => (
-    <View className="flex-1 items-center justify-center mt-2">
-      <Text className="text-gray-400 font-inter">Nenhum evento encontrado</Text>
-    </View>
-  );
+  const emptyList = () => {
+    if (loading) {
+      return (
+        <ActivityIndicator size="large" color={colors.blue[500]} className="my-4" />
+      );
+    }
+
+    return (
+      <View className="flex-1 items-center justify-center mt-2">
+        <Text className="text-gray-400 font-inter">
+          Nenhum evento encontrado
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">
@@ -133,8 +143,6 @@ export default function EventAdmin() {
           <Button title="Criar evento" onPress={() => {navigation.navigate("EventAdminCreate")}}/>
 
           <View className="flex-1 mt-8">
-            {loading && <ActivityIndicator size="large" color={colors.blue[500]} className="my-4"/>}
-
             {error && <Text className="text-red-400 text-center mt-2">{error}</Text>}
 
             <FlatList
