@@ -191,12 +191,12 @@ export default function Home() {
           />
         }
 
-        {/* Guia do evento */}
+        {/* Minhas atividades */}
         <View className="w-full mb-8 gap-4">
           <Text className="text-sm text-green font-poppinsMedium">Minhas atividades</Text>
           
           <IconButton 
-            title="Sua programação do dia"
+            title="Sua programação para o evento"
             subtitle="Pronto para hoje?"
             subtitleAlt="Pronto para hoje?"
             icon={require("../../../assets/icons/calendar.png")}
