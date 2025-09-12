@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { parseISO, addHours, getDay, isPast } from "date-fns";
@@ -17,7 +17,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
-// Props esperadas pelo componente ActivityList
 type ActivityListProps = {
   selectedDay?: string;
   onPressActivity?: (item: Activity) => void;
@@ -123,7 +122,6 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
 
   const filteredActivities = getFilteredActivitiesByDay();
 
-  // Tela de loading
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center pb-24">
@@ -132,7 +130,6 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
     );
   }
 
-  // Tela de erro
   if (errorMsg) {
     return (
       <View className="flex-1 items-center justify-center px-4">
@@ -141,7 +138,6 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
     );
   }
 
-  // Nenhuma atividade encontrada para o dia selecionado
   if (filteredActivities.length === 0) {
     return (
       <View className="flex-1 items-center justify-start mt-8">
@@ -152,55 +148,51 @@ export default function ActivityList({ selectedDay, onPressActivity }: ActivityL
     );
   }
 
+  const ActivityItem = memo(({ item }: { item: Activity }) => {
+    const activityIcon = categoryIconMap[item.categoriaId] || categoryIconMap["default"];
+    const rawDate = parseISO(item.data);
+    const activityDateTime = addHours(rawDate, 3); 
+    const hasOccurred = isPast(activityDateTime);
+    const iconColor = hasOccurred ? "#3B465E" : colors.blue[500];
+
+    return (
+      <Pressable
+        onPress={() => onPressActivity?.(item)}
+        className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
+      >
+        <View className="items-center justify-center mr-4 w-[48px] h-[56px]">
+          <FontAwesomeIcon icon={activityIcon} size={45} color={iconColor} />
+        </View>
+
+        <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
+
+        <View className="flex flex-1 flex-col">
+          <Text numberOfLines={1} className="text-white text-[14px] mb-1 font-poppinsMedium">
+            {item.nome}
+          </Text>
+
+          <View className="flex flex-row">
+            <Text className="w-24 mr-4 text-gray-400 text-[13px] font-interMedium mb-[8px]">
+              Horário:
+              <Text className="text-green font-inter"> {item.data.substring(11, 16)}</Text>
+            </Text>
+
+            <Text className="flex-1 text-gray-400 text-[13px] font-interMedium" numberOfLines={1} ellipsizeMode="tail">
+              Local: <Text className="text-green font-inter">{item.local}</Text>
+            </Text>
+          </View>
+        </View>
+      </Pressable>
+    );
+  });
+
   return (
     <FlatList
       data={filteredActivities}
       keyExtractor={(item) => item.id}
       contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => {
-        const activityIcon = categoryIconMap[item.categoriaId] || categoryIconMap["default"];
-
-        const rawDate = parseISO(item.data);
-        const activityDateTime = addHours(rawDate, 3); // Horario de brasilia
-        const hasOccurred = isPast(activityDateTime);
-
-        // Cor do icone
-        const iconColor = hasOccurred ? "#3B465E" : colors.blue[500];
-
-        return (
-          <Pressable
-            onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
-          >
-            {/* Bloco com o ÍCONE da categoria */}
-            <View className="items-center justify-center mr-4 w-[48px] h-[56px]">
-              <FontAwesomeIcon icon={activityIcon} size={48} color={iconColor} />
-            </View>
-
-            {/* Linha vertical separadora */}
-            <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
-
-            {/* Bloco com nome da atividade e horário*/}
-            <View className="flex-1 flex-col flex-wrap">
-              <Text numberOfLines={1} className="text-white text-[14px] mb-1 font-poppinsMedium">
-                {item.nome}
-              </Text>
-
-              <View className="flex flex-row gap-3">
-                <Text className="w-24 text-default text-[13px] font-inter">
-                  Horário:
-                  <Text className="text-green font-inter"> {item.data.substring(11, 16)}</Text>
-                </Text>
-
-                <Text className="text-default text-[13px] font-inter flex-shrink" numberOfLines={1} ellipsizeMode="tail">
-                  Local: <Text className="text-green font-inter">{item.local}</Text>
-                </Text>
-              </View>
-            </View>
-          </Pressable>
-        );
-      }}
+      renderItem={({ item }) => <ActivityItem item={item} />}
     />
   );
 }

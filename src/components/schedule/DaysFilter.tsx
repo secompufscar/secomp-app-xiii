@@ -25,7 +25,7 @@ export default function DaysFilter({ onSelect }: { onSelect?: (day: string) => v
               key={day}
               onPress={() => handlePress(day)}
               className={`flex-1 px-5 py-2 rounded-full justify-center items-center
-                ${isSelected ? "bg-green" : "border border-neutral-200"}`}
+                ${isSelected ? "border border-green bg-green" : "border border-neutral-200"}`}
             >
               <Text
                 className={`text-xs font-poppinsMedium transition duration-500 ease-in-out
