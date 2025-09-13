@@ -245,7 +245,7 @@ export default function Home() {
             subtitle="Participantes que estão liderando o evento"
             subtitleAlt="Os melhores do evento!"
             icon={require("../../../assets/icons/ranking.png")}
-            onPress={() => navigation.navigate("Sponsors")}
+            onPress={() => navigation.navigate("Ranking")}
           />
         </View>
 

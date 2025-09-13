@@ -10,6 +10,7 @@ import {
   EventGuide,
   Sponsors,
   MyEvents,
+  Ranking,
   Credential,
   Activities,
   QRCode,
@@ -41,6 +42,7 @@ type StackNavigation = {
   EventGuide: undefined;
   Sponsors: undefined;
   MyEvents: undefined;
+  Ranking: undefined;
   Credential: undefined;
   Activities: undefined;
   QRCode: { id: string };
@@ -75,6 +77,7 @@ export default function StackRoutes() {
       <Stack.Screen name="EventGuide" component={EventGuide} />
       <Stack.Screen name="Sponsors" component={Sponsors} />
       <Stack.Screen name="MyEvents" component={MyEvents} />
+      <Stack.Screen name="Ranking" component={Ranking} />
       <Stack.Screen name="Credential" component={Credential} />
       <Stack.Screen name="Activities" component={Activities} />
       <Stack.Screen name="QRCode" component={QRCode} />
