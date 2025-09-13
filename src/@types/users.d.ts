@@ -8,6 +8,7 @@ interface User {
   points: int;
   registrationStatus: int;
   currentEdition?: string;
+  rank?: number;
 };
 
 interface Login {
