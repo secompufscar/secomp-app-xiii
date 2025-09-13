@@ -236,6 +236,19 @@ export default function Home() {
           />
         </View>
 
+        {/* Ranking*/}
+        <View className="w-full mb-8 gap-4">
+          <Text className="text-sm text-green font-poppinsSemiBold">Ranking</Text>
+
+          <IconButton 
+            title="Top 50"
+            subtitle="Participantes que estão liderando o evento"
+            subtitleAlt="Os melhores do evento!"
+            icon={require("../../../assets/icons/ranking.png")}
+            onPress={() => navigation.navigate("Sponsors")}
+          />
+        </View>
+
         {/* Redes sociais */}
         <View className="w-full mb-24 gap-4">
           <Text className="text-sm text-green font-poppinsSemiBold">Redes sociais</Text>

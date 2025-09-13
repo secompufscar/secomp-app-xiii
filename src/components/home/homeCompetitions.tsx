@@ -79,7 +79,7 @@ export default function HomeCompetitions() {
       ) : (
         <View className="w-full">
           <Text className="text-default text-[12px] font-inter">
-            Nenhuma competição encontrada.
+            Nenhuma competição disponível.
           </Text>
         </View>
       )}
