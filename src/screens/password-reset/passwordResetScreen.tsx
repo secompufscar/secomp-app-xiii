@@ -91,11 +91,7 @@ export default function PasswordReset() {
           </Text>
         )}
 
-        {isLoading ? (
-          <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-        ) : (
-          <Button className="mt-4" title="Enviar" onPress={replacePass} />
-        )}
+        <Button className="mt-4" title="Enviar" loading={isLoading} onPress={replacePass} />
       </AppLayout>
     </SafeAreaView>
   );

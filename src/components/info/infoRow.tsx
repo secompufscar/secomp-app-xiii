@@ -16,7 +16,7 @@ export default function InfoRow({ icon, mainText, subText, children, className }
   return (
     <View className={`flex-row items-center mb-4 items-center ${className || ""}`}>
       {/* icone */}
-      <View className="w-10 h-10 bg-background rounded items-center justify-center mr-4">
+      <View className="w-10 h-10 bg-background border border-iconbg rounded items-center justify-center mr-4">
         <FontAwesomeIcon icon={icon} size={18} color={colors.blue[500]} />
       </View>
 

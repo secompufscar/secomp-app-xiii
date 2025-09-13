@@ -144,19 +144,15 @@ export default function Login() {
             <Pressable onPress={() => navigation.navigate("PasswordReset")}>
               {({ pressed }) => (
                 <Text
-                  className={`text-xs font-poppins underline ${pressed ? "text-white" : "text-gray-400"}`}
+                  className={`text-sm font-interMedium ${pressed ? "text-gray-400" : "text-gray-400/80"}`}
                 >
-                  Esqueci minha senha!
+                  Esqueci minha senha
                 </Text>
               )}
             </Pressable>
           </View>
 
-          {isLoading ? (
-            <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-          ) : (
-            <Button className="mt-8" title="Entrar" onPress={handleLogin} />
-          )}
+          <Button className="mt-8" title="Entrar" loading={isLoading} onPress={handleLogin} />
 
           <View className="flex-row mt-8 items-center justify-center gap-1">
             <Text className="text-white text-sm font-inter">Não possui uma conta?</Text>

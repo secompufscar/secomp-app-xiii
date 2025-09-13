@@ -525,11 +525,7 @@ export default function ActivityAdminUpdate() {
                 )}
               </View>
 
-              {isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-6" />
-              ) : (
-                <Button title="Atualizar" className="mt-auto" onPress={handleUpdateActivity} />
-              )}
+              <Button title="Atualizar" className="mt-auto" loading={isLoading} onPress={handleUpdateActivity} />
             </View>
           </ScrollView>
         </View>

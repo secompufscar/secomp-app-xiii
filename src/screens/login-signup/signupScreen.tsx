@@ -217,11 +217,7 @@ export default function SignUp() {
             )}
           </View>
 
-          {isLoading ? (
-            <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-          ) : (
-            <Button className="mt-8" title="Criar" onPress={handleRegister} />
-          )}
+          <Button className="mt-8" title="Criar" loading={isLoading} onPress={handleRegister} />
 
           <View className="flex-row mt-8 items-center justify-center gap-1">
             <Text className="text-white text-sm font-inter">Já possui uma conta?</Text>

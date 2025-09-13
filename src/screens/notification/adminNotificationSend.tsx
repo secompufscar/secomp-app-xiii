@@ -235,11 +235,7 @@ export default function AdminNotificationSend() {
             />
           )}
 
-          {isLoading ? (
-            <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-          ) : (
-            <Button title="Enviar Notificação" className="mt-auto mb-8" onPress={handleSendNotification} />
-          )}
+          <Button title="Enviar Notificação" className="mt-auto mb-8" loading={isLoading} onPress={handleSendNotification} />
         </View>
       </View>
 

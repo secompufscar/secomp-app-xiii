@@ -210,15 +210,7 @@ export default function SponsorsAdminCreate() {
                 <Text className="text-danger text-sm font-inter">{error}</Text>
               )}
 
-              {isLoading ? (
-                <ActivityIndicator
-                  size="large"
-                  color={colors.blue[200]}
-                  className="mt-6"
-                />
-              ) : (
-                <Button title="Criar" className="mt-auto mb-8" onPress={handleCreate} />
-              )}
+              <Button title="Criar" className="mt-auto mb-8" loading={isLoading} onPress={handleCreate} />
             </View>
           </ScrollView>
         </View>

@@ -239,11 +239,7 @@ export default function EventAdminCreate() {
                 )}
               </View>
                 
-              {isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-              ) : (
-                <Button title="Criar" className="mt-auto mb-8" onPress={handleCreateEvent}/>
-              )}
+              <Button title="Criar" className="mt-auto mb-8" loading={isLoading} onPress={handleCreateEvent}/>
             </View>
           </ScrollView>
         </View>

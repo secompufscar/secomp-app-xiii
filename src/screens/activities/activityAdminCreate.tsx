@@ -7,7 +7,7 @@ import { createActivity } from "../../services/activities";
 import { getCategories } from "../../services/categories"; 
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { parseISO, format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { is, ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
 import * as ImagePicker from "expo-image-picker";
@@ -452,11 +452,7 @@ export default function ActivityAdminCreate() {
                 )}
               </View>
 
-              {isLoading ? (
-                <ActivityIndicator size="large" color={colors.blue[500]} className="mt-6" />
-              ) : (
-                <Button title="Criar" className="mt-auto" onPress={handleCreateActivity} />
-              )}
+              <Button title="Criar" className="mt-auto" loading={isLoading} onPress={handleCreateActivity} />
             </View>
           </ScrollView>
         </View>

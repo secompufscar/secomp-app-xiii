@@ -134,11 +134,7 @@ export default function SetNewPassword() {
           {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
         </View>
 
-        {isLoading ? (
-          <ActivityIndicator size="large" color={colors.blue[500]} className="mt-8" />
-        ) : (
-          <Button className="mt-4" title="Atualizar senha" onPress={handleUpdatePassword} />
-        )}
+        <Button className="mt-4" title="Atualizar senha" loading={isLoading} onPress={handleUpdatePassword} />
       </AppLayout>
 
       <Modal visible={successVisible} transparent animationType="fade">

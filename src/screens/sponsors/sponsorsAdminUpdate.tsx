@@ -286,19 +286,7 @@ export default function SponsorsAdminUpdateScreen() {
             </View>
           </View>
 
-          {saving ? (
-            <ActivityIndicator
-              size="large"
-              color={colors.blue[500]}
-              className="mt-6"
-            />
-          ) : (
-            <Button
-              title="Salvar alterações"
-              className="mt-auto mb-8"
-              onPress={handleSubmit(onSubmit)}
-            />
-          )}
+          <Button title="Salvar alterações" className="mt-auto mb-8" loading={saving} onPress={handleSubmit(onSubmit)}/>
         </View>
       </AppLayout>
 

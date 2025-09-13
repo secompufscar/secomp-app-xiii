@@ -274,7 +274,7 @@ export default function ActivityDetails() {
                   }
                 />
               </View>
-            ) : !["6", "7"].includes(activity.categoriaId) ? ( 
+            ) : !["6", "7", "8"].includes(activity.categoriaId) ? ( 
               subscriptionLoading || isLoading ? (
                 <ActivityIndicator size="large" color={colors.blue[500]} />
               ) : (

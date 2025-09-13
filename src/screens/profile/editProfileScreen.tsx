@@ -147,8 +147,7 @@ export default function EditProfileScreen() {
 
           {/* Botão Atualizar */}
           <View className="mt-4">
-            <Button title="Atualizar" onPress={handleUpdate} disabled={isLoading} />
-            {isLoading && <ActivityIndicator size="large" color={colors.blue[500]} />}
+            <Button title="Atualizar" onPress={handleUpdate} loading={isLoading} disabled={isLoading} />
           </View>
         </View>
       </AppLayout>

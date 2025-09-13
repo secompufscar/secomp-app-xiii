@@ -7,9 +7,10 @@ import {
   ActivityIndicator
 } from 'react-native'
 import { useRoute, RouteProp } from '@react-navigation/native'
+import { getParticipantsByActivity } from '../../services/userAtActivities'
+import { colors } from '../../styles/colors'
 import AppLayout from '../../components/app/appLayout'
 import BackButton from '../../components/button/backButton'
-import { getParticipantsByActivity } from '../../services/userAtActivities'
 
 type ParticipantsListRouteParams = {
   ParticipantsList: {
@@ -46,7 +47,7 @@ export default function ParticipantsList() {
   if (loading) {
     return (
       <View className="flex-1 justify-center items-center bg-blue-900">
-        <ActivityIndicator size="large" color="#3DCC87" />
+        <ActivityIndicator size="large" color={colors.blue[500]} />
       </View>
     )
   }

@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, Image, Pressable, Linking, ActivityIndicator, StatusBar, Platform, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { colors } from "../../styles/colors";
 import { LinearGradient } from "expo-linear-gradient";
-import { getSponsors, Sponsor }  from "../../services/sponsors";
+import { getSponsors }  from "../../services/sponsors";
 import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import AntDesign from "@expo/vector-icons/AntDesign";
