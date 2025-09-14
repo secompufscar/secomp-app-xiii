@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { View, Text, FlatList, ActivityIndicator, StatusBar, Platform } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native'
@@ -55,8 +55,10 @@ export default function ParticipantsList() {
               }
             })
           )
-          // Ordena a lista de participantes pelo nome do usuário alfabeticamente
-          const sorted = detailedList.sort((a, b) => a.userName.localeCompare(b.userName))
+          // Ordena a lista de participantes pela ordem de inscrição
+          const sorted = detailedList.sort(
+            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
           if (isActive) setList(sorted)
         } catch (err) {
           console.error(err)
@@ -81,11 +83,19 @@ export default function ParticipantsList() {
 
       <View className="w-[90px] flex items-start justify-start">
         <View className={`w-full p-3 rounded-full flex items-center justify-center ${item.presente ? 'bg-success/10' : 'bg-gray-500/10'}`}>
-          <Text
-            className={`font-interMedium text-center leading-none ${item.presente ? 'text-success' : 'text-gray-500'}`}
-          >
-            {item.presente ? 'presente' : 'ausente'}
-          </Text>
+          {item.listaEspera ? 
+            <Text
+              className={`font-interMedium text-center leading-none ${item.presente ? 'text-success' : 'text-gray-500'}`}
+            >
+              espera
+            </Text>
+          :
+            <Text
+              className={`font-interMedium text-center leading-none ${item.presente ? 'text-success' : 'text-gray-500'}`}
+            >
+              {item.presente ? 'presente' : 'ausente'}
+            </Text>
+          }
         </View>
       </View>
     </View>
@@ -93,7 +103,7 @@ export default function ParticipantsList() {
 
   // Separador da lista
   const renderSeparator = () => (
-    <View className="h-[1px] bg-[#3B465E] opacity-50 my-1" />
+    <View className="h-[1px] bg-iconbg opacity-50 my-1" />
   )
 
   // Lista vazia

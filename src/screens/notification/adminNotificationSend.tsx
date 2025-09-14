@@ -40,7 +40,7 @@ export default function AdminNotificationSend() {
 
   const handleSendNotification = async () => {
     if (!title.trim() || !message.trim()) {
-      setWarningMessage("Por favor, preencha todos os campos e selecione uma categoria")
+      setWarningMessage("Por favor, preencha todos os campos")
       setWarningModalVisible(true);
       return;
     }
