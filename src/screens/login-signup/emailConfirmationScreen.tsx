@@ -13,8 +13,8 @@ export default function EmailConfirmation() {
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
       <AppLayout>
-        <View className="flex-col w-full h-full py-24 gap-10 items-center">
-          <View className="w-full max-w-[400px] max-h-[400px] rounded-lg flex items-center">
+        <View className="flex-col w-full h-full py-24 items-center">
+          <View className="w-full max-w-[400px] max-h-[400px] rounded-lg flex items-center mb-2">
             <Image
               source={require("../../../assets/email/email.png")}
               style={{
@@ -26,14 +26,14 @@ export default function EmailConfirmation() {
             />
           </View>
 
-          <View className="w-full flex-col items-start">
+          <View className="w-full flex-col items-start mb-12">
             <Text className="text-white text-xl font-poppinsSemiBold mb-2">
               Confirme seu e-mail
             </Text>
-            <Text className="text-gray-400 text-base font-inter mb-2">
+            <Text className="text-gray-400 text-base font-inter leading-[1.8] mb-4">
               Um e-mail foi enviado para <Text className="text-green">{email}</Text>. 
             </Text>
-            <Text className="text-gray-400 text-base font-inter">
+            <Text className="text-gray-400 text-base font-inter leading-[1.8]">
               Se o e-mail não estiver na sua caixa de entrada, confira também a pasta de spam!
             </Text>
           </View>
