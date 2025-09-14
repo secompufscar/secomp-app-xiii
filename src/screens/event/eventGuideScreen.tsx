@@ -153,7 +153,17 @@ export default function EventGuide() {
           </Text>
         </View>
 
-        {/* Inscrever-se x Salvar atividade*/}
+        {/* Prêmios */}
+        <View className="mb-8">
+          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
+            Participe e ganhe prêmios!
+          </Text>
+          <Text className="text-default text-base font-inter leading-relaxed">
+            Participe das atividades e acumule pontos durante todo o evento! Os três participantes com maior pontuação ao final serão premiados, então não perca a chance de se destacar e ganhar prêmios incríveis!
+          </Text>
+        </View>
+
+        {/* Inscrever-se x Salvar atividade */}
         <View className="mb-8">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">
             Inscrever-se ou salvar atividade?
