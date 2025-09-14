@@ -19,8 +19,12 @@ export default function EventConfirmation() {
         />
 
         <View className="flex flex-col w-full items-center justify-center px-6 max-w-[1000px] mx-auto min-h-screen">
-          <View className="flex w-64 h-64 p-3 items-center justify-center border border-iconbg bg-iconbg/20 rounded-xl">
-            <Image source={require("../../../assets/icons/celebration.png")} className="w-full h-full" />
+          <View className="flex p-2 items-center justify-center border border-iconbg bg-iconbg/20 rounded-xl">
+            <Image 
+              source={require("../../../assets/icons/celebration.png")}
+              resizeMode="contain" 
+              style={Platform.OS === "web" ? { width: 170, height: 170 } : { width: 160, height: 160 }} 
+            />
           </View>
 
           <View className="flex flex-col my-14 gap-5">
