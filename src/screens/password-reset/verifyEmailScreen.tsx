@@ -32,11 +32,11 @@ export default function VerifyEmail() {
         <BackButton />
 
         <View className="mt-8 mb-10">
-          <Text className="text-white text-2xl font-poppinsSemiBold mb-3">
+          <Text className="text-white text-xl font-poppinsSemiBold mb-3">
             Verifique seu e-mail
           </Text>
 
-          <Text className="text-gray-400 font-inter text-base">
+          <Text className="text-gray-400 font-inter text-base leading-[1.8]">
             Foi enviado um link para redefinição de senha no seu e-mail cadastrado.
           </Text>
         </View>
@@ -51,9 +51,9 @@ export default function VerifyEmail() {
         <Pressable onPress={() => navigation.navigate("Login")}>
           {({ pressed }) => (
             <View
-              className={`w-full mt-4 p-4 border border-blue-200 items-center justify-center rounded-lg outline-none ${pressed ? "bg-blue-100/10" : ""}`}
+              className={`w-full mt-4 p-4 border border-border items-center justify-center rounded-lg outline-none ${pressed ? "bg-border/10" : ""}`}
             >
-              <Text className="text-blue-200 text-base font-inter font-semibold">
+              <Text className="text-border text-base font-inter font-semibold">
                 Voltar para o login
               </Text>
             </View>
