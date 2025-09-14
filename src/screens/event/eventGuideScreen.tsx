@@ -38,6 +38,22 @@ export default function EventGuide() {
           Agora, você está pronto para se juntar a nós!
         </Text>
 
+        {/* Inscrever-se x Salvar atividade */}
+        <View className="mb-8">
+          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
+            Inscrever-se ou salvar atividade?
+          </Text>
+          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
+            Durante o evento, apenas os minicursos precisam de inscrição pelo app. As outras atividades são livres ou acontecem de forma externa. 
+            Mesmo assim, <Text className="text-green font-inter">você pode salvar as atividades que curtir</Text> e acompanhar tudo o que vai rolar na semana sem se preocupar com inscrição!
+          </Text>
+
+          <Text className="text-default text-base font-inter leading-relaxed">
+            Todas as atividades que você salvar vão direto para o mesmo lugar das que você se inscreveu, em: <Text className="text-green font-inter" onPress={() => { navigation.navigate("MyEvents") }} >Minhas Atividades</Text>.
+            Assim, fica fácil acompanhar tudo o que você quer participar durante a semana em um só lugar! 😉
+          </Text>
+        </View>
+
         {/* Seção Palestras */}
         <View className="mb-8 w-full">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">Palestras</Text>
@@ -153,29 +169,22 @@ export default function EventGuide() {
           </Text>
         </View>
 
+        {/* Coffee */}
+        <View className="mb-8">
+          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
+            Aproveite o coffee do evento
+          </Text>
+          <Text className="text-default text-base font-inter leading-relaxed">
+            Para participar do coffee, é necessário estar inscrito no evento e apresentar sua credencial na entrada. Venha desfrutar de deliciosas opções de café, fazer networking e recarregar as energias durante o evento!          </Text>
+        </View>
+
         {/* Prêmios */}
         <View className="mb-8">
           <Text className="text-white text-[16px] font-poppinsMedium mb-2">
             Participe e ganhe prêmios!
           </Text>
           <Text className="text-default text-base font-inter leading-relaxed">
-            Participe das atividades e acumule pontos durante todo o evento! Os três participantes com maior pontuação ao final serão premiados, então não perca a chance de se destacar e ganhar prêmios incríveis!
-          </Text>
-        </View>
-
-        {/* Inscrever-se x Salvar atividade */}
-        <View className="mb-8">
-          <Text className="text-white text-[16px] font-poppinsMedium mb-2">
-            Inscrever-se ou salvar atividade?
-          </Text>
-          <Text className="text-default text-base mb-4 font-inter leading-relaxed">
-            Durante o evento, só os minicursos precisam de inscrição pelo app. As outras atividades são livres ou acontecem de forma externa. 
-            Mesmo assim, <Text className="text-green font-inter">você pode salvar as atividades que curtir</Text> e acompanhar tudo o que vai rolar na semana sem se preocupar com inscrição!
-          </Text>
-
-          <Text className="text-default text-base font-inter leading-relaxed">
-            Todas as atividades que você salvar vão direto para o mesmo lugar das que você se inscreveu, em: <Text className="text-green font-inter" onPress={() => { navigation.navigate("MyEvents") }} >Minhas Atividades</Text>.
-            Assim, fica fácil acompanhar tudo o que você quer participar durante a semana em um só lugar! 😉
+            Participe das atividades e acumule pontos! Os três participantes com maior pontuação ao final serão premiados, então não perca a chance de se destacar e ganhar prêmios incríveis!
           </Text>
         </View>
 
