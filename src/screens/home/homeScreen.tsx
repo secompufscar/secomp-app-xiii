@@ -53,7 +53,12 @@ export default function Home() {
             const today = new Date();
             const start = new Date(event.startDate);
             const end = new Date(event.endDate);
-            setIsEventActive(today >= start && today <= end);
+
+            // Permite inscrição 1 mês anterior ao evento
+            const startOneMonthBefore = new Date(start);
+            startOneMonthBefore.setMonth(startOneMonthBefore.getMonth() - 1);
+
+            setIsEventActive(today >= startOneMonthBefore && today <= end);
 
             const message = getEventStatusMessage(event);
             setEventStatusMessage(message);
