@@ -117,9 +117,9 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
   // Nenhuma atividade encontrada para a categoria
   if (filtered.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center px-4 pb-24">
+      <View className="flex-1 items-center justify-start mt-8">
         <Text className="text-gray-400 text-center text-sm font-inter">
-          Nenhuma atividade em “{selectedCategory}”
+          Nenhuma atividade em {selectedCategory}
         </Text>
       </View>
     );

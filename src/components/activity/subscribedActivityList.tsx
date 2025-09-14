@@ -69,9 +69,9 @@ export function SubscribedActivityList({ onPressActivity }: SubscribedActivityLi
 
   if (activities.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center px-4 pb-24">
+      <View className="flex-1 items-center justify-start mt-8">
         <Text className="text-gray-400 text-center text-sm font-inter">
-          Você não está inscrito em nenhuma atividade.
+          Você não está inscrito em nenhuma atividade
         </Text>
       </View>
     );

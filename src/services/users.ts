@@ -71,7 +71,7 @@ export const getUserRanking = async (id: string): Promise<{ rank: number }> => {
 // Retorna o Top 50 usuários do ranking
 export const getTop50Users = async (): Promise<User[]> => {
   const response = await api.get("/users/top50");
-  return response.data;
+  return response.data.data;
 };
 
 // Retorna quantidade total de atividades de um usuário
