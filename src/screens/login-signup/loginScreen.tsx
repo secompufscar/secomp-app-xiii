@@ -1,6 +1,6 @@
-import { View, Alert, Text, Platform, Pressable, ActivityIndicator } from "react-native";
-import { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { View, Text, Pressable } from "react-native";
+import { useCallback, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../hooks/AuthContext";
 import { AuthTypes } from "../../routes/auth.routes";
@@ -33,6 +33,20 @@ export default function Login() {
   const validateEmail = (email: string): boolean => {
     return validator.isEmail(email);
   };
+
+  // Limpar os campos ao sair da tela
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setEmail("");
+        setSenha("");
+        setIsEmailValid(true);
+        setIsPasswordValid(true);
+        setIsAlertOpen(false);
+        setAlertText("");
+      };
+    }, [])
+  );
 
   const handleLogin = async () => {
     setIsEmailValid(true);
@@ -100,12 +114,6 @@ export default function Login() {
                 autoCapitalize="none"
               />
             </Input>
-
-            {!isEmailValid && (
-              <Text className="text-[12px] text-danger font-inter mb-1">
-                Por favor, digite um email válido!
-              </Text>
-            )}
           </View>
 
           <View className="w-full">
@@ -128,23 +136,29 @@ export default function Login() {
                 />
               </Pressable>
             </Input>
+          </View>
+
+          <View
+            className={`w-full flex flex-row items-center ${isAlertOpen || !isEmailValid || !isPasswordValid ? "justify-between" : "justify-end"}`}
+          >
+            {!isEmailValid && (
+              <Text className="text-[12px] text-danger font-inter">
+                Por favor, digite um email válido!
+              </Text>
+            )}
 
             {!isPasswordValid && (
               <Text className="text-[12px] text-danger font-inter">
                 A senha deve conter no mínimo 6 caracteres
               </Text>
             )}
-          </View>
 
-          <View
-            className={`w-full flex flex-row items-center ${isAlertOpen ? "justify-between" : "justify-end"}`}
-          >
-            {isAlertOpen && <Text className={`text-sm font-inter ${alertColor}`}>{alertText}</Text>}
+            {isAlertOpen && <Text className={`text-[12px] font-inter ${alertColor}`}>{alertText}</Text>}
 
             <Pressable onPress={() => navigation.navigate("PasswordReset")}>
               {({ pressed }) => (
                 <Text
-                  className={`text-sm font-interMedium ${pressed ? "text-gray-400" : "text-gray-400/80"}`}
+                  className={`text-[12px] font-interMedium ${pressed ? "text-gray-400" : "text-gray-400/80"}`}
                 >
                   Esqueci minha senha
                 </Text>
@@ -155,12 +169,12 @@ export default function Login() {
           <Button className="mt-8" title="Entrar" loading={isLoading} onPress={handleLogin} />
 
           <View className="flex-row mt-8 items-center justify-center gap-1">
-            <Text className="text-white text-sm font-inter">Não possui uma conta?</Text>
+            <Text className="text-white text-[12px] font-inter">Não possui uma conta?</Text>
 
             <Pressable onPress={() => navigation.navigate("SignUp")}>
               {({ pressed }) => (
                 <Text
-                  className={`text-sm font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}
+                  className={`text-[12px] font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}
                 >
                   Criar agora
                 </Text>

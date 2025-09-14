@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
 import { colors } from "../../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -41,6 +41,24 @@ export default function SignUp() {
   const validateEmail = (email: string): boolean => {
     return validator.isEmail(email);
   };
+
+  // Limpar os campos ao sair da tela
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setNome("");
+        setEmail("");
+        setSenha("");
+        setConfirmPassword("");
+        setIsEmailValid(true);
+        setIsPasswordValid(true);
+        setIsConfirmPasswordValid(true);
+        setIsAlertOpen(false);
+        setAlertText("");
+      };
+    }, [])
+  );
+
 
   function normalizeName(name: string): string {
     const particles = ["de", "da", "do", "das", "dos", "e", "em", "no", "na", "nos", "nas"];
@@ -151,12 +169,6 @@ export default function SignUp() {
                 autoCapitalize="none"
               />
             </Input>
-
-            {!isEmailValid && (
-              <Text className="text-[12px] text-danger font-inter mb-1">
-                Por favor, digite um email válido!
-              </Text>
-            )}
           </View>
 
           {/* Senha */}
@@ -179,12 +191,6 @@ export default function SignUp() {
                 />
               </Pressable>
             </Input>
-
-            {!isPasswordValid && (
-              <Text className="text-[12px] text-danger font-inter">
-                A senha deve conter no mínimo 6 caracteres
-              </Text>
-            )}
           </View>
 
           {/* Confirmar senha */}
@@ -207,25 +213,37 @@ export default function SignUp() {
                 />
               </Pressable>
             </Input>
+            
+            {!isEmailValid && (
+              <Text className="text-[12px] text-danger font-inter mt-2">
+                Por favor, digite um email válido!
+              </Text>
+            )}
+
+            {!isPasswordValid && (
+              <Text className="text-[12px] text-danger font-inter mt-2">
+                A senha deve conter no mínimo 6 caracteres
+              </Text>
+            )}
 
             {!isConfirmPasswordValid && (
-              <Text className="text-[12px] text-danger font-inter">As senhas não coincidem!</Text>
+              <Text className="text-[12px] text-danger font-inter mt-2">As senhas não coincidem!</Text>
             )}
 
             {isAlertOpen && (
-              <Text className={`text-sm mt-2 font-inter ${alertColor}`}>{alertText}</Text>
+              <Text className={`text-[12px] mt-2 font-inter ${alertColor}`}>{alertText}</Text>
             )}
           </View>
 
           <Button className="mt-8" title="Criar" loading={isLoading} onPress={handleRegister} />
 
           <View className="flex-row mt-8 items-center justify-center gap-1">
-            <Text className="text-white text-sm font-inter">Já possui uma conta?</Text>
+            <Text className="text-white text-[12px] font-inter">Já possui uma conta?</Text>
 
             <Pressable onPress={() => navigation.navigate("Login")}>
               {({ pressed }) => (
                 <Text
-                  className={`text-sm font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}
+                  className={`text-[12px] font-inter font-semibold ${pressed ? "text-blue-500 opacity-80" : "text-blue-500"}`}
                 >
                   Entrar
                 </Text>
