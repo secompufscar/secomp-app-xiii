@@ -88,11 +88,8 @@ export default function Sponsors() {
               key={sponsor.id}
             >
               {({ pressed }) => (
-                <LinearGradient
-                  colors={["#2E364B", "#161F36"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  className={`flex-col w-full rounded-[8px] border p-6 mb-8 overflow-hidden ${pressed ? "border-blue-500" : "border-border"}`}
+                <View
+                  className={`flex-col w-full rounded-[8px] bg-background border p-6 mb-8 overflow-hidden ${pressed ? "border-border" : "border-iconbg"}`}
                 >
                   {/* Header */}
                   <View className="w-full flex-row items-center justify-between mb-5">
@@ -108,7 +105,7 @@ export default function Sponsors() {
                           }}
                         />
                       </View>
-                      <Text className="text-white text-[16px] font-poppinsMedium">
+                      <Text className="text-white text-[16px] text-center leading-[1.5] font-poppinsMedium">
                         {sponsor.name}
                       </Text>
                     </View>
@@ -131,7 +128,7 @@ export default function Sponsors() {
                   <Text className="text-default text-sm font-inter leading-relaxed">
                     {sponsor.description}
                   </Text>
-                </LinearGradient>
+                </View>
               )}
             </Pressable>
           ))}
