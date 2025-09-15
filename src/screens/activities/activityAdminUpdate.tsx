@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { updateActivity, getActivityId } from "../../services/activities";
-import { getImagesByActivityId, updateActivityImageById } from "../../services/activityImage";
+import { createActivityImage, getImagesByActivityId, updateActivityImageById } from "../../services/activityImage";
 import { getCategories } from "../../services/categories";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -271,20 +271,30 @@ export default function ActivityAdminUpdate() {
       // Atualiza imagens apenas se foram alteradas (uri local do dispositivo)
       const uploadPromises: Promise<any>[] = [];
 
-      if (activityImage && activityImage !== originalActivityImage && activityImageId) {
+      // Atividade
+      if (activityImage && activityImage !== originalActivityImage) {
         const formDataActivity = new FormData();
         formDataActivity.append("activityId", activityId);
         await appendImageToFormData(formDataActivity, activityImage, "atividade");
 
-        uploadPromises.push(updateActivityImageById(activityImageId, formDataActivity));
+        if (activityImageId) {
+          uploadPromises.push(updateActivityImageById(activityImageId, formDataActivity));
+        } else {
+          uploadPromises.push(createActivityImage(formDataActivity));
+        }
       }
 
-      if (speakerImage && speakerImage !== originalSpeakerImage && speakerImageId) {
+      // Palestrante
+      if (speakerImage && speakerImage !== originalSpeakerImage) {
         const formDataSpeaker = new FormData();
         formDataSpeaker.append("activityId", activityId);
         await appendImageToFormData(formDataSpeaker, speakerImage, "palestrante");
 
-        uploadPromises.push(updateActivityImageById(speakerImageId, formDataSpeaker));
+        if (speakerImageId) {
+          uploadPromises.push(updateActivityImageById(speakerImageId, formDataSpeaker));
+        } else {
+          uploadPromises.push(createActivityImage(formDataSpeaker));
+        }
       }
 
       if (uploadPromises.length > 0) {
