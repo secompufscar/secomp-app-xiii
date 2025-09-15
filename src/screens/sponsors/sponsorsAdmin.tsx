@@ -80,6 +80,7 @@ export default function SponsorsAdmin() {
               <Image
                 source={{ uri: item.logoUrl }}
                 className="w-full h-full rounded"
+                resizeMode="contain"
               />
             </View>
 
