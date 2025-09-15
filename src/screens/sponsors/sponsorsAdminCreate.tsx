@@ -10,6 +10,7 @@ import { colors } from "../../styles/colors"
 import BackButton from "../../components/button/backButton"
 import Button from "../../components/button/button"
 import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay"
 
 interface Tag {
   id: string;
@@ -32,9 +33,10 @@ export default function SponsorsAdminCreate() {
   const [loadingTags, setLoadingTags] = useState(true);
 
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [tagError, setTagError] = useState<string | null>(null)
   const [errorModalVisible, setErrorModalVisible] = useState(false)
+
+  const [warningMessage, setWarningMessage] = useState("Aviso");
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
 
   // Ao montar o componente, busca todas as tags
   useEffect(() => {
@@ -43,7 +45,8 @@ export default function SponsorsAdminCreate() {
         const all = await getTags();
         setAllTags(all.map(tag => ({ id: tag.id ?? "", name: tag.name })));
       } catch {
-        setTagError("Não foi possível carregar as tags")
+        setWarningMessage("Não foi possível carregar as tags.");
+        setWarningModalVisible(true);
       } finally {
         setLoadingTags(false);
       }
@@ -60,11 +63,11 @@ export default function SponsorsAdminCreate() {
   };
 
   const handleCreate = async () => {
-    setError(null);
     setErrorModalVisible(false);
 
     if (!name.trim() || !logoUrl.trim() || !description.trim() || !starColor.trim() || !link.trim()) {
-      setError("Preencha todos os campos!");
+      setWarningMessage("Todos os campos são obrigatórios.");
+      setWarningModalVisible(true);
       return;
     }
 
@@ -206,10 +209,6 @@ export default function SponsorsAdminCreate() {
                 }
               </View>
 
-              {error && (
-                <Text className="text-danger text-sm font-inter">{error}</Text>
-              )}
-
               <Button title="Criar" className="mt-auto mb-8" loading={isLoading} onPress={handleCreate} />
             </View>
           </ScrollView>
@@ -221,6 +220,14 @@ export default function SponsorsAdminCreate() {
         title="Erro na criação"
         message="Não foi possível criar este patrocinador"
         onConfirm={() => {setErrorModalVisible(false)}}
+        confirmText="OK"
+      />
+
+      <WarningOverlay
+        visible={warningModalVisible}
+        title="Aviso"
+        message={warningMessage}
+        onConfirm={() => {setWarningModalVisible(false)}}
         confirmText="OK"
       />
     </SafeAreaView>

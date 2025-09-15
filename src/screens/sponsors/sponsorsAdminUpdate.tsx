@@ -12,6 +12,7 @@ import AppLayout from "../../components/app/appLayout";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
+import WarningOverlay from "../../components/overlay/warningOverlay"
 
 type RouteParams = { SponsorsAdminUpdate: { id: string } }
 type FormData = {
@@ -54,6 +55,9 @@ export default function SponsorsAdminUpdateScreen() {
 
   const [errorMessage, setErrorMessage] = useState("Erro");
   const [errorModalVisible, setErrorModalVisible] = useState(false);
+
+  const [warningMessage, setWarningMessage] = useState("Aviso");
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
 
   // react-hook-form setup
   const { control, handleSubmit, reset } = useForm<FormData>({
@@ -124,6 +128,13 @@ export default function SponsorsAdminUpdateScreen() {
   }
 
   const onSubmit = async (formData: OnSubmitParams): Promise<void> => {
+    const { name, description, logoUrl, link, starColor } = formData;
+    if (!name.trim() || !description.trim() || !logoUrl.trim() || !link.trim() || !starColor.trim()) {
+      setWarningMessage("Todos os campos são obrigatórios.");
+      setWarningModalVisible(true);
+      return;
+    }
+
     const mappedStarColor = (() => {
       switch (formData.starColor.toLowerCase()) {
         case "diamante":
