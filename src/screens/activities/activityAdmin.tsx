@@ -31,7 +31,12 @@ export default function ActivityAdmin() {
 
         try {
           const data = await getActivities(); 
-          setActivities(data); 
+
+          const sorted = data.sort((a, b) =>
+            a.nome.localeCompare(b.nome, "pt", { sensitivity: "base" })
+          );
+
+          setActivities(sorted); 
         } catch (err) {
           setError("Não foi possível carregar as atividades. Tente novamente."); 
         } finally {

@@ -41,9 +41,12 @@ export function SubscribedActivityList({ onPressActivity }: SubscribedActivityLi
         const allActs = await getActivities();
         const filtered = allActs.filter((a) => subscribedIds.includes(a.id));
 
-        setActivities(filtered);
+        const sorted = filtered.sort((a, b) =>
+          a.nome.localeCompare(b.nome, "pt", { sensitivity: "base" })
+        );
+
+        setActivities(sorted);
       } catch (err: any) {
-        console.error("Erro ao buscar inscrições:", err);
         setErrorMsg("Não foi possível carregar suas inscrições.");
       } finally {
         setLoading(false);
