@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, Pressable, StatusBar, Platform, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, Pressable, StatusBar, Platform, ScrollView } from "react-native";
 import { ParamListBase, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -88,15 +88,13 @@ export default function EventAdminUpdate() {
   // Função para atualização de evento
   const handleUpdateEvent = async () => {
     setWarningModalVisible(false);
-    
-    // Verifica se o ano foi preenchido
+
     if (!year.trim()) {
       setWarningMessage("Por favor, preencha o ano da edição")
       setWarningModalVisible(true);     
       return;
     }
 
-    // Verifica se o ano é válido
     const currentYear = new Date().getFullYear();
     const parsedYear = parseInt(year, 10);
 

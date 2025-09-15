@@ -1,4 +1,3 @@
-import React from "react";
 import { View, Text, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SubscribedActivityList } from "../../components/activity/subscribedActivityList";

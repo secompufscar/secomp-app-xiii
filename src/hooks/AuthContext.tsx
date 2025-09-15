@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState, ReactNode, useCallback,
 import { setGlobalSignOut } from "../utils/authHelper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Tipo do contexto de autenticação
 interface AuthContextData {
   user: User | null;
   loading: boolean;
@@ -11,7 +10,6 @@ interface AuthContextData {
   updateUser: (data: User) => Promise<void>; 
 }
 
-// Criação do contexto
 const AuthContext = createContext<AuthContextData | undefined>(undefined);
 
 interface AuthProviderProps {

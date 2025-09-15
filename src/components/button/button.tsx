@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PressableProps } from "@react-native-material/core";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 

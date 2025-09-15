@@ -22,7 +22,7 @@ export default function HomeCompetitions() {
         const data = await getActivities();
         setActivities(data);
       } catch (error) {
-        console.error("Erro ao buscar atividades para homepage:", error);
+        console.error("Erro ao buscar atividades para home page:", error);
       }
     };
 

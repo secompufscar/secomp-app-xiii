@@ -1,8 +1,6 @@
 import { memo, useCallback, useState } from "react";
 import { Text, View, StatusBar, Platform, ActivityIndicator, FlatList, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useFocusEffect } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../styles/colors";

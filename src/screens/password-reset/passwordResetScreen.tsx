@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { useState } from "react";
+import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";
@@ -51,7 +51,6 @@ export default function PasswordReset() {
       await sendForgotPasswordEmail({ email });
       navigation.navigate("VerifyEmail", { email });
     } catch (error: any) {
-      // Erros
       setAlertText("Ocorreu um erro ao tentar enviar o e-mail de redefinição.");
       setAlertColor("text-danger");
       setIsAlertOpen(true);

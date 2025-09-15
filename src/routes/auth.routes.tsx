@@ -1,20 +1,9 @@
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from "@react-navigation/native-stack";
-import {
-  Login,
-  SignUp,
-  EmailConfirmation,
-  PasswordReset,
-  VerifyEmail,
-  SetNewPassword,
-  Welcome,
-} from "../screens";
+import { NativeStackNavigationProp, createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Login, SignUp, EmailConfirmation, PasswordReset, VerifyEmail, SetNewPassword, Welcome } from "../screens";
 
 const Stack = createNativeStackNavigator();
 
-// Rotas para usuários NÃO logados
+// Rotas para usuários não logados
 type StackNavigation = {
   Welcome: undefined;
   Login: undefined;
@@ -29,10 +18,7 @@ export type AuthTypes = NativeStackNavigationProp<StackNavigation>;
 
 export default function AuthRoutes() {
   return (
-    <Stack.Navigator
-      initialRouteName="Welcome"
-      screenOptions={{ headerShown: false }}
-    >
+    <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={Welcome} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="Login" component={Login} />

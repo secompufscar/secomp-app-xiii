@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";

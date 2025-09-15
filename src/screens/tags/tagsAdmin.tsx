@@ -175,7 +175,6 @@ export default function TagsAdmin() {
         <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
           <BackButton/>
 
-          {/* Cabeçalho */}
           <View className="mb-8">
             <Text className="text-white text-2xl font-poppinsSemiBold mb-2">Painel de tags </Text>
             <Text className="text-gray-400 font-inter">
@@ -200,7 +199,6 @@ export default function TagsAdmin() {
         </View>
       </View>
 
-      {/* Modal de criação e edição */}
       <CreationEditionOverlay
         visible={modalVisible}
         title={editingTag ? "Editar Tag" : "Nova Tag"}
@@ -218,7 +216,6 @@ export default function TagsAdmin() {
         </Input>
       </CreationEditionOverlay>
 
-      {/* Modal de confirmação de exclusão */}
       <ConfirmationOverlay
           visible={deleteModalVisible}
           title="Confirmar exclusão"
@@ -228,7 +225,6 @@ export default function TagsAdmin() {
           confirmText="Excluir"
       />
 
-      {/* Modal de erro */}
       <ErrorOverlay
         visible={errorModalVisible}
         title="Erro"
@@ -237,7 +233,6 @@ export default function TagsAdmin() {
         confirmText="OK"
       />
 
-      {/* Modal de aviso */}
       <WarningOverlay
         visible={warningModalVisible}
         title="Aviso"

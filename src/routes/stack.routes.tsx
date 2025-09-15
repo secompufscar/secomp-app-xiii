@@ -1,8 +1,4 @@
-import {
-  NativeStackNavigationProp,
-  createNativeStackNavigator,
-} from "@react-navigation/native-stack";
-
+import { NativeStackNavigationProp, createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabRoutes from "./tab.routes";
 
 import {

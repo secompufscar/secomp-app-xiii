@@ -62,14 +62,12 @@ export default function EventAdminCreate() {
 
   // Função para criação de evento
   const handleCreateEvent = async () => {
-    // Verifica se o ano foi preenchido
     if (!year.trim()) {
       setWarningMessage("Por favor, preencha o ano da edição")
       setWarningModalVisible(true);       
       return;
     }
 
-    // Verifica se o ano é válido
     const currentYear = new Date().getFullYear();
     const parsedYear = parseInt(year, 10);
 

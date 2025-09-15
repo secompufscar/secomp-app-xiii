@@ -17,7 +17,6 @@ export const login = async (data: Login, navigation: NavigationProp<ParamListBas
     try {
       await registerForPushNotifications();
       setupNotificationListeners(navigation);
-      console.log('Notificações configuradas');
     } catch (notifError) {
       console.error('Erro ao configurar notificações:', notifError);
     }

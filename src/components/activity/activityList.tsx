@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { getActivities } from "../../services/activities";
 import { getCategories } from "../../services/categories";
@@ -7,13 +7,11 @@ import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { useFocusEffect } from "@react-navigation/native";
 
-// Props esperadas pelo componente ActivityList
 type ActivityListProps = {
-  selectedCategory?: string; // Categoria atualmente selecionada
-  onPressActivity?: (item: Activity) => void; // Callback ao tocar em uma atividade
+  selectedCategory?: string; 
+  onPressActivity?: (item: Activity) => void; 
 };
 
-// Componente principal que lista atividades filtradas por categoria
 export default function ActivityList({ selectedCategory, onPressActivity }: ActivityListProps) {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [allCategories, setAllCategories] = useState<Category[]>([]);
@@ -26,18 +24,17 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
   // Busca as categorias e atividades na montagem do componente
   useFocusEffect(
     useCallback(() => {
-      let isActive = true; // Flag para evitar updates de estado em componente desmontado
+      let isActive = true;
 
       const fetchData = async () => {
-        setLoading(true); // Mostra o loading a cada atualização
+        setLoading(true); 
         try {
-          // Otimização: busca categorias e atividades em paralelo
           const [cats, acts] = await Promise.all([getCategories(), getActivities()]);
 
           if (isActive) {
             setAllCategories(cats);
             setAllActivities(acts);
-            setErrorMsg(null); // Limpa erros anteriores
+            setErrorMsg(null); 
           }
         } catch (err: any) {
           console.error("Erro ao buscar dados:", err);
@@ -53,11 +50,10 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
 
       fetchData();
 
-      // 3. Função de limpeza que roda quando a tela perde o foco
       return () => {
         isActive = false;
       };
-    }, []), // O array de dependências do useCallback continua vazio
+    }, []), 
   );
 
   // Tela de loading

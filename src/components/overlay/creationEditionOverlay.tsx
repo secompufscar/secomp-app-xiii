@@ -25,7 +25,6 @@ const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
   originalNavBarColor = colors.blue[900],
 }) => {
   useEffect(() => {
-    // Esta função só fará algo no Android
     const setAndroidNavColor = async (color: string) => {
       if (Platform.OS === 'android') {
         await NavigationBar.setBackgroundColorAsync(color);
@@ -38,7 +37,6 @@ const CreationEditionOverlay: React.FC<CreationEditionOverlayProps> = ({
       setAndroidNavColor(originalNavBarColor);
     }
 
-    // Função de limpeza do useEffect: Garante que ao desmontar o componente, a cor volte ao normal.
     return () => {
       StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);

@@ -23,7 +23,6 @@ const WarningOverlay: React.FC<WarningOverlayProps> = ({
 }) => {
 
   useEffect(() => {
-    // Esta função só fará algo no Android
     const setAndroidNavColor = async (color: string) => {
       if (Platform.OS === 'android') {
         await NavigationBar.setBackgroundColorAsync(color);
@@ -36,7 +35,6 @@ const WarningOverlay: React.FC<WarningOverlayProps> = ({
       setAndroidNavColor(originalNavBarColor);
     }
 
-    // Função de limpeza do useEffect: Garante que ao desmontar o componente, a cor volte ao normal.
     return () => {
       StatusBar.setBackgroundColor('transparent', true);
       setAndroidNavColor(originalNavBarColor);

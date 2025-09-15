@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Image, Text, Modal, Pressable, Alert, ActivityIndicator } from "react-native";
+import { useState } from "react";
+import { View, Image, Text, Modal, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { AuthTypes } from "../../routes/auth.routes";

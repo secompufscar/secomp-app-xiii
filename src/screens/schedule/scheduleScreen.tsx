@@ -1,20 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useAuth } from "../../hooks/AuthContext";
-import BackButton from "../../components/button/backButton";
 import DaysFilter from "../../components/schedule/DaysFilter";
 import ActivityList from "../../components/schedule/activityList";
 
 export default function Activities() {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const {
-    user: { user },
-  }: any = useAuth();
+  const { user: { user } }: any = useAuth();
 
-  // Estado para armazenar o dia selecionado no filtro
   const [selectedDay, setSelectedDay] = useState<string>("SEG");
 
   // Callback ao selecionar um dia no DaysFilter

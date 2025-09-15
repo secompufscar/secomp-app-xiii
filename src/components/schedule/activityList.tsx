@@ -5,16 +5,7 @@ import { parseISO, addHours, getDay, isPast } from "date-fns";
 import { useFocusEffect } from "@react-navigation/native";
 import { colors } from "../../styles/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faMicrophone,
-  faLaptopCode,
-  faTrophy,
-  faGamepad,
-  faUsers,
-  faIdBadge,
-  faCalendar,
-  faMugHot,
-} from "@fortawesome/free-solid-svg-icons";
+import { faMicrophone, faLaptopCode, faTrophy, faGamepad, faUsers, faIdBadge, faCalendar, faMugHot } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 type ActivityListProps = {

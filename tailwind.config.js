@@ -8,7 +8,6 @@ module.exports = {
         white: "#FFFFFF",
         black: "#000000",
 
-        // Versão antiga do app, remover quando finalizar nova versão
         neutral: {
           200: "#E5E5E5",
           300: "#D4D4D4",
@@ -19,21 +18,6 @@ module.exports = {
           900: "#171717",
         },
 
-        "green-old": {
-          50: "#F7FDFA",
-          100: "#EFFBF6",
-          200: "#DBF6EB",
-          300: "#CAF1E2",
-          400: "#B6ECD6",
-          500: "#9FE6CA",
-          600: "#69D8AC",
-          700: "#51B68D",
-        },
-
-        "blue-old": "#445BE6",
-
-        // Versão nova do app
-        // Accent
         blue: {
           100: "#C5CCF7",
           200: "#A9B4F4",

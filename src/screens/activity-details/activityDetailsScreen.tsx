@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Pressable, ActivityIndicator, Linking, StatusBar, Platform, ScrollView, Image, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRoute, useNavigation, ParamListBase } from "@react-navigation/native";

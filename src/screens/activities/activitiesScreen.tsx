@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, StatusBar, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
@@ -21,7 +21,6 @@ export default function Activities() {
   };
 
   const handlePressActivity = (item: Activity) => {
-    // Ao clicar numa atividade, navega para os detalhes
     navigation.navigate("ActivityDetails", { item });
   };
 

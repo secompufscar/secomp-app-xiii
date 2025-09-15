@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator, Pressable } from "react-native";
 import { parseISO, addHours, format } from "date-fns";
 import { ptBR } from "date-fns/locale";

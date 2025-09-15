@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 
 export default function DaysFilter({ onSelect }: { onSelect?: (day: string) => void }) {
-  // Lista fixa de dias exibidos como botões
   const days = ["SEG", "TER", "QUA", "QUI", "SEX"];
-
-  // Estado para rastrear qual dia está atualmente selecionado
   const [selectedDay, setSelectedDay] = useState<string>("SEG");
 
-  // Ao pressionar um dia, atualiza o estado e chama o callback do pai (se houver)
   const handlePress = (day: string) => {
     setSelectedDay(day);
     if (onSelect) onSelect(day);
