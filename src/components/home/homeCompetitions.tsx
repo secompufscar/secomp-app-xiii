@@ -10,9 +10,9 @@ export default function HomeCompetitions() {
   const [pressedItemId, setPressedItemId] = useState<string | null>(null);
   const categoriaId = "3";
 
-  const formatDate = (date: Date) => {
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const formatDate = (dateStr: string) => {
+    const [datePart] = dateStr.split("T");
+    const [year, month, day] = datePart.split("-");
     return `${day}/${month}`;
   };
 
@@ -51,12 +51,12 @@ export default function HomeCompetitions() {
                   <View className="flex-row">
                     <Text className="text-default text-[12px] text-inter">Data: </Text>
                     <Text className="text-blue-200 text-[12px] text-inter mr-3">
-                      {formatDate(new Date(item.data.substring(0, 10)))}
+                      {formatDate(item.data)}
                     </Text>
 
                     <Text className="text-default text-[12px] text-inter">Horário: </Text>
                     <Text className="text-blue-200 text-[12px] text-inter">
-                      {item.data.substring(11, 16)}h
+                      {item.data.substring(11, 16)}
                     </Text>
                   </View>
                 </View>
