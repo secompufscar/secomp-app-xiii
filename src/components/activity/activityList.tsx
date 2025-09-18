@@ -108,7 +108,11 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
     return allActivities.filter((a) => a.categoriaId === catObj.id);
   };
 
-  const filtered = getFilteredActivities();
+  const filtered = getFilteredActivities().sort((a, b) => {
+    const dateA = new Date(a.data).getTime();
+    const dateB = new Date(b.data).getTime();
+    return dateA - dateB;
+  });
 
   // Nenhuma atividade encontrada para a categoria
   if (filtered.length === 0) {
@@ -125,7 +129,7 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
     <FlatList
       data={filtered}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={{ paddingBottom: 16, paddingTop: 4 }}
+      contentContainerStyle={{ paddingBottom: 60, paddingTop: 4 }}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => {
         const rawDate = parseISO(item.data);
