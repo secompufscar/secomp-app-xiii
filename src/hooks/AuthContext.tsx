@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback, useMemo } from "react";
 import { setGlobalSignOut } from "../utils/authHelper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from "../services/api";
 
 interface AuthContextData {
   user: User | null;
@@ -16,7 +17,6 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const USER_STORAGE_KEY = "user";
 const TOKEN_STORAGE_KEY = "userToken";
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signIn = useCallback(async (data: User, token: string) => {
     try {
-      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
       await AsyncStorage.setItem(TOKEN_STORAGE_KEY, token);
       setUser(data);
     } catch (error) {
@@ -35,7 +34,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signOut = useCallback(async () => {
     try {
-      await AsyncStorage.removeItem(USER_STORAGE_KEY);
       await AsyncStorage.removeItem(TOKEN_STORAGE_KEY);
       setUser(null);
     } catch (error) {
@@ -44,12 +42,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const updateUser = useCallback(async (data: User) => {
-    try {
-      await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data));
-      setUser(data);
-    } catch (error) {
-      console.error("Erro ao atualizar usuário:", error);
-    }
+    setUser(data);
   }, []);
 
   useEffect(() => {
@@ -60,21 +53,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const loadUserFromStorage = async () => {
       try {      
-        const storedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
         const storedToken = await AsyncStorage.getItem(TOKEN_STORAGE_KEY);
 
-        if (storedUser && storedToken) {
-          try {
-            setUser(JSON.parse(storedUser));
-          } catch (parseError) {
-            console.error("Erro ao parsear dados do usuário:", parseError);
-            await AsyncStorage.removeItem(USER_STORAGE_KEY);
-            setUser(null);
-          }
+        if (storedToken) {
+          const response = await api.get("/users/me");
+          setUser(response.data);
+        } else {
+          setUser(null);
         }
       } catch (error) {
-        console.error("Erro ao carregar usuário do storage:", error);
         setUser(null);
+        await signOut();
       } finally {
         setLoading(false);
       }
