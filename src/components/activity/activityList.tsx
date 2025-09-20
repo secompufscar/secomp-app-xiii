@@ -142,7 +142,7 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
             onPress={() => onPressActivity?.(item)}
             className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
           >
-            <View className="items-center mr-4">
+            <View className="min-w-[55px] flex items-center justify-center mr-4">
               <Text className="text-white text-3xl font-poppinsSemiBold">{dia}</Text>
               <Text className="text-blue-300 text-xs font-inter lowercase">{mes}</Text>
             </View>
