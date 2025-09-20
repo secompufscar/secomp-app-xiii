@@ -153,8 +153,7 @@ export default function Home() {
   };
 
   const greeting = getCurrentTime();
-
-  const nomeCompleto = new BeautifulName(user.nome).beautifulName;
+  const nomeCompleto = new BeautifulName(user.nome || "").beautifulName;
   const nomes = nomeCompleto.trim().split(" ");
 
   const primeiroNome = nomes[0];

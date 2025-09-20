@@ -101,7 +101,7 @@ export default function UserProfile() {
     }
   };
 
-  const nomeCompleto = new BeautifulName(userFromContext.nome).beautifulName;
+  const nomeCompleto = new BeautifulName(userFromContext.nome || "").beautifulName;
 
   return (
     <SafeAreaView className="bg-blue-900 flex-1 items-center">

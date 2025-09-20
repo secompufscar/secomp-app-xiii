@@ -22,7 +22,7 @@ export default function AdminProfile() {
   const { signOut, user: userFromContext, updateUser}: any = useAuth();
 
   const [user, setUser] = useState(userFromContext);
-  const nomeCompleto = new BeautifulName(user.nome).beautifulName;
+  const nomeCompleto = new BeautifulName(user.nome || "").beautifulName;
 
   const [isUserSubscribed, setIsUserSubscribed] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
