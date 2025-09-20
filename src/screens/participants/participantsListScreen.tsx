@@ -142,7 +142,7 @@ export default function ParticipantsList() {
 
   return (
     <SafeAreaView className="flex-1 bg-blue-900 items-center">
-      <View className="w-full px-6 max-w-[1000px] mx-auto min-h-screen">
+      <View className="w-full flex-1 px-6 max-w-[1000px] mx-auto">
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"
@@ -188,11 +188,12 @@ export default function ParticipantsList() {
         <FlatList
           data={list}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 16 }}
+          contentContainerStyle={{ paddingBottom: 32 }}
           initialNumToRender={15}
           renderItem={renderParticipant}
           ItemSeparatorComponent={renderSeparator}
           ListEmptyComponent={renderEmptyComponent}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </SafeAreaView>
