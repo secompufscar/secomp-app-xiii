@@ -140,17 +140,17 @@ export default function ActivityList({ selectedCategory, onPressActivity }: Acti
         return (
           <Pressable
             onPress={() => onPressActivity?.(item)}
-            className="flex-row items-center bg-background rounded-lg p-4 mx-0 mb-4 shadow-sm active:bg-background/70"
+            className="flex-row items-center bg-background rounded-lg p-4 mb-4 shadow-sm active:bg-background/70"
           >
-            <View className="min-w-[55px] flex items-center justify-center mr-4">
+            <View className="min-w-[50px] flex items-center justify-center mr-4">
               <Text className="text-white text-3xl font-poppinsSemiBold">{dia}</Text>
               <Text className="text-blue-300 text-xs font-inter lowercase">{mes}</Text>
             </View>
 
             <View className="w-px h-12 bg-[#3B465E] opacity-50 mr-4" />
 
-            <View className="flex-1 flex-col flex-wrap justify-between py-1">
-              <Text numberOfLines={1} className="text-white text-[14px] font-poppinsMedium mb-1">
+            <View className="flex-1 flex-col justify-between py-1">
+              <Text numberOfLines={1} ellipsizeMode="tail" className="text-white text-[14px] font-poppinsMedium mb-1">
                 {item.nome}
               </Text>
 
