@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, ParamListBase, useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { updateActivity, getActivityId } from "../../services/activities";
-import { createActivityImage, getImagesByActivityId, updateActivityImageById } from "../../services/activityImage";
+import { createActivityImage, getImagesByActivityId, updateActivityImageById, deleteActivityImageById } from "../../services/activityImage";
 import { getCategories } from "../../services/categories";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
@@ -12,11 +12,13 @@ import { ptBR } from "date-fns/locale";
 import { colors } from "../../styles/colors";
 import { Input } from "../../components/input/input";
 import * as ImagePicker from "expo-image-picker";
+import ConfirmationOverlay from "../../components/overlay/confirmationOverlay";
 import ErrorOverlay from "../../components/overlay/errorOverlay";
 import WarningOverlay from "../../components/overlay/warningOverlay";
 import BackButton from "../../components/button/backButton";
 import Button from "../../components/button/button";
 import DatePicker from "react-datepicker";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 type ActivityAdminCreateNavigationProp = NativeStackNavigationProp<ParamListBase>;
 
@@ -51,6 +53,8 @@ export default function ActivityAdminUpdate() {
   const [originalSpeakerImage, setOriginalSpeakerImage] = useState<string | null>(null);
   const [activityImageId, setActivityImageId] = useState<string>();
   const [speakerImageId, setSpeakerImageId] = useState<string>();
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState<{ id: string; type: "atividade" | "palestrante" } | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
@@ -189,7 +193,6 @@ export default function ActivityAdminUpdate() {
     }
   };
 
-
   // Função para abrir a galeria e selecionar imagem
   const pickImage = async (setImage: React.Dispatch<React.SetStateAction<string | null>>) => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -206,6 +209,36 @@ export default function ActivityAdminUpdate() {
     
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
+    }
+  };
+
+  // Função para abrir o overlay de confirmação
+  const confirmDeleteImage = (id: string, type: "atividade" | "palestrante") => {
+    setImageToDelete({ id, type });
+    setConfirmVisible(true);
+  };
+
+  // Função para confirmar exclusão
+  const handleDeleteImage = async () => {
+    if (!imageToDelete) return;
+    try {
+      await deleteActivityImageById(imageToDelete.id);
+
+      if (imageToDelete.type === "atividade") {
+        setActivityImage(null);
+        setOriginalActivityImage(null);
+        setActivityImageId(undefined);
+      } else {
+        setSpeakerImage(null);
+        setOriginalSpeakerImage(null);
+        setSpeakerImageId(undefined);
+      }
+    } catch (err) {
+      setErrorMessage("Não foi possível excluir a imagem.");
+      setErrorModalVisible(true);
+    } finally {
+      setConfirmVisible(false);
+      setImageToDelete(null);
     }
   };
 
@@ -348,14 +381,23 @@ export default function ActivityAdminUpdate() {
               {/* Imagem da Atividade */}
               <View className="w-full mb-2">
                 <Text className="text-gray-400 text-sm font-inter mb-2">Imagem da Atividade</Text>
-                <Pressable
-                  onPress={() => pickImage(setActivityImage)}
-                  className="w-full h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center justify-center"
-                >
-                  <Text className="text-gray-200 text-sm font-interMedium">
-                    {activityImage ? "Trocar Imagem" : "Selecionar Imagem"}
-                  </Text>
-                </Pressable>
+                <View className="flex flex-row gap-3">
+                  <Pressable
+                    onPress={() => pickImage(setActivityImage)}
+                    className="flex-1 h-[56px] px-5 bg-background rounded-lg border border-border flex-row items-center justify-center"
+                  >
+                    <Text className="text-gray-200 text-sm font-interMedium">
+                      {activityImage ? "Trocar Imagem" : "Selecionar Imagem"}
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => confirmDeleteImage(activityImageId!, "atividade")}
+                    className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
+                  >
+                    <FontAwesome name="trash" size={20} color={colors.danger} />
+                  </Pressable>
+                </View>
 
                 {activityImage && (
                   <Image
@@ -377,14 +419,24 @@ export default function ActivityAdminUpdate() {
               {/* Imagem do Apresentador(a) */}
               <View className="w-full mb-2">
                 <Text className="text-gray-400 text-sm font-inter mb-2">Imagem do Apresentador(a)</Text>
-                <Pressable
-                  onPress={() => pickImage(setSpeakerImage)}
-                  className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
-                >
-                  <Text className="text-gray-200 text-sm font-interMedium">
-                    {speakerImage ? "Trocar Imagem" : "Selecionar Imagem"}
-                  </Text>
-                </Pressable>
+
+                <View className="flex flex-row gap-3">
+                  <Pressable
+                    onPress={() => pickImage(setSpeakerImage)}
+                    className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
+                  >
+                    <Text className="text-gray-200 text-sm font-interMedium">
+                      {speakerImage ? "Trocar Imagem" : "Selecionar Imagem"}
+                    </Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => confirmDeleteImage(speakerImageId!, "palestrante")}
+                    className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
+                  >
+                    <FontAwesome name="trash" size={20} color={colors.danger} />
+                  </Pressable>
+                </View>
 
                 {speakerImage && (
                   <Image
@@ -548,6 +600,7 @@ export default function ActivityAdminUpdate() {
         </>
       )}
 
+      <ConfirmationOverlay visible={confirmVisible} title="Excluir imagem" message="Tem certeza que deseja excluir esta imagem?" onCancel={() => setConfirmVisible(false)} onConfirm={handleDeleteImage} confirmText="Excluir" cancelText="Cancelar" confirmButtonColor="#dc2626"/>
       <ErrorOverlay visible={errorModalVisible} title="Erro" message={errorMessage} onConfirm={() => setErrorModalVisible(false)} confirmText="OK" />
       <WarningOverlay visible={warningModalVisible} title="Aviso" message={warningMessage} onConfirm={() => setWarningModalVisible(false)} confirmText="OK" />
     </SafeAreaView>
