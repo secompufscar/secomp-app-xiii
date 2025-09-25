@@ -391,12 +391,14 @@ export default function ActivityAdminUpdate() {
                     </Text>
                   </Pressable>
 
-                  <Pressable
-                    onPress={() => confirmDeleteImage(activityImageId!, "atividade")}
-                    className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
-                  >
-                    <FontAwesome name="trash" size={20} color={colors.danger} />
-                  </Pressable>
+                  {activityImage &&
+                    <Pressable
+                      onPress={() => confirmDeleteImage(activityImageId!, "atividade")}
+                      className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
+                    >
+                      <FontAwesome name="trash" size={20} color={colors.danger} />
+                    </Pressable>
+                  }
                 </View>
 
                 {activityImage && (
@@ -423,19 +425,21 @@ export default function ActivityAdminUpdate() {
                 <View className="flex flex-row gap-3">
                   <Pressable
                     onPress={() => pickImage(setSpeakerImage)}
-                    className="w-full p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
+                    className="flex-1 p-4 bg-background rounded-lg border border-border flex-row items-center justify-center"
                   >
                     <Text className="text-gray-200 text-sm font-interMedium">
                       {speakerImage ? "Trocar Imagem" : "Selecionar Imagem"}
                     </Text>
                   </Pressable>
 
-                  <Pressable
-                    onPress={() => confirmDeleteImage(speakerImageId!, "palestrante")}
-                    className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
-                  >
-                    <FontAwesome name="trash" size={20} color={colors.danger} />
-                  </Pressable>
+                  {speakerImage &&
+                    <Pressable
+                      onPress={() => confirmDeleteImage(speakerImageId!, "palestrante")}
+                      className="w-[56px] h-[56px] flex items-center justify-center bg-danger/10 rounded-lg border border-danger"
+                    >
+                      <FontAwesome name="trash" size={20} color={colors.danger} />
+                    </Pressable>
+                  }
                 </View>
 
                 {speakerImage && (
