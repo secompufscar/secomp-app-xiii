@@ -36,10 +36,12 @@ export default function ActivityDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+  const [isUserOnWaitlist, setIsUserOnWaitlist] = useState(false);
 
   // Vagas da atividade
   const [subscribedCount, setSubscribedCount] = useState(0);
   const [waitingListCount, setWaitingListCount] = useState(0);
+  const [waitlistPosition, setWaitlistPosition] = useState<number | null>(null);
 
   // Imagens da atividade
   const [palestranteImageUrl, setPalestranteImageUrl] = useState("");
@@ -59,10 +61,21 @@ export default function ActivityDetails() {
       const participants = await getParticipantsByActivity(activity.id);
 
       const inscritos = participants.filter(p => p.inscricaoPrevia === true).length;
-      const listaEspera = participants.filter(p => p.listaEspera === true).length;
+      const listaEspera = participants.filter(p => p.listaEspera === true);
+
+      // Ordena pela data de criação (ordem crescente)
+      const waitlistSorted = listaEspera.sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      // Descobre a posição do usuário (se ele estiver na lista)
+      if (user) {
+        const pos = waitlistSorted.findIndex(p => p.userId === user.id);
+        setWaitlistPosition(pos !== -1 ? pos + 1 : null); // +1 porque índice começa em 0
+      }
 
       setSubscribedCount(inscritos);
-      setWaitingListCount(listaEspera);
+      setWaitingListCount(listaEspera.length);
     } catch (error) {
       console.error("Erro ao buscar participantes:", error);
     }
@@ -79,6 +92,7 @@ export default function ActivityDetails() {
       setSubscriptionLoading(true);
       try {
         const response = await userSubscription(user.id, activity.id);
+        setIsUserOnWaitlist(response.listaEspera);
         if (response?.inscricaoPrevia === true || response?.listaEspera === true) {
           setIsSubscribed(true);
         } else {
@@ -255,7 +269,22 @@ export default function ActivityDetails() {
                 </View>
               </View>
             </View>
-          </View>
+          </View> 
+          
+          { isSubscribed && !["6", "7", "8"].includes(activity.categoriaId) &&
+            <View className="w-full mb-6 flex items-start justify-center px-6 max-w-[1000px] mx-auto">
+                {isUserOnWaitlist ? (
+                <Text className="text-blue-500 font-inter px-5 py-3 border border-blue-500 rounded-lg bg-blue-500/10">
+                  Você está na lista de espera 
+                  {waitlistPosition ? ` (posição ${waitlistPosition})` : ""}
+                </Text>
+              ) : (
+                <Text className="text-blue-500 font-inter px-5 py-3 border border-blue-500 rounded-lg bg-blue-500/10">
+                  Sua vaga está garantida!
+                </Text>
+              )}
+            </View>
+          }
 
           {/* Botão final */}
           <View className="w-full px-6 max-w-[1000px] mx-auto">
