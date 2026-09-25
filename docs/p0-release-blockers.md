@@ -19,6 +19,8 @@ Esta versão depende dos contratos:
 - `GET /api/v1/userAtActivities/activity/:activityId/summary`;
 - objeto `categoria` nas respostas de atividades, incluindo `requiresEnrollment`.
 
+Esses contratos estão propostos no [PR 52 da API](https://github.com/secompufscar/secomp-server-xiii/pull/52). Esta implementação do aplicativo está no [PR 51](https://github.com/secompufscar/secomp-app-xiii/pull/51).
+
 ## Publicação
 
 1. Publique primeiro a API com `APP_VERSION_ENFORCEMENT_ENABLED=false`.
